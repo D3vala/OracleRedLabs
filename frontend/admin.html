@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administrator Console | Oracle Red Labs</title>
+  <meta name="description" content="Administrator console shell for services, engagements, inquiries and vault entries.">
+  <meta name="author" content="Oracle Red Labs (ITS122P student project)">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Adds a "js" class so the mobile menu can start collapsed. With
+       JavaScript disabled the class is never added and the nav links stay
+       visible, which is the safer failure mode. -->
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
+       include/template; until then consistency matters more than DRY). -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
+        <span class="brand__name">Oracle <em>Red</em> Labs</span>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <ul class="nav__list">
+          <li><a class="nav__link" href="methodology.html">Methodology</a></li>
+          <li><a class="nav__link" href="services.html">Services</a></li>
+          <li><a class="nav__link" href="who-we-serve.html">Who We Serve</a></li>
+          <li><a class="nav__link" href="vault.html">Vault</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+          <li><a class="nav__link" href="engage.html">Engage</a></li>
+        </ul>
+        <ul class="nav__list nav__list--auth">
+          <li><a class="nav__link" href="login.html">Log In</a></li>
+          <li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head" aria-labelledby="page-heading">
+      <div class="container">
+        <p class="page-head__code">/ administrator console</p>
+        <h1 id="page-heading">Administrator Console</h1>
+        <p class="lede">
+          Staff view of the service catalogue, the engagement register, incoming
+          inquiries and the vault library. Every control is labelled, but this
+          milestone renders the UI shell only: no create, update or delete call
+          is wired up yet.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="admin-heading">
+      <div class="container">
+        <h2 class="visually-hidden" id="admin-heading">Administration areas</h2>
+
+        <p class="notice">
+          <strong>UI shell, static data.</strong>
+          Services and vault rows are drawn from <code>js/data/services.js</code>
+          and <code>js/data/resources.js</code>; engagements and inquiries come
+          from a small array in this page. Buttons report what they would do in
+          the status line instead of changing anything.
+        </p>
+
+        <p class="result-status" id="admin-status" role="status" aria-live="polite" style="margin-top: var(--space-md);"></p>
+
+        <!-- ================================================================
+             TABS
+             ARIA tabs pattern; js/main.js toggles aria-selected, tabindex and
+             the hidden attribute on the matching panel.
+             ================================================================ -->
+        <div data-tabs style="margin-top: var(--space-lg);">
+          <div class="tabs" role="tablist" aria-label="Administration areas">
+            <button class="tab" type="button" role="tab" id="tab-services"
+                    aria-controls="panel-services" aria-selected="true">Services</button>
+            <button class="tab" type="button" role="tab" id="tab-engagements"
+                    aria-controls="panel-engagements" aria-selected="false" tabindex="-1">Engagements</button>
+            <button class="tab" type="button" role="tab" id="tab-inquiries"
+                    aria-controls="panel-inquiries" aria-selected="false" tabindex="-1">Inquiries</button>
+            <button class="tab" type="button" role="tab" id="tab-vault"
+                    aria-controls="panel-vault" aria-selected="false" tabindex="-1">Vault entries</button>
+          </div>
+
+          <!-- ---------------------------- SERVICES ---------------------- -->
+          <section class="tab-panel" id="panel-services" role="tabpanel"
+                   aria-labelledby="tab-services" tabindex="0">
+            <h3 class="visually-hidden">Manage services</h3>
+            <div class="table-wrap">
+              <div class="table-scroll">
+                <table class="table table--stack" id="admin-services-table">
+                  <caption>Service catalogue (from js/data/services.js)</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Delivery method</th>
+                      <th scope="col">Base price</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- --------------------------- ENGAGEMENTS -------------------- -->
+          <section class="tab-panel" id="panel-engagements" role="tabpanel"
+                   aria-labelledby="tab-engagements" tabindex="0" hidden>
+            <h3 class="visually-hidden">Manage engagements</h3>
+            <div class="table-wrap">
+              <div class="table-scroll">
+                <table class="table table--stack" id="admin-engagements-table">
+                  <caption>Engagement register with status control</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Reference</th>
+                      <th scope="col">Client</th>
+                      <th scope="col">Service</th>
+                      <th scope="col">Requested slot</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ---------------------------- INQUIRIES --------------------- -->
+          <section class="tab-panel" id="panel-inquiries" role="tabpanel"
+                   aria-labelledby="tab-inquiries" tabindex="0" hidden>
+            <h3 class="visually-hidden">Manage inquiries</h3>
+            <div class="table-wrap">
+              <div class="table-scroll">
+                <table class="table table--stack" id="admin-inquiries-table">
+                  <caption>Inquiries waiting for an engagement lead</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Received</th>
+                      <th scope="col">Contact</th>
+                      <th scope="col">Company</th>
+                      <th scope="col">Message</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- ------------------------------ VAULT ----------------------- -->
+          <section class="tab-panel" id="panel-vault" role="tabpanel"
+                   aria-labelledby="tab-vault" tabindex="0" hidden>
+            <h3 class="visually-hidden">Manage vault entries</h3>
+            <div class="table-wrap">
+              <div class="table-scroll">
+                <table class="table table--stack" id="admin-vault-table">
+                  <caption>Vault library (from js/data/resources.js)</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Published</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================================
+         PAGE SCRIPT (admin.html)
+         Wrapped in DOMContentLoaded so the shared scripts - including
+         js/data/services.js and js/data/resources.js - have run before we read
+         those globals. Milestone 7 replaces the two mock arrays with fetch()
+         calls and swaps the stub buttons for real CRUD handlers.
+         ====================================================================== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        /* Engagement statuses allowed by the future `engagements.status` column. */
+        var STATUSES = ["pending", "scoping", "active", "completed", "cancelled"];
+
+        /* Mock engagements and inquiries (these live in a database later). */
+        var MOCK_ENGAGEMENTS_ADMIN = [
+          { reference: "ORL-482913", client: "Northwind Logistics", service: "ORACLE AI", slot: "2026-09-28T09:00:00", status: "active" },
+          { reference: "ORL-517204", client: "Helios Bioworks", service: "PHANTASM", slot: "2026-10-12T08:00:00", status: "scoping" },
+          { reference: "ORL-533187", client: "Verge Cloud", service: "CHAINBREAK", slot: "2026-11-02T09:00:00", status: "pending" },
+          { reference: "ORL-401662", client: "Northwind Logistics", service: "ORACLE AI", slot: "2026-06-15T09:00:00", status: "completed" }
+        ];
+
+        var MOCK_INQUIRIES = [
+          { received: "2026-09-22T14:05:00", contact: "J. Ellis", company: "Northwind Logistics", message: "External assessment of the customer portal before our Q4 audit window." },
+          { received: "2026-09-21T09:41:00", contact: "R. Okonkwo", company: "Helios Bioworks", message: "Tabletop plus assumed-breach rehearsal across four clinical sites." },
+          { received: "2026-09-19T16:17:00", contact: "M. Lindqvist", company: "Verge Cloud", message: "CI/CD provenance review after a dependency scare." }
+        ];
+
+        /* --- helpers ------------------------------------------------------ */
+        var statusLine = document.getElementById("admin-status");
+
+        function announce(message) {
+          if (statusLine) {
+            statusLine.textContent = message;
+          }
+        }
+
+        function el(tagName, className, text) {
+          var node = document.createElement(tagName);
+          if (className) {
+            node.className = className;
+          }
+          if (typeof text === "string") {
+            node.textContent = text;
+          }
+          return node;
+        }
+
+        /** A td carrying the data-label used by the stacked mobile layout. */
+        function cell(label, content) {
+          var td = document.createElement("td");
+          td.setAttribute("data-label", label);
+          if (content instanceof Node) {
+            td.appendChild(content);
+          } else {
+            td.textContent = content;
+          }
+          return td;
+        }
+
+        /** Row header cell: the first column of every table here. */
+        function rowHead(text) {
+          var th = document.createElement("th");
+          th.scope = "row";
+          th.className = "table__row-head";
+          th.textContent = text;
+          return th;
+        }
+
+        /** Stub action buttons: they announce intent instead of acting. */
+        function actionCell(recordName, labels) {
+          var group = el("div", "table__actions");
+          labels.forEach(function (label) {
+            var isDestructive = label === "Delete";
+            var button = el(
+              "button",
+              "btn btn--sm " + (isDestructive ? "btn--danger" : "btn--ghost"),
+              label
+            );
+            button.type = "button";
+            button.addEventListener("click", function () {
+              announce(
+                label + " " + recordName +
+                  ": this control is a labelled stub until the back end exists."
+              );
+            });
+            group.appendChild(button);
+          });
+          return cell("Actions", group);
+        }
+
+        function formatSlot(iso) {
+          var date = new Date(iso);
+          return isNaN(date.getTime())
+            ? iso
+            : date.toLocaleString("en-US", {
+                year: "numeric", month: "short", day: "numeric",
+                hour: "2-digit", minute: "2-digit"
+              });
+        }
+
+        function formatPrice(value) {
+          return "$" + Number(value).toLocaleString("en-US", {
+            maximumFractionDigits: 0
+          });
+        }
+
+        /** Replace the rows of one table body. */
+        function fill(tbodySelector, rows) {
+          var tbody = document.querySelector(tbodySelector);
+          if (!tbody) {
+            return;
+          }
+          tbody.replaceChildren();
+          rows.forEach(function (row) {
+            tbody.appendChild(row);
+          });
+        }
+
+        /* --- services table (from js/data/services.js) -------------------- */
+        function renderServices() {
+          var rows = (typeof services === "undefined" ? [] : services).map(
+            function (service) {
+              var row = document.createElement("tr");
+              row.appendChild(rowHead(String(service.service_id)));
+              row.appendChild(cell("Name", service.name));
+              row.appendChild(cell("Category", service.category));
+              row.appendChild(cell("Delivery method", service.delivery_method));
+              row.appendChild(cell("Base price", formatPrice(service.base_price)));
+              row.appendChild(actionCell(service.name, ["Edit", "Delete"]));
+              return row;
+            }
+          );
+          fill("#admin-services-table tbody", rows);
+          return rows.length;
+        }
+
+        /* --- engagement register with the status dropdown ---------------- */
+        function renderEngagements() {
+          var rows = MOCK_ENGAGEMENTS_ADMIN.map(function (engagement) {
+            var row = document.createElement("tr");
+            row.appendChild(rowHead(engagement.reference));
+            row.appendChild(cell("Client", engagement.client));
+            row.appendChild(cell("Service", engagement.service));
+            row.appendChild(cell("Requested slot", formatSlot(engagement.slot)));
+
+            /* A <select> inside a table cell has no visible label of its own,
+               so it gets an aria-label that names the row it belongs to. */
+            var select = document.createElement("select");
+            select.className = "select select--inline";
+            select.setAttribute(
+              "aria-label",
+              "Status for engagement " + engagement.reference
+            );
+            STATUSES.forEach(function (status) {
+              var option = document.createElement("option");
+              option.value = status;
+              option.textContent = status;
+              if (status === engagement.status) {
+                option.selected = true;
+              }
+              select.appendChild(option);
+            });
+            select.addEventListener("change", function () {
+              announce(
+                "Status for " + engagement.reference + " set to " + select.value +
+                  " - not saved, there is no back end yet."
+              );
+            });
+            row.appendChild(cell("Status", select));
+
+            row.appendChild(actionCell(engagement.reference, ["View", "Assign"]));
+            return row;
+          });
+          fill("#admin-engagements-table tbody", rows);
+          return rows.length;
+        }
+
+        /* --- inquiry queue ----------------------------------------------- */
+        function renderInquiries() {
+          var rows = MOCK_INQUIRIES.map(function (inquiry) {
+            var row = document.createElement("tr");
+            row.appendChild(rowHead(formatSlot(inquiry.received)));
+            row.appendChild(cell("Contact", inquiry.contact));
+            row.appendChild(cell("Company", inquiry.company));
+            row.appendChild(cell("Message", inquiry.message));
+            row.appendChild(actionCell(inquiry.company, ["Review", "Delete"]));
+            return row;
+          });
+          fill("#admin-inquiries-table tbody", rows);
+          return rows.length;
+        }
+
+        /* --- vault library (from js/data/resources.js) -------------------- */
+        function renderVault() {
+          var rows = (typeof resources === "undefined" ? [] : resources).map(
+            function (resource) {
+              var row = document.createElement("tr");
+              row.appendChild(rowHead(String(resource.resource_id)));
+              row.appendChild(cell("Title", resource.title));
+              row.appendChild(cell("Category", resource.category));
+              row.appendChild(cell("Published", resource.published_at));
+              row.appendChild(actionCell(resource.title, ["Edit", "Delete"]));
+              return row;
+            }
+          );
+          fill("#admin-vault-table tbody", rows);
+          return rows.length;
+        }
+
+        /* --- draw the console ------------------------------------------- */
+        var serviceCount = renderServices();
+        var engagementCount = renderEngagements();
+        var inquiryCount = renderInquiries();
+        var vaultCount = renderVault();
+
+        announce(
+          serviceCount + " services, " + engagementCount + " engagements, " +
+            inquiryCount + " inquiries and " + vaultCount +
+            " vault entries loaded from static mock data."
+        );
+      });
+    </script>
+
+  </main>
+
+  <!-- Shared footer: identical on all 11 pages. -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <p class="mono">Oracle Red Labs</p>
+        <p class="site-footer__tagline">
+          Adversarial security research under signed authorisation. We reproduce
+          attacker tradecraft, then hand your engineers the fixes.
+        </p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Footer">
+        <div>
+          <h2 class="site-footer__heading">Company</h2>
+          <ul class="site-footer__list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="methodology.html">Methodology</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="who-we-serve.html">Who We Serve</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="site-footer__heading">Resources</h2>
+          <ul class="site-footer__list">
+            <li><a href="vault.html">Exploit Vault</a></li>
+            <li><a href="engage.html">Book an Engagement</a></li>
+            <li><a href="contact.html">Encrypted Inquiry</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="site-footer__heading">Client Area</h2>
+          <ul class="site-footer__list">
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="dashboard.html">Client Dashboard</a></li>
+            <li><a href="admin.html">Administrator Console</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container site-footer__legal">
+      <p class="site-footer__disclaimer">
+        Oracle Red Labs is a fictional company created for an academic project
+        (ITS122P). Every engagement, price and case study shown here is
+        placeholder content. Nothing on this site scans, exploits or attacks
+        anything: all dashboards, badges and live statuses are simulated in the
+        browser with mock data.
+      </p>
+      <p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+<script src="js/data/services.js"></script><script src="js/data/resources.js"></script>
+</body>
+</html>

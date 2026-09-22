@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200" role="img" aria-label="Decorative cover art for whitepaper entries">
+  <!-- Decorative placeholder cover: pure shapes, no photography, no external
+       assets. Used with alt="" on vault cards. -->
+  <defs>
+    <linearGradient id="wp-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16161a"/>
+      <stop offset="1" stop-color="#0a0a0c"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="200" fill="url(#wp-bg)"/>
+  <g stroke="#26262c" stroke-width="1">
+    <path d="M0 40h640M0 80h640M0 120h640M0 160h640"/>
+    <path d="M80 0v200M160 0v200M240 0v200M320 0v200M400 0v200M480 0v200M560 0v200"/>
+  </g>
+  <rect x="32" y="32" width="4" height="136" fill="#d13b3b"/>
+  <g fill="#e8e8ec" opacity="0.9">
+    <rect x="64" y="60" width="240" height="10" rx="3"/>
+    <rect x="64" y="82" width="180" height="8" rx="3" opacity="0.7"/>
+    <rect x="64" y="100" width="300" height="8" rx="3" opacity="0.5"/>
+    <rect x="64" y="118" width="220" height="8" rx="3" opacity="0.35"/>
+  </g>
+  <g fill="none" stroke="#6f8fd6" stroke-width="2" opacity="0.85">
+    <circle cx="524" cy="100" r="34"/>
+    <path d="M524 66v68M490 100h68"/>
+  </g>
+</svg>

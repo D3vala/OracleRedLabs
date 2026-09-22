@@ -1,0 +1,1035 @@
+/* ==========================================================================
+   components.css - reusable UI pieces
+   Oracle Red Labs (ORL) - Milestone 4
+
+   Everything here is defined once and reused on every page: buttons, cards,
+   badges, form fields, tables, tabs, the step indicator used by the
+   engagement funnel, and the small status/notice pieces.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Buttons
+   Buttons are <a> or <button> elements; both share .btn so an action looks
+   the same wherever it is used.
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 44px; /* comfortable touch target */
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-200);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  /* Subtle lift, fast and calm - deliberately not springy. */
+  transition: background-color var(--transition-fast),
+    border-color var(--transition-fast), color var(--transition-fast),
+    box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Primary: the single accent-coloured action per view. */
+.btn--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: #fff;
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+/* Secondary: bordered, no fill until hover. */
+.btn--secondary {
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover {
+  background: var(--color-surface-2);
+  border-color: var(--color-text-faint);
+  color: var(--color-text);
+}
+
+/* Ghost: low-emphasis inline action (table row buttons, back buttons). */
+.btn--ghost {
+  color: var(--color-text-muted);
+}
+
+.btn--ghost:hover {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+/* Danger: destructive table actions (UI shell only in this milestone). */
+.btn--danger {
+  border-color: rgba(194, 99, 79, 0.4);
+  color: #d98a78;
+}
+
+.btn--danger:hover {
+  background: rgba(194, 99, 79, 0.14);
+  border-color: rgba(194, 99, 79, 0.7);
+  color: #eb9d8b;
+}
+
+.btn--sm {
+  min-height: 34px;
+  padding: var(--space-2xs) var(--space-md);
+  font-size: var(--fs-100);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* Disabled controls must look disabled (and stay inert). */
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn[disabled]:hover {
+  transform: none;
+  background: transparent;
+  border-color: var(--color-border-strong);
+  color: var(--color-text-muted);
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   2. Cards
+   -------------------------------------------------------------------------- */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-fast),
+    background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+/* Cards hold their own content: the global 72ch prose limit is lifted. */
+.card > p {
+  max-width: none;
+}
+
+.card--interactive:hover,
+a.card:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-2);
+  transform: translateY(-2px);
+}
+
+.card__link {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.card__link:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Makes the whole card clickable when the card is an <a> or has a title
+   link: the pseudo-element stretches over the padded card box. */
+.card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.card__meta {
+  display: grid;
+  /* Label column hugs its content, value column takes the rest. Because the
+     children are dt, dd, dt, dd the grid pairs them up automatically. */
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-2xs) var(--space-md);
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+/* A button inside a card must sit above the stretched .card__link overlay,
+   otherwise the overlay would swallow the click. */
+.card .btn {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+}
+
+.card__meta dt {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.card__meta dd {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+/* Headline figure inside a service card. */
+.card__price {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-600);
+}
+
+.card__price span {
+  color: var(--color-text-faint);
+  font-size: var(--fs-200);
+}
+
+/* Compact card variant used by the dashboard KPI tiles. */
+.card--stat {
+  gap: var(--space-2xs);
+}
+
+.card__value {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-600);
+}
+
+.card__label {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   3. Badges (status pills)
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 2px var(--space-sm);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* A leading dot keeps the state scannable in a dense table row. */
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* One subtle colour per engagement state. Hues stay light enough to pass a
+   basic contrast check against the near-black background. */
+.badge--pending {
+  border-color: rgba(217, 161, 59, 0.45);
+  background: rgba(217, 161, 59, 0.12);
+  color: #e2b562;
+}
+
+.badge--scoping {
+  border-color: rgba(111, 143, 214, 0.45);
+  background: rgba(111, 143, 214, 0.12);
+  color: #9db4e4;
+}
+
+.badge--active {
+  border-color: rgba(79, 180, 119, 0.45);
+  background: rgba(79, 180, 119, 0.12);
+  color: #74c795;
+}
+
+.badge--completed {
+  background: rgba(139, 139, 154, 0.12);
+  color: #a5a5b3;
+}
+
+.badge--cancelled {
+  border-color: rgba(194, 99, 79, 0.45);
+  background: rgba(194, 99, 79, 0.12);
+  color: #d98a78;
+}
+
+/* Non-status tag: service category, vault category, armory label. */
+.badge--tag {
+  border-color: var(--color-border);
+  background: transparent;
+  color: var(--color-text-faint);
+}
+
+.badge--tag::before {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   4. Forms
+   Every field is <label> + control + optional hint + optional error, so the
+   layout is a simple vertical stack with a consistent rhythm.
+   -------------------------------------------------------------------------- */
+.form {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.form__row {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.field__label {
+  color: var(--color-text);
+  font-size: var(--fs-200);
+  font-weight: 600;
+}
+
+/* Required marker: we mark it with a word, not with colour alone. */
+.field__required {
+  margin-left: var(--space-2xs);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  font-weight: 400;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.field__hint {
+  color: var(--color-text-faint);
+  font-size: var(--fs-200);
+}
+
+.field__error {
+  display: flex;
+  gap: var(--space-xs);
+  color: #e79c8b; /* lightened danger red: readable as small text */
+  font-size: var(--fs-200);
+}
+
+.field__error::before {
+  content: "!";
+  flex: 0 0 auto;
+  width: 1.1em;
+  height: 1.1em;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  line-height: 1.1em;
+  text-align: center;
+}
+
+/* Hidden errors must really be hidden. */
+.field__error[hidden] {
+  display: none;
+}
+
+/* Shared control styling for input, textarea and select. */
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--fs-300);
+  transition: border-color var(--transition-fast),
+    background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-text-faint);
+}
+
+.input:hover,
+.textarea:hover,
+.select:hover {
+  border-color: var(--color-border-strong);
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  background: var(--color-bg-raised);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+  outline: none; /* replaced by the visible ring above */
+}
+
+.textarea {
+  min-height: 9rem;
+  resize: vertical;
+  font-family: var(--font-mono);
+  font-size: var(--fs-200);
+  line-height: 1.6;
+}
+
+.select {
+  appearance: none;
+  /* Small inline SVG chevron: no external image request, works offline. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23a2a2ad' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+  padding-right: var(--space-xl);
+}
+
+/* Invalid fields are signalled by the border AND by the inline error text. */
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"],
+.select[aria-invalid="true"] {
+  border-color: #b4564a;
+}
+
+/* Checkbox / radio rows: the label wraps the control so the hit area is big. */
+.checkbox,
+.radio {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+.checkbox input,
+.radio input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 0.2em;
+  accent-color: var(--color-accent);
+}
+
+/* Group wrapper for radio / checkbox sets inside a step panel. */
+.choice-group {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* Native file input, styled just enough to sit inside a dark card. */
+.file-input {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--color-bg-sunken);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+.file-input::file-selector-button {
+  margin-right: var(--space-md);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.file-input::file-selector-button:hover {
+  background: var(--color-border);
+}
+
+.fieldset {
+  padding: 0;
+  border: 0;
+}
+
+.fieldset__legend {
+  padding: 0;
+  color: var(--color-text);
+  font-size: var(--fs-500);
+  font-weight: 650;
+}
+
+.fieldset__note {
+  margin-top: var(--space-xs);
+  color: var(--color-text-faint);
+  font-size: var(--fs-200);
+}
+
+/* Page-level form feedback (success notices, "not wired yet" notes). */
+.form-message {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border-strong);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--fs-200);
+}
+
+.form-message[hidden] {
+  display: none;
+}
+
+.form-message--success {
+  border-left-color: var(--color-status-active);
+}
+
+/* Demo-only banner for pages that have no back end yet. */
+.notice {
+  display: grid;
+  gap: var(--space-2xs);
+  padding: var(--space-md);
+  background: rgba(111, 143, 214, 0.08);
+  border: 1px solid rgba(111, 143, 214, 0.35);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+.notice strong {
+  color: var(--color-text);
+}
+
+/* Static PGP key block with its copy button (contact.html). */
+.pgp {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.pgp__key {
+  max-height: 15rem;
+  margin: 0;
+  padding: var(--space-md);
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--fs-100);
+  line-height: 1.5;
+  white-space: pre;
+  overflow: auto;
+}
+
+/* Definition list used for the "what happens next" info panels. */
+.info-list {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.info-list dt {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.info-list dd {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+/* --------------------------------------------------------------------------
+   5. Data tables (dashboard.html, admin.html)
+   Responsive strategy: below 600px the wrapper scrolls horizontally and
+   responsive.css additionally stacks each row into a card using the
+   data-label attributes on the cells.
+   -------------------------------------------------------------------------- */
+.table-wrap {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-raised);
+}
+
+.table-scroll {
+  overflow-x: auto; /* the only place horizontal scrolling is allowed */
+}
+
+.table {
+  width: 100%;
+  min-width: 44rem; /* keeps columns readable before the wrapper scrolls */
+  border-collapse: collapse;
+  font-size: var(--fs-200);
+}
+
+.table caption {
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table th,
+.table td {
+  padding: var(--space-sm) var(--space-lg);
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table thead th {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+.table tbody tr:hover {
+  background: var(--color-surface-2);
+}
+
+.table tbody tr:last-child th,
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table__row-head {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* Row action cluster (view / cancel / edit / delete). */
+.table__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: flex-start;
+}
+
+/* Inline control inside a table cell (status dropdown on admin.html). */
+.table .select--inline {
+  width: auto;
+  min-width: 10rem;
+  padding: var(--space-2xs) var(--space-lg) var(--space-2xs) var(--space-sm);
+  font-size: var(--fs-200);
+}
+
+/* Methodology table: the tactic mapping. Reuses .table inside .table-wrap. */
+.table--compact th,
+.table--compact td {
+  padding: var(--space-sm) var(--space-md);
+}
+
+/* --------------------------------------------------------------------------
+   6. Vault toolbar: category filter buttons + live search
+   -------------------------------------------------------------------------- */
+.toolbar {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* A filter chip is a real <button> with aria-pressed, so keyboard users can
+   operate it and assistive tech can announce the selected state. */
+.filter-btn {
+  padding: var(--space-xs) var(--space-md);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: color var(--transition-fast),
+    border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.filter-btn:hover {
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+.filter-btn[aria-pressed="true"] {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent-line);
+  color: var(--color-text);
+}
+
+.search {
+  position: relative;
+}
+
+.search .input {
+  padding-left: var(--space-xl);
+}
+
+/* Magnifier drawn with a tiny inline SVG so no icon font is needed. */
+.search::before {
+  content: "";
+  position: absolute;
+  left: var(--space-md);
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='7' cy='7' r='5' fill='none' stroke='%2374747f' stroke-width='1.6'/%3E%3Cpath d='M11 11l4 4' stroke='%2374747f' stroke-width='1.6'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Live result counter / status line above the grid. */
+.result-status {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* Empty state when the combined filter removes every card. */
+.empty-state {
+  padding: var(--space-2xl) var(--space-lg);
+  text-align: center;
+  background: var(--color-bg-raised);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-muted);
+}
+
+.empty-state h3 {
+  margin-bottom: var(--space-xs);
+  color: var(--color-text);
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   7. Tabs (admin.html)
+   Marked up with the ARIA tabs pattern; js/main.js only toggles attributes
+   and the hidden property, so the panel content stays in the DOM.
+   -------------------------------------------------------------------------- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tab {
+  padding: var(--space-xs) var(--space-md);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+  font-weight: 600;
+  transition: color var(--transition-fast),
+    background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.tab:hover {
+  color: var(--color-text);
+  background: var(--color-surface-2);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--color-text);
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent-line);
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. Engagement funnel: step indicator + step panels (engage.html)
+   -------------------------------------------------------------------------- */
+.stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.stepper__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.stepper__item::after {
+  content: "/";
+  margin-left: var(--space-sm);
+  color: var(--color-border-strong);
+}
+
+.stepper__item:last-child::after {
+  content: "";
+  margin: 0;
+}
+
+.stepper__index {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+/* aria-current="step" is set by js/engage-form.js on the active step. */
+.stepper__item[aria-current="step"],
+.stepper__item.is-complete {
+  color: var(--color-text);
+}
+
+.stepper__item[aria-current="step"] .stepper__index {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.stepper__item.is-complete .stepper__index {
+  border-color: var(--color-accent-line);
+  color: var(--color-accent);
+}
+
+.step-panel {
+  padding: var(--space-lg);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.step-panel[hidden] {
+  display: none;
+}
+
+/* Back / Next / Submit row at the foot of each step panel. */
+.form-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Confirmation panel shown after the final submit. */
+.confirm {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-accent-line);
+  border-radius: var(--radius-lg);
+}
+
+.confirm[hidden] {
+  display: none;
+}
+
+.confirm__ref {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-600);
+}
+
+.confirm__summary {
+  display: grid;
+  gap: var(--space-xs);
+  margin: 0;
+}
+
+.confirm__summary dt {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.confirm__summary dd {
+  margin: 0 0 var(--space-sm);
+  color: var(--color-text);
+}
+
+/* --------------------------------------------------------------------------
+   9. Card extras: icon tile, armory label, cover art, details, CTA band
+   -------------------------------------------------------------------------- */
+
+/* Icon tile used by the "who we serve" blocks and feature lists. */
+.icon-tile {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-xs);
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent-line);
+  border-radius: var(--radius-md);
+  color: var(--color-accent-hover);
+}
+
+.icon-tile svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Armory badge: mono tech-stack label with a short caption. */
+.armory__item {
+  display: grid;
+  gap: var(--space-2xs);
+  padding: var(--space-sm);
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast);
+}
+
+.armory__item:hover {
+  border-color: var(--color-border-strong);
+}
+
+.armory__name {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-200);
+}
+
+.armory__note {
+  color: var(--color-text-faint);
+  font-size: var(--fs-100);
+}
+
+/* Cover art on a vault card. Decorative, so alt="" in the markup. */
+.card__cover {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* <details>/<summary> powers the "Learn more" expander on service cards:
+   no JavaScript and no page reload required. */
+.details {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.details__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-accent-hover);
+  font-size: var(--fs-200);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.details__summary:hover {
+  color: var(--color-accent);
+}
+
+.details__summary::marker {
+  color: var(--color-accent);
+}
+
+.details__body {
+  margin-top: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+/* Closing call-to-action band reused across pages. */
+.cta-band {
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+}
+
+.cta-band h2 {
+  font-size: var(--fs-600);
+}
+
+/* Small mono footnote at the end of pricing or legal blocks. */
+.footnote {
+  color: var(--color-text-faint);
+  font-size: var(--fs-200);
+}
+
+/* "Scroll for more" hint, shown on small screens only (responsive.css). */
+.scroll-hint {
+  display: none;
+  color: var(--color-text-faint);
+  font-size: var(--fs-100);
+}

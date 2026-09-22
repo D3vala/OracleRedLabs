@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Methodology and Armory | Oracle Red Labs</title>
+  <meta name="description" content="How Oracle Red Labs scopes, logs and reports a simulated assault, plus the technology stack behind it.">
+  <meta name="author" content="Oracle Red Labs (ITS122P student project)">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Adds a "js" class so the mobile menu can start collapsed. With
+       JavaScript disabled the class is never added and the nav links stay
+       visible, which is the safer failure mode. -->
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
+       include/template; until then consistency matters more than DRY). -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
+        <span class="brand__name">Oracle <em>Red</em> Labs</span>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <ul class="nav__list">
+          <li><a class="nav__link" href="methodology.html">Methodology</a></li>
+          <li><a class="nav__link" href="services.html">Services</a></li>
+          <li><a class="nav__link" href="who-we-serve.html">Who We Serve</a></li>
+          <li><a class="nav__link" href="vault.html">Vault</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+          <li><a class="nav__link" href="engage.html">Engage</a></li>
+        </ul>
+        <ul class="nav__list nav__list--auth">
+          <li><a class="nav__link" href="login.html">Log In</a></li>
+          <li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head" aria-labelledby="page-heading">
+      <div class="container">
+        <p class="page-head__code">/ about and methodology</p>
+        <h1 id="page-heading">Methodology and Armory</h1>
+        <p class="lede">
+          Oracle Red Labs exists because most organisations know their
+          vulnerability counts and none of them know their intrusion paths. We
+          are in the business of producing the second number.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="about-heading">
+      <div class="container">
+        <div class="prose-grid">
+          <div>
+            <p class="eyebrow">Who We Are</p>
+            <h2 id="about-heading">Operators first, consultants second</h2>
+
+            <p>
+              The firm was founded by four engineers who spent a decade on the
+              defensive side of network operations and incident response. That
+              background shapes how we work: we write the report we always wished
+              we had received at 03:00, we keep reproduction steps short enough to
+              follow under pressure, and we assume your team is competent rather
+              than negligent.
+            </p>
+
+            <p>
+              Our engagements are simulations, not scans. A scan tells you which
+              versions of software you run; a simulation tells you which of those
+              facts an adversary would combine, in what order, and at what cost to
+              you. We work from a signed scope, log every action against that
+              scope, and consider a test failed if we cannot replay it for your
+              engineers afterwards.
+            </p>
+
+            <p>
+              Method is deliberately boring and repeatable. Reconnaissance is
+              documented, hypotheses are written down before they are tested, and
+              anything that cannot be reproduced gets dropped from the report. If
+              we cannot show it twice, we do not claim it.
+            </p>
+          </div>
+
+          <aside class="card" aria-labelledby="principles-heading">
+            <span class="card__label">Working Principles</span>
+            <h3 id="principles-heading">Rules we hold ourselves to</h3>
+            <dl class="info-list">
+              <dt>Authorisation first</dt>
+              <dd>No packet leaves our network until a named signatory has approved the scope in writing.</dd>
+              <dt>Stoppable at any time</dt>
+              <dd>Your duty officer can halt an engagement with one phone call, and we log the halt.</dd>
+              <dt>Reversibility</dt>
+              <dd>Anything we change, we can change back. Destructive objectives are refused outright.</dd>
+              <dt>Evidence, not exfiltration</dt>
+              <dd>Proof objects are hashed where they sit. Customer data is never copied out.</dd>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SERVICE-TO-TACTIC MAPPING
+         The phase names below are invented, illustrative labels written in the
+         style of an adversarial tactic matrix. They are not official
+         identifiers and nothing here is copied from a real framework.
+         ==================================================================== -->
+    <section class="section section--raised" aria-labelledby="mapping-heading">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow">Mapping</p>
+          <h2 id="mapping-heading">Which simulated phases each service exercises</h2>
+          <p class="lede">
+            Illustrative phase labels from our own planning documents, so a
+            client can see at a glance what is and is not covered.
+          </p>
+        </div>
+
+        <div class="table-wrap table-wrap--scroll">
+          <div class="table-scroll">
+            <table class="table table--compact">
+              <caption>Service to simulated-phase mapping (illustrative labels)</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Service</th>
+                  <th scope="col">Simulated phase</th>
+                  <th scope="col">What we try to prove</th>
+                  <th scope="col">Default window</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="table__row-head">ORACLE AI</th>
+                  <td>Perimeter Cartography</td>
+                  <td>Every declared external asset is known and accounted for</td>
+                  <td>48 hours</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="table__row-head">ORACLE AI</th>
+                  <td>Credential Harvest</td>
+                  <td>A leaked or reused secret converts into a valid session</td>
+                  <td>48 hours</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="table__row-head">ORACLE AI</th>
+                  <td>Edge Breach</td>
+                  <td>One external weakness reaches an internal service</td>
+                  <td>48 hours</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="table__row-head">PHANTASM</th>
+                  <td>Silent Persistence</td>
+                  <td>Access survives a reboot and a credential rotation</td>
+                  <td>2-4 weeks</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="table__row-head">PHANTASM</th>
+                  <td>Privilege Ascent</td>
+                  <td>Operator rights are reachable from a standard user</td>
+                  <td>2-4 weeks</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="table__row-head">PHANTASM</th>
+                  <td>Lateral Transit</td>
+                  <td>The crown-jewel system is reachable from the entry point</td>
+                  <td>2-4 weeks</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="table__row-head">CHAINBREAK</th>
+                  <td>Build Poisoning</td>
+                  <td>An unreviewed artifact can reach a release channel</td>
+                  <td>3-6 weeks</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="table__row-head">CHAINBREAK</th>
+                  <td>Dependency Substitution</td>
+                  <td>A third-party update is trusted without verification</td>
+                  <td>3-6 weeks</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="scroll-hint mono">Scroll the table sideways to see every column.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ARMORY
+         Static labels only. The brief asks for a badge grid of the tech stack
+         we talk about in proposals - these are not functioning capabilities of
+         this website, and this page runs no tooling of any kind.
+         ==================================================================== -->
+    <section class="section" aria-labelledby="armory-heading">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow">Armory</p>
+          <h2 id="armory-heading">Technology we bring to an engagement</h2>
+          <p class="lede">
+            The stack our operators and analysts work in, listed as labels
+            because this page is a menu, not a tool.
+          </p>
+        </div>
+
+        <ul class="armory">
+          <li class="armory__item">
+            <span class="armory__name">eBPF</span>
+            <span class="armory__note">Kernel-level telemetry for coverage checks</span>
+          </li>
+          <li class="armory__item">
+            <span class="armory__name">GANs</span>
+            <span class="armory__note">Synthetic variation for detection testing</span>
+          </li>
+          <li class="armory__item">
+            <span class="armory__name">Federated Learning</span>
+            <span class="armory__note">Cross-client models that share no raw data</span>
+          </li>
+          <li class="armory__item">
+            <span class="armory__name">LLM Red-Teaming</span>
+            <span class="armory__note">Abuse testing of in-product assistants</span>
+          </li>
+          <li class="armory__item">
+            <span class="armory__name">Admission Control</span>
+            <span class="armory__note">Policy enforcement inside cluster paths</span>
+          </li>
+          <li class="armory__item">
+            <span class="armory__name">Rust</span>
+            <span class="armory__note">Memory-safe operator tooling</span>
+          </li>
+          <li class="armory__item">
+            <span class="armory__name">TLA+</span>
+            <span class="armory__note">Formal models of authentication flows</span>
+          </li>
+          <li class="armory__item">
+            <span class="armory__name">Sigma Rules</span>
+            <span class="armory__note">Portable detection content we hand over</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="method-cta-heading">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2 id="method-cta-heading">Want the full method document before you commit?</h2>
+            <p class="text-muted">
+              We will send the scope template, the logging standard and the
+              reporting format we use on every engagement.
+            </p>
+          </div>
+          <div class="row">
+            <a class="btn btn--primary" href="contact.html">Request the Method Document</a>
+            <a class="btn btn--secondary" href="services.html">Compare Services</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared footer: identical on all 11 pages. -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <p class="mono">Oracle Red Labs</p>
+        <p class="site-footer__tagline">
+          Adversarial security research under signed authorisation. We reproduce
+          attacker tradecraft, then hand your engineers the fixes.
+        </p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Footer">
+        <div>
+          <h2 class="site-footer__heading">Company</h2>
+          <ul class="site-footer__list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="methodology.html">Methodology</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="who-we-serve.html">Who We Serve</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="site-footer__heading">Resources</h2>
+          <ul class="site-footer__list">
+            <li><a href="vault.html">Exploit Vault</a></li>
+            <li><a href="engage.html">Book an Engagement</a></li>
+            <li><a href="contact.html">Encrypted Inquiry</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="site-footer__heading">Client Area</h2>
+          <ul class="site-footer__list">
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="dashboard.html">Client Dashboard</a></li>
+            <li><a href="admin.html">Administrator Console</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container site-footer__legal">
+      <p class="site-footer__disclaimer">
+        Oracle Red Labs is a fictional company created for an academic project
+        (ITS122P). Every engagement, price and case study shown here is
+        placeholder content. Nothing on this site scans, exploits or attacks
+        anything: all dashboards, badges and live statuses are simulated in the
+        browser with mock data.
+      </p>
+      <p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>

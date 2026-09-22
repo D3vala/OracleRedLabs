@@ -1,0 +1,155 @@
+    <!-- ====================================================================
+         HERO
+         The tagline is animated by js/typewriter.js (Feature 1): the script
+         types into #hero-typed, and .hero__tagline reserves two lines of
+         height in CSS so nothing below shifts while it types.
+         ==================================================================== -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container hero__inner">
+        <p class="eyebrow">Offensive Security Consultancy - Est. 2026</p>
+
+        <h1 class="hero__tagline" id="hero-heading" data-typewriter-text="We break so you can build.">
+          <!-- Assistive technology gets the finished sentence straight away;
+               the animated copy is decorative and marked aria-hidden. -->
+          <span class="visually-hidden">We break so you can build.</span>
+          <span class="hero__typed" id="hero-typed" aria-hidden="true"></span><span class="typewriter-cursor" aria-hidden="true">|</span>
+        </h1>
+
+        <p class="hero__lede">
+          Oracle Red Labs is a simulation-first offensive security consultancy. We
+          reproduce the tradecraft of a determined adversary against your
+          production systems - only ever under signed authorisation - then leave
+          your engineers with the evidence, the reproduction steps and the fixes.
+          Every engagement is scoped in writing, logged throughout, and can be
+          stopped by you at any moment.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="engage.html">Start Your Assault</a>
+          <a class="btn btn--secondary" href="contact.html">Initiate Engagement</a>
+        </div>
+
+        <dl class="hero__stats">
+          <div>
+            <dt>120+</dt>
+            <dd>Simulated intrusions delivered to contract</dd>
+          </div>
+          <div>
+            <dt>48h</dt>
+            <dd>Typical time to the first confirmed finding</dd>
+          </div>
+          <div>
+            <dt>3</dt>
+            <dd>Service lines: ORACLE AI, PHANTASM, CHAINBREAK</dd>
+          </div>
+          <div>
+            <dt>100%</dt>
+            <dd>Engagements run under a signed authorisation</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SERVICE TEASER
+         Cards are built by js/main.js from js/data/services.js (teaser
+         variant), not hardcoded, so the catalogue lives in one place.
+         ==================================================================== -->
+    <section class="section" aria-labelledby="teaser-heading">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow">Service Lines</p>
+          <h2 id="teaser-heading">Three ways to find out how you would really be attacked</h2>
+          <p class="lede">
+            Pick the question you need answered: can they get in, can they stay
+            in, or can they poison what you ship?
+          </p>
+        </div>
+
+        <div class="grid grid--cards grid--cards--3" id="services-teaser" data-services-grid="teaser"></div>
+
+        <noscript>
+          <p class="notice">
+            <strong>JavaScript is off.</strong>
+            This preview is generated from <code>js/data/services.js</code>. The
+            three service lines are ORACLE AI (external assault), PHANTASM
+            (assumed breach) and CHAINBREAK (supply chain) - see the
+            <a href="services.html">services page</a>.
+          </p>
+        </noscript>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         ENGAGEMENT LIFECYCLE
+         Static explanatory content: no script needed here.
+         ==================================================================== -->
+    <section class="section section--raised" aria-labelledby="lifecycle-heading">
+      <div class="container">
+        <div class="section__head">
+          <p class="eyebrow">How It Runs</p>
+          <h2 id="lifecycle-heading">Four moves, no surprises</h2>
+          <p class="lede">
+            The same sequence every time: agree the rules, rehearse the attack,
+            prove it happened, then rebuild.
+          </p>
+        </div>
+
+        <ol class="grid grid--cards grid--cards--4">
+          <li class="card card--stat">
+            <span class="card__label">Move 01</span>
+            <h3>Scope and authorise</h3>
+            <p class="text-muted">
+              We write the target list, the excluded systems and the stop
+              conditions together. Nothing starts until a named signatory
+              approves the scope.
+            </p>
+          </li>
+          <li class="card card--stat">
+            <span class="card__label">Move 02</span>
+            <h3>Rehearse the assault</h3>
+            <p class="text-muted">
+              Operators run the simulation from a monitored jump host. Every
+              action is timestamped against the authorisation ledger.
+            </p>
+          </li>
+          <li class="card card--stat">
+            <span class="card__label">Move 03</span>
+            <h3>Prove and replay</h3>
+            <p class="text-muted">
+              Findings are reproduced in front of your team, in a session you
+              can record, with the evidence hashed rather than exfiltrated.
+            </p>
+          </li>
+          <li class="card card--stat">
+            <span class="card__label">Move 04</span>
+            <h3>Rebuild and retest</h3>
+            <p class="text-muted">
+              You get a prioritised remediation queue; a retest window closes
+              the loop and confirms the fix actually holds.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CLOSING CALL TO ACTION
+         ==================================================================== -->
+    <section class="section" aria-labelledby="cta-heading">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2 id="cta-heading">Ready to see your own attack surface the way an adversary does?</h2>
+            <p class="text-muted">
+              Send us an encrypted inquiry and we will reply with a scope
+              template, an indicative timeline and the authorisation paperwork.
+            </p>
+          </div>
+          <div class="row">
+            <a class="btn btn--primary" href="engage.html">Start Your Assault</a>
+            <a class="btn btn--secondary" href="contact.html">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </section>

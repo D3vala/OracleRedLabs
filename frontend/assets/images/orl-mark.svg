@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Oracle Red Labs mark">
+  <!-- Brand mark: a peaked "shield" with a red baseline. Drawn inline so the
+       site has no external image dependency. -->
+  <rect x="1.5" y="1.5" width="45" height="45" rx="11" fill="#111114" stroke="#d13b3b" stroke-width="2"/>
+  <path d="M14 32 24 13l10 19" fill="none" stroke="#e8e8ec" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19 32h10" fill="none" stroke="#d13b3b" stroke-width="3" stroke-linecap="round"/>
+</svg>

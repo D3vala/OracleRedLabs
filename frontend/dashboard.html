@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client Dashboard | Oracle Red Labs</title>
+  <meta name="description" content="Mock client dashboard showing engagement status, requested windows and invoices.">
+  <meta name="author" content="Oracle Red Labs (ITS122P student project)">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <!-- Adds a "js" class so the mobile menu can start collapsed. With
+       JavaScript disabled the class is never added and the nav links stay
+       visible, which is the safer failure mode. -->
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
+       include/template; until then consistency matters more than DRY). -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
+        <span class="brand__name">Oracle <em>Red</em> Labs</span>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <ul class="nav__list">
+          <li><a class="nav__link" href="methodology.html">Methodology</a></li>
+          <li><a class="nav__link" href="services.html">Services</a></li>
+          <li><a class="nav__link" href="who-we-serve.html">Who We Serve</a></li>
+          <li><a class="nav__link" href="vault.html">Vault</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+          <li><a class="nav__link" href="engage.html">Engage</a></li>
+        </ul>
+        <ul class="nav__list nav__list--auth">
+          <li><a class="nav__link" href="login.html">Log In</a></li>
+          <li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head" aria-labelledby="page-heading">
+      <div class="container">
+        <p class="page-head__code">/ client dashboard</p>
+        <h1 id="page-heading">Your Engagements</h1>
+        <p class="lede">
+          Status, requested windows and invoices for every engagement on your
+          account. Everything you see is mock data rendered by a page-local
+          script - Milestone 7 swaps that script for a call to the API.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="summary-heading">
+      <div class="container">
+        <h2 id="summary-heading" class="visually-hidden">Account summary</h2>
+        <p class="notice">
+          <strong>Mock data.</strong>
+          The rows below come from a hard-coded array in this page
+          (<code>MOCK_ENGAGEMENTS</code>). The action buttons are stubs: they
+          report what they would do instead of performing it.
+        </p>
+
+        <!-- KPI tiles, built from the same array as the table. -->
+        <div class="stat-grid" id="dashboard-stats" style="margin-top: var(--space-lg);"></div>
+      </div>
+    </section>
+
+    <section class="section section--tight" aria-labelledby="engagements-heading">
+      <div class="container">
+        <div class="section__head">
+          <h2 id="engagements-heading">Engagement register</h2>
+          <p class="lede">
+            Cancel is disabled for anything already completed or cancelled, which
+            is the only rule the buttons enforce in this milestone.
+          </p>
+        </div>
+
+        <p class="result-status" id="dashboard-status" role="status" aria-live="polite"></p>
+
+        <div class="table-wrap">
+          <!-- table--stack: below 600px each row becomes a card, using the
+               data-label attributes on the cells (see css/responsive.css). -->
+          <div class="table-scroll">
+            <table class="table table--stack" id="engagements-table">
+              <caption>Engagements for the signed-in (mock) client account</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Reference</th>
+                  <th scope="col">Service</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Requested slot</th>
+                  <th scope="col">Findings</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Filled by the page script at the bottom of this file. -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="dashboard-cta-heading">
+      <div class="container">
+        <div class="cta-band">
+          <div>
+            <h2 id="dashboard-cta-heading">Need another engagement on this account?</h2>
+            <p class="text-muted">
+              Repeat work reuses your existing authorisation template, so scoping
+              is usually faster the second time.
+            </p>
+          </div>
+          <div class="row">
+            <a class="btn btn--primary" href="engage.html">Book an Engagement</a>
+            <a class="btn btn--secondary" href="vault.html">Open the Vault</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         PAGE SCRIPT (dashboard.html)
+         Deliberately page-local and deliberately dumb: it holds mock rows and
+         draws the table and the KPI tiles. In Milestone 7 the two constants
+         below are replaced by:
+
+             const response = await fetch("/api/engagements", { credentials: "same-origin" });
+             const MOCK_ENGAGEMENTS = await response.json();
+
+         and nothing else in this file has to change.
+         ====================================================================== -->
+    <script>
+      /* Status values mirror the future `engagements.status` column. */
+      var MOCK_ENGAGEMENTS = [
+        {
+          reference: "ORL-482913",
+          service: "ORACLE AI",
+          status: "active",
+          slot: "2026-09-28T09:00:00",
+          findings: 7,
+          invoice_state: "outstanding",
+          invoice_amount: 15000
+        },
+        {
+          reference: "ORL-517204",
+          service: "PHANTASM",
+          status: "scoping",
+          slot: "2026-10-12T08:00:00",
+          findings: 0,
+          invoice_state: "not_issued",
+          invoice_amount: 22000
+        },
+        {
+          reference: "ORL-533187",
+          service: "CHAINBREAK",
+          status: "pending",
+          slot: "2026-11-02T09:00:00",
+          findings: 0,
+          invoice_state: "not_issued",
+          invoice_amount: 18000
+        },
+        {
+          reference: "ORL-401662",
+          service: "ORACLE AI",
+          status: "completed",
+          slot: "2026-06-15T09:00:00",
+          findings: 12,
+          invoice_state: "paid",
+          invoice_amount: 15000
+        },
+        {
+          reference: "ORL-388041",
+          service: "PHANTASM",
+          status: "cancelled",
+          slot: "2026-05-20T09:00:00",
+          findings: 0,
+          invoice_state: "cancelled",
+          invoice_amount: 0
+        }
+      ];
+
+      /* --- tiny local helpers (this script runs before js/main.js loads, so it
+             does not rely on the shared API in window.ORL) ----------------- */
+      var dashboardStatus = document.getElementById("dashboard-status");
+
+      function announce(message) {
+        if (dashboardStatus) {
+          dashboardStatus.textContent = message;
+        }
+      }
+
+      function el(tagName, className, text) {
+        var node = document.createElement(tagName);
+        if (className) {
+          node.className = className;
+        }
+        if (typeof text === "string") {
+          node.textContent = text;
+        }
+        return node;
+      }
+
+      function formatSlot(iso) {
+        var date = new Date(iso);
+        if (isNaN(date.getTime())) {
+          return iso;
+        }
+        return date.toLocaleString("en-US", {
+          year: "numeric", month: "short", day: "numeric",
+          hour: "2-digit", minute: "2-digit"
+        });
+      }
+
+      function formatSlotShort(iso) {
+        var date = new Date(iso);
+        return isNaN(date.getTime())
+          ? iso
+          : date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      }
+
+      /* --- KPI tiles -------------------------------------------------- */
+      function renderStats() {
+        var container = document.getElementById("dashboard-stats");
+        if (!container) {
+          return;
+        }
+
+        var openStatuses = ["pending", "scoping", "active"];
+        var open = MOCK_ENGAGEMENTS.filter(function (engagement) {
+          return openStatuses.indexOf(engagement.status) !== -1;
+        });
+        var findings = MOCK_ENGAGEMENTS.reduce(function (total, engagement) {
+          return total + engagement.findings;
+        }, 0);
+        var upcoming = open
+          .filter(function (engagement) {
+            return new Date(engagement.slot).getTime() >= Date.now();
+          })
+          .sort(function (a, b) {
+            return new Date(a.slot) - new Date(b.slot);
+          })[0];
+        var outstanding = MOCK_ENGAGEMENTS.filter(function (engagement) {
+          return engagement.invoice_state === "outstanding";
+        }).reduce(function (total, engagement) {
+          return total + engagement.invoice_amount;
+        }, 0);
+
+        var tiles = [
+          { label: "Open engagements", value: String(open.length) },
+          { label: "Findings logged", value: String(findings) },
+          {
+            label: "Next start window",
+            value: upcoming ? formatSlotShort(upcoming.slot) : "None scheduled"
+          },
+          {
+            label: "Outstanding invoices",
+            value: outstanding ? "$" + outstanding.toLocaleString("en-US") : "$0"
+          }
+        ];
+
+        container.replaceChildren();
+        tiles.forEach(function (tile) {
+          var card = el("div", "card card--stat");
+          card.appendChild(el("span", "card__label", tile.label));
+          card.appendChild(el("p", "card__value", tile.value));
+          container.appendChild(card);
+        });
+      }
+
+      /* --- table rows ------------------------------------------------- */
+      function buildRow(engagement) {
+        var row = document.createElement("tr");
+
+        var reference = document.createElement("th");
+        reference.scope = "row";
+        reference.className = "table__row-head";
+        reference.textContent = engagement.reference;
+        row.appendChild(reference);
+
+        /* Every td carries data-label so the stacked mobile view can print the
+           column heading (see the <=600px rules in css/responsive.css). */
+        var service = document.createElement("td");
+        service.setAttribute("data-label", "Service");
+        service.textContent = engagement.service;
+        row.appendChild(service);
+
+        var status = document.createElement("td");
+        status.setAttribute("data-label", "Status");
+        var badge = el("span", "badge badge--" + engagement.status, engagement.status);
+        status.appendChild(badge);
+        row.appendChild(status);
+
+        var slot = document.createElement("td");
+        slot.setAttribute("data-label", "Requested slot");
+        slot.textContent = formatSlot(engagement.slot);
+        row.appendChild(slot);
+
+        var findings = document.createElement("td");
+        findings.setAttribute("data-label", "Findings");
+        findings.textContent = String(engagement.findings);
+        row.appendChild(findings);
+
+        /* Actions. Cancel is disabled for anything already completed or
+           cancelled - the only rule these stubs enforce. */
+        var isCancellable =
+          engagement.status !== "completed" && engagement.status !== "cancelled";
+
+        var actions = document.createElement("td");
+        actions.setAttribute("data-label", "Actions");
+        var group = el("div", "table__actions");
+
+        var viewButton = el("button", "btn btn--ghost btn--sm", "View");
+        viewButton.type = "button";
+        viewButton.addEventListener("click", function () {
+          announce(
+            "View " + engagement.reference +
+              ": the findings view is a stub in this milestone."
+          );
+        });
+        group.appendChild(viewButton);
+
+        var cancelButton = el("button", "btn btn--danger btn--sm", "Cancel");
+        cancelButton.type = "button";
+        cancelButton.disabled = !isCancellable;
+        if (!isCancellable) {
+          cancelButton.title =
+            "Completed and cancelled engagements cannot be cancelled.";
+        }
+        cancelButton.addEventListener("click", function () {
+          announce(
+            "Cancel " + engagement.reference +
+              ": this would request cancellation from your engagement lead."
+          );
+        });
+        group.appendChild(cancelButton);
+
+        actions.appendChild(group);
+        row.appendChild(actions);
+
+        return row;
+      }
+
+      function renderTable() {
+        var tbody = document.querySelector("#engagements-table tbody");
+        if (!tbody) {
+          return;
+        }
+        tbody.replaceChildren();
+        MOCK_ENGAGEMENTS.forEach(function (engagement) {
+          tbody.appendChild(buildRow(engagement));
+        });
+      }
+
+      /* Draw the page. */
+      renderStats();
+      renderTable();
+      announce(MOCK_ENGAGEMENTS.length + " engagements loaded from mock data.");
+    </script>
+  </main>
+
+  <!-- Shared footer: identical on all 11 pages. -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <p class="mono">Oracle Red Labs</p>
+        <p class="site-footer__tagline">
+          Adversarial security research under signed authorisation. We reproduce
+          attacker tradecraft, then hand your engineers the fixes.
+        </p>
+      </div>
+
+      <nav class="site-footer__nav" aria-label="Footer">
+        <div>
+          <h2 class="site-footer__heading">Company</h2>
+          <ul class="site-footer__list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="methodology.html">Methodology</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="who-we-serve.html">Who We Serve</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="site-footer__heading">Resources</h2>
+          <ul class="site-footer__list">
+            <li><a href="vault.html">Exploit Vault</a></li>
+            <li><a href="engage.html">Book an Engagement</a></li>
+            <li><a href="contact.html">Encrypted Inquiry</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="site-footer__heading">Client Area</h2>
+          <ul class="site-footer__list">
+            <li><a href="login.html">Log In</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="dashboard.html">Client Dashboard</a></li>
+            <li><a href="admin.html">Administrator Console</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container site-footer__legal">
+      <p class="site-footer__disclaimer">
+        Oracle Red Labs is a fictional company created for an academic project
+        (ITS122P). Every engagement, price and case study shown here is
+        placeholder content. Nothing on this site scans, exploits or attacks
+        anything: all dashboards, badges and live statuses are simulated in the
+        browser with mock data.
+      </p>
+      <p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>

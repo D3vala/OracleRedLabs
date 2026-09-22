@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200" role="img" aria-label="Decorative cover art for rule set entries">
+  <!-- Decorative placeholder cover: pure shapes, no photography, no external
+       assets. Used with alt="" on vault cards. -->
+  <defs>
+    <linearGradient id="rs-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16161a"/>
+      <stop offset="1" stop-color="#0a0a0c"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="200" fill="url(#rs-bg)"/>
+  <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="14">
+    <text x="32" y="48" fill="#4fb477">rule detect_escape {</text>
+    <text x="52" y="74" fill="#a2a2ad">event: container_start</text>
+    <text x="52" y="98" fill="#a2a2ad">where: namespace != host</text>
+    <text x="52" y="122" fill="#e2b562">severity: high</text>
+    <text x="32" y="152" fill="#4fb477">}</text>
+  </g>
+  <g stroke="#26262c" stroke-width="1">
+    <path d="M420 0v200M520 0v200M600 0v200"/>
+  </g>
+  <rect x="420" y="36" width="4" height="128" fill="#4fb477"/>
+</svg>

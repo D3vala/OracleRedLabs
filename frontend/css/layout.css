@@ -1,0 +1,482 @@
+/* ==========================================================================
+   layout.css - page skeleton: containers, header/nav, footer, sections, grids
+   Oracle Red Labs (ORL) - Milestone 4
+
+   Mobile-first: the single-column phone layout is the default, and wider
+   viewports are handled by min-width queries in responsive.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Containers and section rhythm
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+/* Every band of content on the site is a .section. The generous padding is
+   what gives the page its deliberate vertical rhythm. */
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.section--tight {
+  padding-block: var(--space-xl);
+}
+
+.section--raised {
+  background: var(--color-bg-raised);
+  border-block: 1px solid var(--color-border);
+}
+
+.section--flush-top {
+  padding-top: 0;
+}
+
+/* Heading + lede pair that opens a section. */
+.section__head {
+  margin-bottom: var(--space-xl);
+}
+
+.section__head p {
+  margin-top: var(--space-sm);
+}
+
+/* --------------------------------------------------------------------------
+   2. Header and primary navigation
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10, 10, 12, 0.92);
+  border-bottom: 1px solid var(--color-border);
+  /* Progressive enhancement: browsers without backdrop-filter just ignore it. */
+  backdrop-filter: blur(10px);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: var(--header-height);
+}
+
+/* --- Brand --- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-block: var(--space-xs);
+  text-decoration: none;
+}
+
+.brand__mark {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+}
+
+.brand__name {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-200);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.brand__name em {
+  color: var(--color-accent);
+  font-style: normal;
+}
+
+/* --- Hamburger toggle (hidden from 768px up) --- */
+.nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px; /* 44px is the minimum comfortable touch target. */
+  height: 44px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.nav-toggle:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-2);
+}
+
+.nav-toggle__bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--color-text);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+/* The three bars fold into an X while the menu is open. */
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --- Nav ---
+   When JavaScript is available the mobile menu starts collapsed (the `js`
+   class is added to <html> in the document head). With JavaScript disabled
+   the links simply stay visible, which is the safer failure mode. */
+.nav {
+  flex-basis: 100%;
+  padding-bottom: var(--space-md);
+}
+
+.js .nav {
+  display: none;
+}
+
+.js .nav.is-open {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.nav__list--auth {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.nav__link {
+  display: block;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+  text-decoration: none;
+  transition: color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.nav__link:hover {
+  color: var(--color-text);
+  background: var(--color-surface-2);
+}
+
+/* Active-link indicator. js/main.js sets aria-current on the link that matches
+   the current filename, which keeps the header markup identical everywhere. */
+.nav__link[aria-current="page"] {
+  color: var(--color-text);
+  background: var(--color-accent-soft);
+  box-shadow: inset 2px 0 0 var(--color-accent);
+}
+
+.nav__list--auth .btn {
+  width: 100%;
+}
+
+/* The Register entry is a button, not a .nav__link, but js/main.js marks it
+   with aria-current like every other nav entry. Ring in the text colour so it
+   reads as "you are here" against the accent fill. */
+.nav__list--auth .btn[aria-current="page"] {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Hero (index.html)
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* Full viewport height minus the sticky header. svh avoids the jump that
+     100vh causes when mobile browser chrome appears/disappears. */
+  min-height: calc(100svh - var(--header-height));
+  padding-block: var(--space-2xl);
+  overflow: hidden;
+}
+
+/* Decorative grid + red glow: pure CSS so the page renders identically with
+   no network access (the project has to work offline for grading). */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 40%,
+    #000 5%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(circle at 50% 40%, #000 5%, transparent 72%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  width: 70vw;
+  max-width: 900px;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    circle,
+    var(--color-accent-soft) 0%,
+    transparent 62%
+  );
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__tagline {
+  margin-block: var(--space-md) var(--space-lg);
+  font-size: var(--fs-800);
+  /* Space is reserved for two lines up front so the typewriter animation
+     cannot push the buttons and stats around while it types. */
+  min-height: calc(2 * 1.2em);
+}
+
+.hero__typed {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--color-accent);
+}
+
+.hero__lede {
+  max-width: 58ch;
+  color: var(--color-text-muted);
+  font-size: var(--fs-400);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+/* Small mono fact strip under the hero copy. */
+.hero__stats {
+  display: grid;
+  gap: var(--space-lg);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.hero__stats dt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-700);
+}
+
+.hero__stats dd {
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+/* --------------------------------------------------------------------------
+   4. Inner-page header block (.page-head)
+   -------------------------------------------------------------------------- */
+.page-head {
+  padding-block: var(--space-2xl) var(--space-xl);
+  background: linear-gradient(to bottom, var(--color-bg-raised), var(--color-bg));
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-head h1 {
+  margin-block: var(--space-xs) var(--space-md);
+  font-size: var(--fs-700);
+}
+
+/* Mono breadcrumb-ish line above the H1. */
+.page-head__code {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   5. Grid helpers
+   -------------------------------------------------------------------------- */
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+/* Card grids start as a single column (phones) and gain columns in
+   responsive.css. minmax(0, 1fr) stops long words from blowing out a track. */
+.grid--cards {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Form + supporting column pages (contact, register, login, engage). */
+.split {
+  display: grid;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+/* KPI strip on the dashboards. */
+.stat-grid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+/* Narrative / table two-column block (methodology). */
+.prose-grid {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+/* Manual bullet lists used for guardrails and scope notes. */
+.check-list {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.check-list li {
+  position: relative;
+  padding-left: var(--space-lg);
+  color: var(--color-text-muted);
+}
+
+.check-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 8px;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+/* Vertical stack used inside cards and info panels. */
+.stack {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.stack--sm {
+  gap: var(--space-sm);
+}
+
+/* Horizontal wrap row (buttons, buttons + note, tags). */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* --------------------------------------------------------------------------
+   6. Armory badge grid (methodology.html)
+   -------------------------------------------------------------------------- */
+.armory {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+
+/* --------------------------------------------------------------------------
+   7. Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+  margin-top: var(--space-3xl);
+  padding-block: var(--space-2xl) var(--space-xl);
+  background: var(--color-bg-sunken);
+  border-top: 1px solid var(--color-border);
+}
+
+.site-footer__inner {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.site-footer__brand p {
+  max-width: 34ch;
+}
+
+.site-footer__tagline {
+  margin-top: var(--space-sm);
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+.site-footer__nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-lg);
+}
+
+.site-footer__heading {
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.site-footer__list {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.site-footer__list a {
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+  text-decoration: none;
+}
+
+.site-footer__list a:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.site-footer__legal {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-faint);
+  font-size: var(--fs-200);
+}
+
+.site-footer__disclaimer {
+  max-width: 88ch;
+}

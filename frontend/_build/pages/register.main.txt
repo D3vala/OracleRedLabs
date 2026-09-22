@@ -1,0 +1,124 @@
+    <section class="page-head" aria-labelledby="page-heading">
+      <div class="container">
+        <p class="page-head__code">/ client registration</p>
+        <h1 id="page-heading">Register a Client Account</h1>
+        <p class="lede">
+          An account gives you access to engagement status, findings and
+          deliverables. Accounts are created in the browser only: there is no
+          user database yet.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="register-heading">
+      <div class="container">
+        <div class="split">
+          <div>
+            <p class="eyebrow">New Account</p>
+            <h2 id="register-heading">Create your credentials</h2>
+
+            <!-- data-password-form enables the confirmation check in
+                 js/main.js (initPasswordConfirmation); data-demo-form shows the
+                 on-page confirmation instead of navigating away. -->
+            <form class="form" id="register-form" data-demo-form data-password-form
+                  data-success-message="Account form validated. In the finished application these details would be posted to the user service and a verification email would follow; nothing was stored in this demo."
+                  style="margin-top: var(--space-lg);">
+              <div class="field">
+                <label class="field__label" for="register-name">
+                  Full name <span class="field__required">required</span>
+                </label>
+                <input class="input" id="register-name" name="register-name" type="text"
+                       required autocomplete="name" placeholder="Jordan Ellis">
+              </div>
+
+              <div class="form__row form__row--2">
+                <div class="field">
+                  <label class="field__label" for="register-email">
+                    Company email <span class="field__required">required</span>
+                  </label>
+                  <input class="input" id="register-email" name="register-email" type="email"
+                         required autocomplete="email" placeholder="jordan.ellis@company.com">
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="register-company">
+                    Company name <span class="field__required">required</span>
+                  </label>
+                  <input class="input" id="register-company" name="register-company" type="text"
+                         required autocomplete="organization" placeholder="Northwind Logistics">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="register-password">
+                  Password <span class="field__required">required</span>
+                </label>
+                <input class="input" id="register-password" name="register-password" type="password"
+                       required data-password minlength="12"
+                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}"
+                       autocomplete="new-password"
+                       aria-describedby="register-password-hint"
+                       title="At least 12 characters, including upper and lower case, a number and a symbol.">
+                <p class="field__hint" id="register-password-hint">
+                  At least 12 characters, with upper and lower case, a number and a
+                  symbol. The rule is enforced by the pattern attribute in the
+                  markup, not by a library.
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="register-password-confirm">
+                  Confirm password <span class="field__required">required</span>
+                </label>
+                <input class="input" id="register-password-confirm" name="register-password-confirm"
+                       type="password" required data-password-confirm
+                       autocomplete="new-password" aria-describedby="register-password-confirm-error">
+                <!-- Filled in by js/main.js when the two passwords differ. -->
+                <p class="field__error" id="register-password-confirm-error"
+                   data-password-error role="alert" hidden></p>
+              </div>
+
+              <label class="checkbox">
+                <input type="checkbox" id="register-terms" name="register-terms" required>
+                <span>
+                  I confirm I am authorised to request security testing on behalf
+                  of this organisation. <span class="field__required">required</span>
+                </span>
+              </label>
+
+              <p class="notice">
+                <strong>Front-end demo.</strong>
+                No account is created, no password is stored and no email is sent.
+                Authentication and the user table arrive in Milestone 7.
+              </p>
+
+              <button class="btn btn--primary" type="submit">Create Account</button>
+
+              <p class="form-message" data-form-status role="status" tabindex="-1" hidden></p>
+            </form>
+          </div>
+
+          <aside class="stack" aria-label="Registration notes">
+            <div class="card">
+              <span class="card__label">Why Register</span>
+              <h3>What the account is for</h3>
+              <ul class="check-list">
+                <li>Track engagement status and requested start slots</li>
+                <li>Download findings and remediation queues as they are released</li>
+                <li>Approve a scope change without reopening the whole contract</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <span class="card__label">Already Registered</span>
+              <h3>Sign in instead</h3>
+              <p class="text-muted">
+                Existing clients can go straight to the login page. Again: there
+                is no real authentication behind it yet.
+              </p>
+              <a class="btn btn--secondary btn--sm" href="login.html">Go to Log In</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>

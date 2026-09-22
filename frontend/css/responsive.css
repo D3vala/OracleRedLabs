@@ -1,0 +1,266 @@
+/* ==========================================================================
+   responsive.css - all breakpoints live here
+   Oracle Red Labs (ORL) - Milestone 4
+
+   The site is mobile-first: base.css, layout.css and components.css describe
+   the phone layout, and this file only *adds* columns/rows as space appears.
+   The one exception is the table stacking rule at the bottom, which is a
+   max-width query because it removes the horizontal scroll fallback.
+
+   Breakpoints
+     480px  - large phones (full-width buttons, tighter padding)
+     600px  - two-column card grids, two-up form rows
+     768px  - tablet/desktop navigation, richer hero stats
+    1024px  - three-column card grids, wide two-column page splits
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Very small screens (<= 480px): stack actions, reduce chrome
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .hero__actions .btn,
+  .form-nav .btn,
+  .row .btn {
+    width: 100%;
+  }
+
+  .form-nav {
+    flex-direction: column-reverse;
+  }
+
+  .brand__name {
+    font-size: var(--fs-100);
+  }
+
+  .stepper__item {
+    font-size: 0.7rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Phones and up (>= 600px)
+   -------------------------------------------------------------------------- */
+@media (min-width: 600px) {
+  .grid--cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Two fields side by side inside one form row. */
+  .form__row--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .armory {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .confirm__summary {
+    grid-template-columns: max-content 1fr;
+    gap: var(--space-xs) var(--space-lg);
+  }
+
+  .confirm__summary dd {
+    margin-bottom: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet and up (>= 768px): the navigation becomes a horizontal bar
+   -------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  /* The hamburger is no longer needed, and the menu is always visible even
+     when JavaScript is unavailable. */
+  .nav-toggle {
+    display: none;
+  }
+
+  .nav,
+  .js .nav,
+  .js .nav.is-open {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-basis: auto;
+    padding-bottom: 0;
+  }
+
+  .nav__list {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .nav__list--auth {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+    gap: var(--space-sm);
+  }
+
+  .nav__list--auth .btn {
+    width: auto;
+  }
+
+  /* Active-link indicator switches from a left bar to an underline. */
+  .nav__link[aria-current="page"] {
+    box-shadow: inset 0 -2px 0 var(--color-accent);
+  }
+
+  .hero__stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .split {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  .prose-grid {
+    grid-template-columns: 1.15fr 1fr;
+  }
+
+  .site-footer__inner {
+    grid-template-columns: 1fr 1.6fr;
+  }
+
+  .site-footer__legal {
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+  }
+
+  .cta-band {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .toolbar .field {
+    grid-column: 1 / -1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Desktop (>= 1024px)
+   -------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  /* Three service cards / four target-client blocks sit in one row. */
+  .grid--cards--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid--cards--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .armory {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .split {
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-2xl);
+  }
+
+  .section {
+    padding-block: var(--space-3xl);
+  }
+
+  .section--tight {
+    padding-block: var(--space-2xl);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Small phones (<= 600px): tables become stacked cards
+   Tables carry a data-label attribute on every cell, so each cell can print
+   its own column heading once the header row is hidden.
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  /* Tighter page padding and slightly shorter rhythm for small screens. */
+  :root {
+    --container-pad: var(--space-md);
+    --space-2xl: 2.75rem;
+    --space-3xl: 3.5rem;
+  }
+
+  /* Stacked tables do not need a minimum width or a horizontal scroller. */
+  .table--stack {
+    min-width: 0;
+  }
+
+  .table--stack .table-scroll {
+    overflow-x: visible;
+  }
+
+  /* Keep the column headings available to screen readers only. */
+  .table--stack thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .table--stack tbody tr {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .table--stack tbody th,
+  .table--stack tbody td {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: var(--space-sm);
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  /* Each cell prints the label of the column it came from. */
+  .table--stack tbody td::before {
+    content: attr(data-label);
+    color: var(--color-text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--fs-100);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .table--stack tbody tr:first-child {
+    padding-top: var(--space-sm);
+  }
+
+  /* Row actions stay full width and easy to tap. */
+  .table--stack .table__actions .btn {
+    min-height: 38px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Narrow viewports (<= 1024px): remind users that wide tables scroll
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .table-wrap--scroll .scroll-hint {
+    display: block;
+    padding: var(--space-xs) var(--space-lg) var(--space-sm);
+  }
+}
