@@ -1,0 +1,7 @@
+Use case: stylized-concept
+Asset type: small inline typography image for a cybersecurity website heading
+Primary request: isolate a compact horizontal breach trace from the reference: three red particle nodes connected by one thin luminous route, with a few fine sparks, designed to sit inside a line of large text.
+Style/medium: precise premium dark-tech particle rendering matching the reference orb.
+Composition/framing: very wide pill-like artwork, generous transparent margins, one clear left-to-right route, no container shape.
+Color palette: signal red, pale red-white highlights, transparent background.
+Constraints: genuine transparent alpha; no text, no labels, no border, no card, no icon, no watermark; keep the artwork simple and readable at approximately 176 by 64 pixels.
