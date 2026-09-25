@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 760" fill="none">
+  <defs>
+    <linearGradient id="disc" x1="103" y1="166" x2="754" y2="614" gradientUnits="userSpaceOnUse"><stop stop-color="#10231A"/><stop offset="1" stop-color="#06120D"/></linearGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientTransform="matrix(0 145 -145 0 474 367)" gradientUnits="userSpaceOnUse"><stop stop-color="#91FFE0"/><stop offset=".16" stop-color="#3BE6B4"/><stop offset=".54" stop-color="#114F3A" stop-opacity=".58"/><stop offset="1" stop-color="#06120D" stop-opacity="0"/></radialGradient>
+    <linearGradient id="route" x1="164" y1="517" x2="750" y2="268" gradientUnits="userSpaceOnUse"><stop stop-color="#48E7B8"/><stop offset=".55" stop-color="#C1FFE9"/><stop offset="1" stop-color="#43DDB0"/></linearGradient>
+    <filter id="blur" x="0" y="0" width="900" height="760" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="17"/></filter>
+    <filter id="glow" x="0" y="0" width="900" height="760" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="7"/></filter>
+  </defs>
+  <ellipse cx="466" cy="589" rx="334" ry="62" fill="#000" fill-opacity=".47" filter="url(#blur)"/>
+  <ellipse cx="468" cy="379" rx="322" ry="225" fill="url(#disc)" stroke="#77DABD" stroke-opacity=".42" stroke-width="1.5"/>
+  <ellipse cx="468" cy="379" rx="278" ry="193" stroke="#69CDAF" stroke-opacity=".18"/><ellipse cx="468" cy="379" rx="201" ry="138" stroke="#69CDAF" stroke-opacity=".15"/>
+  <g stroke="#80E2C2" stroke-opacity=".13"><path d="M147 379h644M169 325h598M197 271h544M197 487h544M169 433h598"/><path d="M468 154v450M389 159v439M547 159v439M314 177v405M622 177v405"/></g>
+  <circle cx="468" cy="379" r="152" fill="url(#core)"/>
+  <g stroke="#A5FFE4" stroke-opacity=".22"><circle cx="468" cy="379" r="113"/><circle cx="468" cy="379" r="74"/><path d="M357 379h222M468 268v222"/></g>
+  <g fill="#081A13" stroke="#75DFC0" stroke-opacity=".66"><path d="m180 493 57-33 57 33v66l-57 33-57-33v-66Z"/><path d="m605 218 56-33 57 33v66l-57 33-56-33v-66Z"/><path d="m662 480 49-28 49 28v56l-49 28-49-28v-56Z"/></g>
+  <g stroke="#A7FFE5" stroke-opacity=".37"><path d="m180 493 57 33 57-33M237 526v66M605 218l56 33 57-33M661 251v66M662 480l49 28 49-28M711 508v56"/></g>
+  <path d="M237 526 365 441 468 379 661 251 711 508" stroke="#42E3B5" stroke-opacity=".3" stroke-width="23" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <path d="M237 526 365 441 468 379 661 251 711 508" stroke="url(#route)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M237 526 365 441 468 379 661 251 711 508" stroke="#EAFFF6" stroke-opacity=".72" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#47E6B8" stroke="#E4FFF4" stroke-width="2"><circle cx="237" cy="526" r="8"/><circle cx="365" cy="441" r="8"/><circle cx="468" cy="379" r="11"/><circle cx="661" cy="251" r="8"/><circle cx="711" cy="508" r="8"/></g>
+  <circle cx="468" cy="379" r="28" stroke="#63EBC1" stroke-opacity=".72" stroke-width="1.5"/><circle cx="468" cy="379" r="42" stroke="#63EBC1" stroke-opacity=".35" stroke-dasharray="3 9"/>
+  <g font-family="monospace" font-size="11" letter-spacing="3" fill="#C4F8E5"><text x="137" y="445">ENTRY</text><text x="305" y="410">ROUTE</text><text x="421" y="314">CONTROL</text><text x="651" y="161">PROOF</text><text x="736" y="567">RETEST</text></g>
+  <g stroke="#A6F8DE" stroke-opacity=".34"><path d="M171 452h93m101-34h-44m147-97v-53m216-99h-37m72 404h86"/><path d="M264 452v41m57-75v22m152-119v38m112-190v50m-66 348v-30"/></g>
+</svg>

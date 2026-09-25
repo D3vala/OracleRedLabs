@@ -91,6 +91,9 @@
     gap: var(--space-lg);
     flex-basis: auto;
     padding-bottom: 0;
+    margin-left: auto;
+    padding-left: var(--space-lg);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .nav__list {

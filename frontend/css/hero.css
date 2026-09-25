@@ -1,0 +1,293 @@
+/* ==========================================================================
+   hero.css - Phase 2 Visual Polish: Hero Two-Zone Layout & Motion
+   Oracle Red Labs (ORL)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Hero Layout: Asymmetric Two-Zone Container
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100svh - var(--header-height));
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-md);
+  overflow: hidden;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* Two-zone grid: Left text zone + Right network sphere zone */
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 1024px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.95fr);
+    gap: var(--space-2xl);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Left Zone: Text & CTAs
+   -------------------------------------------------------------------------- */
+.hero__text-zone {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero__eyebrow {
+  display: inline-block;
+  color: var(--color-accent-hover);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+}
+
+.hero__tagline {
+  margin-block: var(--space-xs) var(--space-md);
+  font-size: var(--fs-800);
+  min-height: calc(2 * 1.2em);
+  text-wrap: balance;
+}
+
+.hero__typed {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--color-accent-hover);
+}
+
+.hero__lede {
+  max-width: 58ch;
+  color: var(--color-text-muted);
+  font-size: var(--fs-400);
+  margin-top: 0;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   3. Right Zone: Network Sphere Graphic
+   -------------------------------------------------------------------------- */
+.hero__graphic-zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-network {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.hero-network__svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  /* Token-driven halo so the palette stays the single source of truth. */
+  filter: drop-shadow(0 0 30px var(--color-accent-soft));
+}
+
+/* Stacked layouts (below the two-zone breakpoint) put the sphere under the
+   copy, so cap its size: it is the second voice in the hero, never the reason
+   the headline and CTAs scroll off a phone screen. */
+@media (max-width: 1023px) {
+  .hero-network {
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-network {
+    max-width: 260px;
+  }
+}
+
+/* SVG animations */
+@media (prefers-reduced-motion: no-preference) {
+  /* Slow continuous rotation of the node cluster. transform-box: view-box
+     makes the 300px 300px origin resolve against the viewBox (not the
+     element's own border box), which is what every engine now defaults to -
+     stated explicitly so the sphere cannot spin off its axis elsewhere. */
+  .hero-network__cluster {
+    transform-box: view-box;
+    transform-origin: 300px 300px;
+    animation: hero-cluster-spin 80s linear infinite;
+  }
+
+  /* Core node glow pulse */
+  .hero-network__core-glow {
+    animation: hero-core-pulse 3.2s ease-in-out infinite;
+  }
+
+  /* Moving packet dots along transmission channels */
+  .hero-network__packet-1 {
+    animation: packet-travel-1 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+  .hero-network__packet-2 {
+    animation: packet-travel-2 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.2s;
+  }
+  .hero-network__packet-3 {
+    animation: packet-travel-3 3.8s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.7s;
+  }
+
+  /* Dash pulses along key lateral connections */
+  .hero-network__line-active {
+    stroke-dasharray: 6 18;
+    animation: line-pulse 2.8s linear infinite;
+  }
+}
+
+@keyframes hero-cluster-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hero-core-pulse {
+  0%, 100% {
+    opacity: 0.85;
+    r: 15px;
+    filter: drop-shadow(0 0 12px var(--color-accent)) drop-shadow(0 0 24px var(--color-accent-hover));
+  }
+  50% {
+    opacity: 0.45;
+    r: 13px;
+    filter: drop-shadow(0 0 5px var(--color-accent)) drop-shadow(0 0 10px var(--color-accent-glow));
+  }
+}
+
+@keyframes line-pulse {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+
+@keyframes packet-travel-1 {
+  0% {
+    opacity: 0;
+    offset-distance: 0%;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    offset-distance: 100%;
+  }
+}
+
+@keyframes packet-travel-2 {
+  0% {
+    opacity: 0;
+    offset-distance: 0%;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    offset-distance: 100%;
+  }
+}
+
+@keyframes packet-travel-3 {
+  0% {
+    opacity: 0;
+    offset-distance: 0%;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    offset-distance: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Bottom-of-Hero Strip: Scroll to Explore
+   -------------------------------------------------------------------------- */
+.hero__scroll-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.hero__scroll-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.hero__scroll-indicator:hover {
+  color: var(--color-text);
+}
+
+.hero__scroll-chevron {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__scroll-chevron {
+    animation: chevron-bounce 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes chevron-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}

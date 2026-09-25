@@ -1,0 +1,967 @@
+/* ==========================================================================
+   dispatch.css - index.html only
+   World: "The Block Signalling Board" - a night dispatcher's console.
+
+   Rules of the world:
+   - Night ground, one loud hue (aspect red). States are shown by light and
+     position, never by a second traffic-light colour.
+   - Barlow (transport-signage grotesk) for prose and headings; JetBrains Mono
+     for commands, labels, times and readouts. Both self-hosted, offline.
+   - Structure is hairline trackwork: 1px rules, ruled ground, engraved plates.
+   - One authored motion: the route sets itself block by block. Everything
+     else wakes along a single axis.
+
+   Loaded after base/layout/components/responsive, so the token overrides
+   below repaint the whole page while every shared component keeps working.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Faces - self-hosted latin subsets, zero network requests
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Barlow";
+  src: url("../assets/fonts/barlow-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow";
+  src: url("../assets/fonts/barlow-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow";
+  src: url("../assets/fonts/barlow-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../assets/fonts/jetbrainsmono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../assets/fonts/jetbrainsmono-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   2. Page tokens - the console repaints the shared palette
+   -------------------------------------------------------------------------- */
+:root {
+  --color-bg: #0b0e12;
+  --color-bg-raised: #12161b;
+  --color-bg-sunken: #070a0d;
+  --color-surface-2: #1a222b;
+
+  --color-text: #e8eaec;
+  --color-text-muted: #8b939c;
+  --color-text-faint: #7c858e;
+
+  /* The single loud hue: signal aspect red. */
+  --color-accent: #ff4444;
+  --color-accent-hover: #ff6b6b;
+  --color-accent-soft: rgba(255, 68, 68, 0.12);
+  --color-accent-line: rgba(255, 68, 68, 0.5);
+  --color-accent-glow: rgba(255, 68, 68, 0.3);
+
+  --color-border: #242c33;
+  --color-border-strong: #3a4652;
+
+  --font-sans: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+/* --------------------------------------------------------------------------
+   3. Ground, browser surfaces, ink corrections
+   -------------------------------------------------------------------------- */
+body {
+  /* Dispatcher panel ruling instead of the old instrument dot-grid. */
+  background-image:
+    linear-gradient(to right, rgba(232, 234, 236, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(232, 234, 236, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent 420px);
+  background-size: 64px 64px, 64px 64px, 100% 100%;
+  caret-color: var(--color-accent);
+}
+
+::selection {
+  background: rgba(255, 68, 68, 0.3);
+  color: var(--color-text);
+}
+
+@supports (scrollbar-color: red blue) {
+  html {
+    scrollbar-color: var(--color-border-strong) var(--color-bg-sunken);
+    scrollbar-width: thin;
+  }
+}
+
+/* The skip link sits on the accent fill: dark ink clears 5.6:1 where white
+   would fail. Same correction for its focus state. */
+.skip-link,
+.skip-link:focus,
+.skip-link:hover {
+  color: #0b0e12;
+}
+
+/* This world's type metrics make the link 50px tall, so the shared -48px park
+   leaves a red sliver at the corner. Park it deeper; :focus still wins. */
+.skip-link {
+  top: -100px;
+}
+
+.site-header {
+  background: rgba(11, 14, 18, 0.92);
+}
+
+/* The noscript services notice keeps to the console's neutrals. */
+.notice {
+  background: rgba(232, 234, 236, 0.04);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   4. Type voices
+   Headings: Barlow 600, tight but inside the -0.04em tracking floor.
+   strong steps to 700 so inline emphasis stays above body 400.
+   -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+strong {
+  font-weight: 700;
+}
+
+.lede {
+  max-width: 66ch;
+}
+
+/* Commands are stamped plates: mono, caps, tracked. */
+.btn {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.btn--primary,
+.btn--primary:hover {
+  /* Dark ink on the lit aspect - white would miss 4.5:1 on #ff4444. */
+  color: #0b0e12;
+}
+
+/* --------------------------------------------------------------------------
+   5. Section heads - the rule below the head draws itself, lamp first
+   -------------------------------------------------------------------------- */
+html.js .section__head::after {
+  content: "";
+  display: block;
+  height: 2px;
+  margin-top: var(--space-lg);
+  background: linear-gradient(
+    to right,
+    var(--color-accent) 0 14px,
+    var(--color-border) 14px 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+}
+
+html.js .band.is-woken .section__head::after {
+  transform: scaleX(1);
+}
+
+/* --------------------------------------------------------------------------
+   6. Wake choreography - bands rise once, along one axis; the per-element
+   delay (--wake-delay) walks the eye down the band. js-gated so the no-JS
+   page is fully visible from the first paint.
+   -------------------------------------------------------------------------- */
+html.js .band .band-anim {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--wake-delay, 0ms);
+}
+
+html.js .band.is-woken .band-anim {
+  opacity: 1;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   7. The console (first viewport)
+   -------------------------------------------------------------------------- */
+.console {
+  position: relative;
+  display: grid;
+  align-content: center;
+  min-height: calc(100svh - var(--header-height));
+  padding-block: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.console__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-xl) var(--space-2xl);
+}
+
+/* --- Text column --- */
+.console__tagline {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 1rem + 3.6vw, 4rem);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  color: var(--color-accent);
+  /* Two lines are reserved up front so typing cannot move the page. */
+  min-height: calc(2 * 1.18em);
+  margin-block: 0 var(--space-lg);
+  overflow-wrap: break-word;
+}
+
+.console__lede {
+  max-width: 58ch;
+  color: var(--color-text-muted);
+  font-size: var(--fs-400);
+}
+
+.console__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+/* --- Route panel --- */
+.console__panel {
+  display: grid;
+  gap: var(--space-md);
+  align-content: center;
+}
+
+.panel__frame {
+  position: relative;
+  padding: var(--space-lg);
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  /* Double-rule engraving around the instrument face. */
+  box-shadow: inset 0 0 0 4px var(--color-bg-sunken),
+    inset 0 0 0 5px var(--color-border);
+}
+
+.panel__diagram {
+  width: 100%;
+}
+
+.panel__rail {
+  stroke: var(--color-border-strong);
+  stroke-width: 2;
+  fill: none;
+}
+
+.panel__feed {
+  /* Live feed: the box is energised even before the route is set. */
+  stroke: var(--color-accent);
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: butt;
+}
+
+.panel__post {
+  stroke: var(--color-border-strong);
+  stroke-width: 2;
+}
+
+/* Default = route fully set (the no-JS page shows the end state). */
+.blk__route {
+  stroke: var(--color-accent);
+  stroke-width: 3;
+  fill: none;
+}
+
+.blk__lamp {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  transition:
+    fill 0.3s ease,
+    stroke 0.3s ease,
+    filter 0.3s ease;
+}
+
+.blk__num {
+  fill: #0b0e12;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 600;
+  text-anchor: middle;
+  transition: fill 0.3s ease;
+}
+
+.blk.is-set .blk__lamp {
+  /* Emission from a lit lamp, tied to state - not a decorative halo. */
+  filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.45));
+}
+
+.blk.is-pointed .blk__lamp {
+  stroke-width: 3.5;
+}
+
+/* Armed: JS is driving the sequence, so the route starts unlit. */
+.panel--armed .blk__route {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.panel--armed .blk__lamp {
+  fill: var(--color-bg-sunken);
+  stroke: var(--color-border-strong);
+}
+
+.panel--armed .blk__num {
+  fill: var(--color-text-faint);
+}
+
+.panel--armed .blk.is-set .blk__route {
+  stroke-dashoffset: 0;
+}
+
+.panel--armed .blk.is-set .blk__lamp {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+}
+
+.panel--armed .blk.is-set .blk__num {
+  fill: #0b0e12;
+}
+
+/* --- Block chips: the pointing targets for the panel --- */
+.panel__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.panel__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 32px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.panel__chip:hover,
+.panel__chip:focus-visible {
+  border-color: var(--color-accent-line);
+  color: var(--color-text);
+}
+
+.chip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border-strong);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.panel--armed .panel__chip .chip__dot {
+  background: var(--color-bg-sunken);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+}
+
+.panel--armed .panel__chip.is-lit .chip__dot {
+  background: var(--color-accent);
+  box-shadow: 0 0 6px rgba(255, 68, 68, 0.45);
+}
+
+/* --- Status readout --- */
+.panel__status {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.panel__count {
+  color: var(--color-text-muted);
+}
+
+.panel__status.is-set .panel__state {
+  color: var(--color-accent);
+}
+
+/* --- Stat strip with provenance tickets --- */
+.console__stats {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.console__stats > div {
+  display: grid;
+  gap: var(--space-2xs);
+  align-content: start;
+  justify-items: start;
+}
+
+.console__stats dt {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: var(--fs-600);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.console__stats dd {
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+  line-height: 1.5;
+}
+
+/* Provenance ticket: a notched paper tag stating where a figure came from. */
+.ticket {
+  display: table;
+  margin-top: 4px;
+  padding: 1px 8px;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%);
+}
+
+/* --------------------------------------------------------------------------
+   8. Service lanes - three parallel tracks, not a card grid
+   The markup is injected by js/main.js; this restyles it in place.
+   -------------------------------------------------------------------------- */
+.tracks {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.tracks .card {
+  display: grid;
+  grid-template-columns: 14px minmax(9rem, 15rem) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--space-lg);
+  row-gap: var(--space-xs);
+  align-items: start;
+  padding: var(--space-lg);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  transform: none;
+}
+
+.tracks .card:hover,
+.tracks .card--interactive:hover {
+  background: var(--color-bg-raised);
+  border-color: var(--color-border);
+  border-left-color: var(--color-accent);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Lane signal: unlit at rest, lights on approach. */
+.tracks .card::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1 / 3;
+  width: 14px;
+  height: 14px;
+  margin-top: 6px;
+  background: var(--color-bg-sunken);
+  border: 2px solid var(--color-border-strong);
+  border-radius: 50%;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.tracks .card:hover::before,
+.tracks .card:focus-within::before {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+}
+
+.tracks .card h3 {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: var(--fs-500);
+  letter-spacing: 0.04em;
+}
+
+.tracks .card .badge {
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.tracks .card .text-muted {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.tracks .card .footnote {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+/* --------------------------------------------------------------------------
+   9. The train graph - four moves down a signalling rail with running times
+   -------------------------------------------------------------------------- */
+.graph {
+  position: relative;
+  display: grid;
+}
+
+.graph::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: var(--space-md);
+  bottom: var(--space-md);
+  width: 2px;
+  background: var(--color-border);
+}
+
+.graph__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 14px auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-sm) var(--space-lg);
+  padding-block: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.graph__row:last-child {
+  border-bottom: 0;
+}
+
+/* Lamp punched through the rail: lit by default (no-JS end state). */
+.graph__lamp {
+  width: 14px;
+  height: 14px;
+  margin-top: 6px;
+  background: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+html.js .graph__lamp {
+  background: var(--color-bg-raised);
+  border-color: var(--color-border-strong);
+  box-shadow: none;
+}
+
+html.js .graph__row.is-clear .graph__lamp {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+}
+
+.graph__index {
+  padding-top: 4px;
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-200);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.graph__body h3 {
+  margin-bottom: var(--space-xs);
+}
+
+.graph__body p {
+  max-width: 68ch;
+}
+
+.graph__time {
+  padding-top: 6px;
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s ease;
+}
+
+.graph__row.is-clear .graph__time {
+  color: var(--color-text-muted);
+}
+
+/* The budget line: the running times total against one authorised window. */
+.graph__total {
+  max-width: none;
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 3px double var(--color-border-strong);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   10. The yard - four sidings (industry threat models)
+   Top rail instead of a card box, so this never reads as the card grid.
+   -------------------------------------------------------------------------- */
+.yard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xl) var(--space-2xl);
+}
+
+.yard__item {
+  padding-top: var(--space-md);
+  border-top: 2px solid var(--color-border-strong);
+  transition: border-color var(--transition-fast);
+}
+
+.yard__item:hover {
+  border-top-color: var(--color-accent);
+}
+
+.yard__code {
+  color: var(--color-text-faint);
+}
+
+.yard__item h3 {
+  margin-block: var(--space-xs) var(--space-sm);
+}
+
+.yard__item .footnote {
+  margin-top: var(--space-sm);
+}
+
+/* --------------------------------------------------------------------------
+   11. Dispatcher's rules - a schedule, not feature columns
+   -------------------------------------------------------------------------- */
+.rules {
+  position: relative;
+  display: grid;
+  counter-reset: rule;
+}
+
+.rules__item {
+  display: grid;
+  grid-template-columns: auto minmax(12rem, 26rem) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-sm) var(--space-lg);
+  padding-block: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rules__item:last-child {
+  border-bottom: 0;
+}
+
+.rules__num {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-200);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.rules__name {
+  color: var(--color-text);
+  font-size: var(--fs-400);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.rules__clause {
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+/* --------------------------------------------------------------------------
+   12. Terminus - closing plate with its status ticket
+   -------------------------------------------------------------------------- */
+.terminus {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-xl);
+  align-items: center;
+  padding: var(--space-xl);
+  padding-left: calc(var(--space-xl) + 3px);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.terminus::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 3px;
+  background: var(--color-accent);
+}
+
+.terminus__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md) var(--space-lg);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.terminus__meta dt {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.terminus__meta dd {
+  margin: var(--space-2xs) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+.terminus__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.terminus__plate {
+  display: grid;
+  gap: var(--space-2xs);
+  min-width: 15rem;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.plate__label {
+  color: var(--color-text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--fs-100);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.plate__value {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-200);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.plate__value:last-child {
+  margin-bottom: 0;
+}
+
+/* The ball is in their court: the aspect stands at danger until they move. */
+.plate__lamp {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.45);
+}
+
+/* --------------------------------------------------------------------------
+   13. Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 980px) {
+  .console {
+    align-content: start;
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+
+  .panel__chip {
+    min-height: 44px;
+  }
+
+  .console__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .console__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tracks .card {
+    grid-template-columns: 14px minmax(0, 1fr);
+  }
+
+  .tracks .card h3 {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .tracks .card .badge {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .tracks .card .text-muted {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .tracks .card .footnote {
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  .tracks .card::before {
+    grid-row: 1 / 5;
+  }
+
+  .graph__row {
+    grid-template-columns: 14px auto minmax(0, 1fr);
+  }
+
+  .graph__time {
+    grid-column: 3;
+    grid-row: 2;
+    padding-top: 0;
+  }
+
+  .graph__lamp {
+    grid-row: 1 / 3;
+  }
+
+  .yard {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .rules__item {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .rules__clause {
+    grid-column: 2;
+  }
+
+  .terminus {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .terminus__meta {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 640px) {
+  .console__grid {
+    gap: var(--space-lg);
+  }
+
+  .panel__frame {
+    padding: var(--space-md);
+  }
+
+  .panel__status {
+    flex-wrap: wrap;
+  }
+
+  .console__stats {
+    gap: var(--space-md) var(--space-lg);
+  }
+
+  .graph__total {
+    text-align: left;
+  }
+
+  .terminus {
+    padding: var(--space-lg);
+    padding-left: calc(var(--space-lg) + 3px);
+  }
+}
