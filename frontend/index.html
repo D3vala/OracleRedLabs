@@ -3,274 +3,361 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Oracle Red Labs | We break so you can build.</title>
-  <meta name="description" content="Oracle Red Labs runs authorised, simulation-first intrusion testing with evidence your engineers can replay.">
+  <title>Oracle Red Labs | Authorised Offensive Security</title>
+  <meta name="description" content="Oracle Red Labs runs authorised offensive security assessments that turn exploitable attack paths into clear remediation priorities.">
   <meta name="author" content="Oracle Red Labs (ITS122P student project)">
   <meta name="color-scheme" content="dark">
-  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#050506">
+  <link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/landing.css">
-  <!-- Adds a "js" class so the mobile menu can start collapsed. With
-       JavaScript disabled the class is never added and the nav links stay
-       visible, which is the safer failure mode. -->
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body class="landing">
   <a class="skip-link" href="#main">Skip to main content</a>
 
-  <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
-       include/template; until then consistency matters more than DRY). -->
-  <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="brand" href="index.html" aria-current="page">
-        <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
-        <span class="brand__name">Oracle <em>Red</em> Labs</span>
+  <header class="site-header landing-header">
+    <div class="landing-nav-shell">
+      <a class="landing-brand" href="index.html" aria-current="page" aria-label="Oracle Red Labs home">
+        <span>Oracle</span>
+        <i aria-hidden="true"></i>
+        <span class="landing-brand__signal">Red Labs</span>
       </a>
 
       <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
         <span class="nav-toggle__bar" aria-hidden="true"></span>
         <span class="nav-toggle__bar" aria-hidden="true"></span>
         <span class="nav-toggle__bar" aria-hidden="true"></span>
-        <span class="visually-hidden">Menu</span>
+        <span class="visually-hidden">Open navigation</span>
       </button>
 
-      <nav class="nav" id="primary-nav" aria-label="Primary">
+      <nav class="nav" id="primary-nav" aria-label="Primary navigation">
         <ul class="nav__list">
+          <li><a class="nav__link" href="#capabilities">Services</a></li>
           <li><a class="nav__link" href="methodology.html">Methodology</a></li>
-          <li><a class="nav__link" href="services.html">Services</a></li>
-          <li><a class="nav__link" href="who-we-serve.html">Who We Serve</a></li>
+          <li><a class="nav__link" href="who-we-serve.html">Who we serve</a></li>
           <li><a class="nav__link" href="vault.html">Vault</a></li>
-          <li><a class="nav__link" href="contact.html">Contact</a></li>
-          <li><a class="nav__link" href="engage.html">Engage</a></li>
         </ul>
-        <ul class="nav__list nav__list--auth">
-          <li><a class="nav__link" href="login.html">Log In</a></li>
-          <li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li>
-        </ul>
+        <a class="landing-nav-cta" href="#inquiry">
+          <span>Start an inquiry</span>
+          <span class="landing-nav-cta__icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16" focusable="false"><path d="M4 12 12 4M6 4h6v6"></path></svg>
+          </span>
+        </a>
       </nav>
     </div>
   </header>
 
-  <main id="main">
-    <section class="landing-hero" aria-labelledby="hero-heading" data-breach-hero>
-      <div class="landing-hero__art">
-        <img
-          class="landing-hero__plate"
-          src="assets/plates/breach-orb.png"
-          alt=""
-          width="1738"
-          height="905"
-          fetchpriority="high"
-          aria-hidden="true"
-        >
-        <canvas
-          class="landing-hero__canvas"
-          data-breach-orb
-          role="img"
-          aria-label="A red particle globe traces simulated intrusion routes across an authorised attack surface."
-        >A red particle globe traces simulated intrusion routes across an authorised attack surface.</canvas>
+  <main id="main" class="landing-main">
+    <section class="landing-hero" aria-labelledby="hero-heading">
+      <div class="landing-hero__atmosphere" aria-hidden="true">
+        <span class="landing-hero__glow landing-hero__glow--crimson" data-hero-depth="0.45"></span>
+        <span class="landing-hero__glow landing-hero__glow--violet" data-hero-depth="0.72"></span>
+        <span class="landing-hero__glow landing-hero__glow--halo" data-hero-depth="0.28"></span>
       </div>
+      <canvas class="landing-hero__topology" data-hero-topology aria-hidden="true"></canvas>
+      <div class="landing-hero__contrast" aria-hidden="true"></div>
 
-      <div class="landing-hero__copy">
-        <h1 id="hero-heading" class="landing-hero__title">We break so you can build.</h1>
-        <p class="landing-hero__lede">Authorised red teaming. Replayable evidence.</p>
-        <div class="landing-actions" aria-label="Start with Oracle Red Labs">
-          <a class="landing-button landing-button--signal" href="engage.html">
-            Book a red-team briefing
-            <svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg>
+      <div class="landing-shell landing-hero__content">
+        <h1 id="hero-heading" data-reveal>
+          <span>Know how they get in.</span>
+          <span class="landing-hero__line-accent">Prove you can stop them.</span>
+        </h1>
+        <p class="landing-hero__lede" data-reveal>Oracle Red Labs runs authorised offensive security assessments that turn exploitable attack paths into clear, prioritised remediation.</p>
+        <div class="landing-hero__actions" data-reveal>
+          <a class="landing-button landing-button--primary" href="#inquiry">
+            <span>Start an inquiry</span>
+            <span class="landing-button__icon" aria-hidden="true">
+              <svg viewBox="0 0 18 18" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
+            </span>
           </a>
-          <a class="landing-button landing-button--outline" href="#services">
-            Explore services
-            <svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg>
+          <a class="landing-button landing-button--quiet" href="#capabilities">
+            <span>Explore capabilities</span>
+            <span class="landing-button__icon" aria-hidden="true">
+              <svg viewBox="0 0 18 18" focusable="false"><path d="M9 3v11M4.5 9.5 9 14l4.5-4.5"></path></svg>
+            </span>
           </a>
         </div>
-      </div>
-
-      <div class="landing-hero__assurance" aria-label="Authorise, simulate, expose, improve. Offensive security for a more resilient tomorrow.">
-        <p aria-hidden="true">Authorise <i>/</i> Simulate <i>/</i> Expose <i>/</i> Improve</p>
-        <span aria-hidden="true"></span>
-        <p aria-hidden="true">Offensive security for a more resilient tomorrow</p>
+        <p class="landing-hero__assurance" data-reveal>Authorisation before action. Evidence before claims.</p>
       </div>
     </section>
 
-    <div class="landing-marquee" aria-label="Authorised before action. Every move tied to scope. Evidence your engineers can replay. Retested after fixes.">
-      <div class="landing-marquee__track" aria-hidden="true">
-        <span>Authorised before action</span><b>●</b><span>Every move tied to scope</span><b>●</b><span>Evidence your engineers can replay</span><b>●</b><span>Retested after fixes</span><b>●</b>
-        <span>Authorised before action</span><b>●</b><span>Every move tied to scope</span><b>●</b><span>Evidence your engineers can replay</span><b>●</b><span>Retested after fixes</span><b>●</b>
-      </div>
-    </div>
-
-    <section class="landing-services" id="services" aria-labelledby="services-heading">
-      <div class="landing-shell">
-        <div class="landing-section-head">
-          <h2 id="services-heading">Choose the question you need answered.</h2>
-          <p>Test the perimeter, rehearse an assumed breach, or challenge the software supply chain. Each service ends with evidence your team can reproduce.</p>
+    <section class="trust-rail" aria-label="Engagement safeguards">
+      <div class="landing-shell trust-rail__grid">
+        <div class="trust-item" data-reveal>
+          <span class="trust-item__mark" aria-hidden="true"></span>
+          <div><strong>Authorised scope</strong><p>Boundaries and stop conditions are agreed before testing.</p></div>
         </div>
-        <div class="landing-service-accordion" data-service-accordion aria-live="polite"></div>
-        <noscript>
-          <div class="landing-service-fallback">
-            <a href="services.html#oracle-ai">ORACLE AI — External assault simulation</a>
-            <a href="services.html#phantasm">PHANTASM — Assumed-breach testing</a>
-            <a href="services.html#chainbreak">CHAINBREAK — Supply-chain assurance</a>
-          </div>
-        </noscript>
+        <div class="trust-item" data-reveal>
+          <span class="trust-item__mark" aria-hidden="true"></span>
+          <div><strong>Controlled execution</strong><p>Actions stay tied to accountable owners and approved scenarios.</p></div>
+        </div>
+        <div class="trust-item" data-reveal>
+          <span class="trust-item__mark" aria-hidden="true"></span>
+          <div><strong>Replayable evidence</strong><p>Engineers receive clear steps, context, and proof.</p></div>
+        </div>
+        <div class="trust-item" data-reveal>
+          <span class="trust-item__mark" aria-hidden="true"></span>
+          <div><strong>Verified retesting</strong><p>Repairs are challenged again before the route is closed.</p></div>
+        </div>
       </div>
     </section>
 
-    <section class="landing-evidence" id="evidence" aria-labelledby="evidence-heading">
+    <section class="capabilities" id="capabilities" aria-labelledby="capabilities-heading">
       <div class="landing-shell">
-        <div class="landing-section-head landing-section-head--evidence">
-          <h2 id="evidence-heading">Evidence your engineers can <img class="landing-inline-trace" src="assets/images/breach-trace.png" alt="" width="208" height="76"> replay.</h2>
-          <p>The figures below are synthetic demonstration data, included to show how an engagement replay can make a complex route legible without implying real client outcomes.</p>
-        </div>
+        <header class="landing-section-intro" data-reveal>
+          <h2 id="capabilities-heading">Three ways to expose the path.</h2>
+          <p>Choose the pressure test that matches the system, identity boundary, or release path your organisation cannot afford to lose.</p>
+        </header>
 
-        <div class="landing-evidence-grid">
-          <article class="landing-replay">
-            <header>
-              <span>Synthetic engagement</span>
-              <strong>ORL-042631</strong>
-            </header>
-            <div class="landing-replay__map" aria-hidden="true">
-              <span class="landing-replay__route"></span>
-              <i style="--x: 11%; --y: 68%"></i>
-              <i style="--x: 35%; --y: 43%"></i>
-              <i style="--x: 61%; --y: 57%"></i>
-              <i style="--x: 86%; --y: 25%"></i>
-            </div>
-            <div class="landing-replay__copy">
-              <h3>A replay, not a score.</h3>
-              <p>Every validated path carries its timestamp, scope reference, reproduction steps, and the control that should have interrupted it.</p>
+        <div class="service-bento">
+          <article class="service-card service-card--oracle double-bezel" data-reveal>
+            <div class="service-card__core bezel-core">
+              <div class="service-card__copy">
+                <span class="service-card__context">External assault simulation</span>
+                <h3>ORACLE AI</h3>
+                <p>Map public exposure, validate a realistic intrusion route, and give engineers the exact sequence that worked.</p>
+                <a class="landing-text-link" href="services.html#oracle-ai">
+                  <span>Explore ORACLE AI</span>
+                  <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
+                </a>
+              </div>
+              <div class="oracle-field" aria-hidden="true">
+                <span class="oracle-field__route"></span>
+                <i style="--x: 12%; --y: 69%"></i>
+                <i style="--x: 38%; --y: 47%"></i>
+                <i style="--x: 65%; --y: 58%"></i>
+                <i style="--x: 88%; --y: 24%"></i>
+                <b></b>
+              </div>
             </div>
           </article>
 
-          <article class="landing-metric"><strong>42</strong><span>Declared assets mapped</span><small>Synthetic demo data</small></article>
-          <article class="landing-metric"><strong>7</strong><span>Attack paths validated</span><small>Synthetic demo data</small></article>
-          <article class="landing-metric"><strong>3</strong><span>Control gaps isolated</span><small>Synthetic demo data</small></article>
-          <article class="landing-metric"><strong>12h</strong><span>Replay window prepared</span><small>Synthetic demo data</small></article>
+          <article class="service-card service-card--phantasm double-bezel" data-reveal>
+            <div class="service-card__core bezel-core">
+              <span class="service-card__context">Assumed-breach testing</span>
+              <h3>PHANTASM</h3>
+              <p>Begin from a controlled foothold. Test privilege, persistence, lateral movement, and the response of your detection stack.</p>
+              <div class="phantasm-field" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
+              <a class="landing-text-link" href="services.html#phantasm">
+                <span>Explore PHANTASM</span>
+                <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="service-card service-card--chainbreak double-bezel" data-reveal>
+            <div class="service-card__core bezel-core">
+              <span class="service-card__context">Supply-chain assurance</span>
+              <h3>CHAINBREAK</h3>
+              <p>Challenge CI/CD permissions, dependency provenance, artifact signing, and the controls surrounding release.</p>
+              <div class="chain-field" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+              <a class="landing-text-link" href="services.html#chainbreak">
+                <span>Explore CHAINBREAK</span>
+                <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
+              </a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="landing-process" id="process" aria-labelledby="process-heading">
-      <div class="landing-shell landing-process__grid">
-        <div class="landing-process__intro" data-process-intro>
-          <h2 id="process-heading">The route stays controlled from first move to final retest.</h2>
-          <p>Nothing begins without a named signatory. Nothing becomes a finding until your engineers can see it happen again.</p>
-          <a class="landing-text-link" href="methodology.html">Explore the methodology <svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg></a>
+    <section class="evidence" aria-labelledby="evidence-heading">
+      <div class="landing-shell">
+        <h2 id="evidence-heading" class="evidence__heading" data-reveal>
+          From exposure
+          <span class="evidence-inline-media media-motion" aria-hidden="true">
+            <img src="assets/images/evidence-signal-route.png" alt="" width="2172" height="724" loading="lazy">
+          </span>
+          to verified closure.
+        </h2>
+
+        <p class="evidence__statement" data-scrub-copy>Every finding connects the boundary that was crossed, the proof your team can replay, and the control that should interrupt the route next time.</p>
+
+        <div class="evidence-deliverables">
+          <article data-reveal>
+            <span>Validated route</span>
+            <h3>See the sequence, not just the symptom.</h3>
+            <p>Each step shows how isolated weaknesses combine into meaningful business exposure.</p>
+          </article>
+          <article data-reveal>
+            <span>Engineering proof</span>
+            <h3>Reproduce what happened with confidence.</h3>
+            <p>Clear evidence and context help technical owners move directly into remediation.</p>
+          </article>
+          <article data-reveal>
+            <span>Focused retest</span>
+            <h3>Confirm the exploitable route no longer holds.</h3>
+            <p>The engagement closes with verification, not a report left waiting in a queue.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="method" aria-labelledby="method-heading">
+      <div class="landing-shell method__layout">
+        <div class="method__intro" data-reveal>
+          <h2 id="method-heading">Aggressive testing. Deliberate control.</h2>
+          <p>Pressure is useful only when every action remains observable, attributable, and reversible.</p>
+          <a class="landing-text-link" href="methodology.html">
+            <span>Read the methodology</span>
+            <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
+          </a>
         </div>
 
-        <ol class="landing-process__steps">
-          <li class="landing-process__step" data-process-step>
-            <span>Scope locked</span>
-            <div><h3>Authorise the boundary.</h3><p>Agree on targets, exclusions, stop conditions, and a named signatory before any simulation begins.</p></div>
+        <ol class="method__steps">
+          <li data-reveal>
+            <span>1</span>
+            <div><h3>Define the boundary</h3><p>Agree targets, exclusions, stop conditions, and accountable owners.</p></div>
           </li>
-          <li class="landing-process__step" data-process-step>
-            <span>Route active</span>
-            <div><h3>Rehearse the breach.</h3><p>Run the scenario from a monitored jump host, with every action timestamped against the approved scope.</p></div>
+          <li data-reveal>
+            <span>2</span>
+            <div><h3>Run the approved scenario</h3><p>Exercise the attack path with actions your defenders can observe.</p></div>
           </li>
-          <li class="landing-process__step" data-process-step>
-            <span>Evidence ready</span>
-            <div><h3>Replay what worked.</h3><p>Reproduce the intrusion path with the engineers who will fix it, using hashed proof instead of retained client data.</p></div>
-          </li>
-          <li class="landing-process__step" data-process-step>
-            <span>Closure verified</span>
-            <div><h3>Retest the repair.</h3><p>Turn findings into a prioritised remediation queue, then verify which changes genuinely close the route.</p></div>
+          <li data-reveal>
+            <span>3</span>
+            <div><h3>Close the route</h3><p>Prioritise remediation, retest the repair, and verify the result.</p></div>
           </li>
         </ol>
       </div>
     </section>
 
-    <section class="landing-industries" aria-labelledby="industries-heading">
+    <section class="outcomes" aria-labelledby="outcomes-heading">
       <div class="landing-shell">
-        <div class="landing-section-head">
-          <h2 id="industries-heading">Different estates. Different ways in.</h2>
-          <p>The method stays controlled; the adversary path changes with the systems, people, and authority you need to protect.</p>
-        </div>
-        <div class="landing-industries__list">
-          <a href="who-we-serve.html"><span>Financial services</span><small>Payment flows, identity, settlement authority</small><svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg></a>
-          <a href="who-we-serve.html"><span>Healthcare and biotech</span><small>Clinical availability, research integrity</small><svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg></a>
-          <a href="who-we-serve.html"><span>Enterprise SaaS</span><small>Tenant isolation, identity, release pipelines</small><svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg></a>
-          <a href="who-we-serve.html"><span>Critical infrastructure</span><small>IT-to-OT crossings, vendor access, uptime</small><svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg></a>
+        <header class="outcomes__header" data-reveal>
+          <div>
+            <h2 id="outcomes-heading">One engagement. Clear decisions at every level.</h2>
+            <p>Each role receives the level of evidence needed to move from exposure to verified action.</p>
+          </div>
+          <div class="outcomes__controls" data-carousel-controls>
+            <button type="button" data-carousel-prev aria-label="Show previous stakeholder outcome">
+              <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="m11.5 4-5 5 5 5"></path></svg>
+            </button>
+            <span data-carousel-status aria-live="polite">1 / 3</span>
+            <button type="button" data-carousel-next aria-label="Show next stakeholder outcome">
+              <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="m6.5 4 5 5-5 5"></path></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="outcomes-carousel double-bezel" data-outcomes-carousel data-reveal>
+          <div class="outcomes-carousel__core bezel-core">
+            <div class="outcomes-carousel__track" data-carousel-track>
+              <article class="outcome-slide" data-carousel-slide>
+                <div class="outcome-slide__role"><span>Security leaders</span><i aria-hidden="true"></i></div>
+                <div class="outcome-slide__copy">
+                  <h3>Know which attack paths deserve attention first.</h3>
+                  <p>Connect technical findings to exposed assets, likely impact, and the controls that change risk fastest.</p>
+                </div>
+                <ul><li>Prioritised exposure</li><li>Named control gaps</li><li>Retest visibility</li></ul>
+              </article>
+              <article class="outcome-slide" data-carousel-slide>
+                <div class="outcome-slide__role"><span>Engineering teams</span><i aria-hidden="true"></i></div>
+                <div class="outcome-slide__copy">
+                  <h3>Move from report review to reproducible action.</h3>
+                  <p>Follow the tested sequence, understand the failed boundary, and verify the repair against the same route.</p>
+                </div>
+                <ul><li>Replayable proof</li><li>Clear ownership</li><li>Focused remediation</li></ul>
+              </article>
+              <article class="outcome-slide" data-carousel-slide>
+                <div class="outcome-slide__role"><span>Executive sponsors</span><i aria-hidden="true"></i></div>
+                <div class="outcome-slide__copy">
+                  <h3>See what was tested, what changed, and what remains.</h3>
+                  <p>Receive an accountable view of the approved scenario without losing the engineering evidence behind it.</p>
+                </div>
+                <ul><li>Defined scope</li><li>Decision-ready summary</li><li>Verified closure</li></ul>
+              </article>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="landing-cta" aria-labelledby="cta-heading">
-      <div class="landing-shell">
-        <h2 id="cta-heading">Make the first move before the attacker does.</h2>
-        <p>Tell us what you need to test. This academic demo returns an `ORL-######` reference and stores the recap only in your browser.</p>
-        <div class="landing-actions">
-          <a class="landing-button landing-button--dark" href="engage.html">Book a red-team briefing <svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg></a>
-          <a class="landing-button landing-button--light-outline" href="contact.html">Send an inquiry <svg class="landing-arrow" aria-hidden="true" viewBox="0 0 20 20"><path d="M3 10h13M11 5l5 5-5 5"></path></svg></a>
+    <section class="inquiry" id="inquiry" aria-labelledby="inquiry-heading">
+      <div class="landing-shell inquiry__layout">
+        <div class="inquiry__intro" data-reveal>
+          <h2 id="inquiry-heading">What needs to withstand a real attack?</h2>
+          <p>Share the system, environment, or concern you want to test. This demonstration form does not transmit or store any information.</p>
+          <div class="inquiry__route">
+            <span>Already have a defined scope?</span>
+            <a class="landing-text-link" href="engage.html">
+              <span>Submit a full engagement request</span>
+              <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="inquiry-panel double-bezel" data-reveal>
+          <div class="inquiry-panel__core bezel-core">
+            <form class="inquiry-form" data-demo-form data-success-message="Received. This is a front-end demonstration, so nothing was transmitted. In the finished application, these details would be used to arrange an assessment conversation.">
+              <div class="inquiry-form__row">
+                <label for="inquiry-name">Name</label>
+                <input id="inquiry-name" name="name" type="text" autocomplete="name" required>
+              </div>
+              <div class="inquiry-form__row inquiry-form__row--split">
+                <div>
+                  <label for="inquiry-email">Work email</label>
+                  <input id="inquiry-email" name="email" type="email" autocomplete="email" required>
+                </div>
+                <div>
+                  <label for="inquiry-organisation">Organisation</label>
+                  <input id="inquiry-organisation" name="organisation" type="text" autocomplete="organization" required>
+                </div>
+              </div>
+              <div class="inquiry-form__row">
+                <label for="inquiry-service">Service interest</label>
+                <select id="inquiry-service" name="service" required>
+                  <option value="">Choose an option</option>
+                  <option value="oracle-ai">ORACLE AI — External assault</option>
+                  <option value="phantasm">PHANTASM — Assumed breach</option>
+                  <option value="chainbreak">CHAINBREAK — Supply chain</option>
+                  <option value="unsure">Not sure yet</option>
+                </select>
+              </div>
+              <div class="inquiry-form__row">
+                <label for="inquiry-message">What needs to be tested?</label>
+                <textarea id="inquiry-message" name="message" rows="5" minlength="20" required placeholder="Describe the system, environment, or concern you want to assess."></textarea>
+              </div>
+              <p class="inquiry-form__note"><strong>Demo form:</strong> nothing entered here is sent or stored.</p>
+              <button class="landing-button landing-button--primary inquiry-form__submit" type="submit">
+                <span>Request an assessment conversation</span>
+                <span class="landing-button__icon" aria-hidden="true">
+                  <svg viewBox="0 0 18 18" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
+                </span>
+              </button>
+              <p class="inquiry-form__status form-message" data-form-status role="status" tabindex="-1" hidden></p>
+            </form>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Shared footer: identical on all 11 pages. -->
-  <footer class="site-footer">
-    <div class="container site-footer__inner">
-      <div class="site-footer__brand">
-        <p class="mono">Oracle Red Labs</p>
-        <p class="site-footer__tagline">
-          Adversarial security research under signed authorisation. We reproduce
-          attacker tradecraft, then hand your engineers the fixes.
-        </p>
-      </div>
-
-      <nav class="site-footer__nav" aria-label="Footer">
-        <div>
-          <h2 class="site-footer__heading">Company</h2>
-          <ul class="site-footer__list">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="methodology.html">Methodology</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="who-we-serve.html">Who We Serve</a></li>
-          </ul>
-        </div>
-        <div>
-          <h2 class="site-footer__heading">Resources</h2>
-          <ul class="site-footer__list">
-            <li><a href="vault.html">Exploit Vault</a></li>
-            <li><a href="engage.html">Book an Engagement</a></li>
-            <li><a href="contact.html">Encrypted Inquiry</a></li>
-          </ul>
-        </div>
-        <div>
-          <h2 class="site-footer__heading">Client Area</h2>
-          <ul class="site-footer__list">
-            <li><a href="login.html">Log In</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="dashboard.html">Client Dashboard</a></li>
-            <li><a href="admin.html">Administrator Console</a></li>
-          </ul>
-        </div>
+  <footer class="landing-footer">
+    <div class="landing-shell landing-footer__top">
+      <a class="landing-brand" href="index.html" aria-label="Oracle Red Labs home">
+        <span>Oracle</span><i aria-hidden="true"></i><span class="landing-brand__signal">Red Labs</span>
+      </a>
+      <nav aria-label="Footer navigation">
+        <a href="services.html">Services</a>
+        <a href="methodology.html">Methodology</a>
+        <a href="who-we-serve.html">Who we serve</a>
+        <a href="vault.html">Vault</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </div>
-
-    <div class="container site-footer__legal">
-      <p class="site-footer__disclaimer">
-        Oracle Red Labs is a fictional company created for an academic project
-        (ITS122P). Every engagement, price and case study shown here is
-        placeholder content. Nothing on this site scans, exploits or attacks
-        anything: all dashboards, badges and live statuses are simulated in the
-        browser with mock data.
-      </p>
-      <p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
+    <div class="landing-shell landing-footer__legal">
+      <p>Oracle Red Labs is a fictional company created for an academic project (ITS122P). Every engagement, price, and case study shown here is placeholder content. Nothing on this site scans, exploits, or attacks anything.</p>
+      <p>&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
-  <script src="js/data/services.js"></script>
   <script src="js/vendor/gsap.min.js"></script>
   <script src="js/vendor/ScrollTrigger.min.js"></script>
-  <script src="js/breach-orb.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/landing.js"></script>
-  <!-- Shared scroll-reveal: loaded last so every page script has already
-       rendered its cards before the first reveal sweep. -->
-  <script src="js/scroll-reveal.js"></script>
 </body>
 </html>
