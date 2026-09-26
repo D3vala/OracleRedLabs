@@ -123,7 +123,15 @@
     var glows = Array.prototype.slice.call(
       hero.querySelectorAll("[data-hero-depth]")
     );
-    var geometry = { nodes: [], edges: [], faults: [], debris: [], route: [] };
+    var geometry = {
+      nodes: [],
+      edges: [],
+      faults: [],
+      debris: [],
+      seamFragments: [],
+      seamSpikes: [],
+      routeNetwork: { points: [], backbone: [], paths: [], junctions: [] }
+    };
     var width = 0;
     var height = 0;
     var dpr = 1;
@@ -163,13 +171,19 @@
 
     function buildGeometry() {
       var random = seededRandom(315);
-      var nodeCount = 38;
-      var faultPositions = [0.075, 0.205, 0.34, 0.66, 0.795, 0.925];
+      var nodeCount = 44;
+      var seamRatio = width < 640 ? 0.58 : 0.55;
+      var faultPositions = [
+        0.045, 0.115, 0.19, 0.28, 0.365,
+        0.635, 0.72, 0.81, 0.885, 0.955
+      ];
 
       geometry.nodes = [];
       geometry.edges = [];
       geometry.faults = [];
       geometry.debris = [];
+      geometry.seamFragments = [];
+      geometry.seamSpikes = [];
 
       for (var index = 0; index < nodeCount; index += 1) {
         var leftSide = index % 2 === 0;
@@ -225,14 +239,31 @@
           });
         }
         geometry.faults.push({
+          origin: position,
           points: points,
           depth: 0.26 + random() * 0.7,
           phase: faultIndex * 0.83 + random(),
-          alpha: 0.025 + random() * 0.045
+          alpha: 0.055 + random() * 0.075,
+          strands: Array.apply(null, Array(2 + Math.floor(random() * 3))).map(function () {
+            return {
+              offset: (random() - 0.5) * 0.026,
+              alpha: 0.45 + random() * 0.4,
+              width: 0.45 + random() * 0.7
+            };
+          }),
+          ticks: Array.apply(null, Array(7 + Math.floor(random() * 6))).map(function () {
+            return {
+              offset: (random() - 0.5) * 0.04,
+              y: 0.02 + random() * 0.94,
+              length: 0.006 + random() * 0.034,
+              alpha: 0.32 + random() * 0.58,
+              width: 0.45 + random() * 0.85
+            };
+          })
         });
       });
 
-      for (var debrisIndex = 0; debrisIndex < 56; debrisIndex += 1) {
+      for (var debrisIndex = 0; debrisIndex < 80; debrisIndex += 1) {
         var debrisLeft = debrisIndex % 2 === 0;
         geometry.debris.push({
           x: debrisLeft ? random() * 0.39 : 0.61 + random() * 0.39,
@@ -240,21 +271,57 @@
           length: 2 + random() * 9,
           speed: 0.35 + random() * 0.9,
           phase: random(),
-          alpha: 0.025 + random() * 0.09,
+          alpha: 0.04 + random() * 0.12,
           depth: 0.2 + random() * 0.8,
           warm: random() > 0.7
         });
       }
 
-      geometry.route = [
-        { x: 0.03, y: 0.83 },
-        { x: 0.14, y: 0.68 },
-        { x: 0.28, y: 0.76 },
-        { x: 0.41, y: 0.67 },
-        { x: 0.61, y: 0.73 },
-        { x: 0.78, y: 0.64 },
-        { x: 0.95, y: 0.79 }
+      for (var fragmentIndex = 0; fragmentIndex < 68; fragmentIndex += 1) {
+        var fragmentX = random();
+        geometry.seamFragments.push({
+          x: fragmentX,
+          length: 0.004 + random() * 0.026,
+          offset: (random() - 0.5) * 0.012,
+          alpha: 0.15 + random() * 0.55,
+          phase: random() * Math.PI * 2
+        });
+      }
+
+      for (var spikeIndex = 0; spikeIndex < 52; spikeIndex += 1) {
+        var spikeX = random();
+        geometry.seamSpikes.push({
+          x: spikeX,
+          length: 4 + random() * 28,
+          alpha: 0.08 + random() * 0.34,
+          direction: random() > 0.5 ? 1 : -1,
+          phase: random() * Math.PI * 2
+        });
+      }
+
+      var networkPoints = [
+        { x: 0.015, y: seamRatio }, { x: 0.14, y: seamRatio + 0.002 },
+        { x: 0.275, y: seamRatio - 0.003 }, { x: 0.395, y: seamRatio + 0.003 },
+        { x: 0.5, y: seamRatio }, { x: 0.605, y: seamRatio - 0.003 },
+        { x: 0.725, y: seamRatio + 0.004 }, { x: 0.86, y: seamRatio - 0.002 },
+        { x: 0.985, y: seamRatio }, { x: 0.045, y: 0.08 },
+        { x: 0.18, y: 0.22 }, { x: 0.04, y: 0.93 },
+        { x: 0.19, y: 0.81 }, { x: 0.955, y: 0.1 },
+        { x: 0.82, y: 0.21 }, { x: 0.96, y: 0.92 },
+        { x: 0.81, y: 0.83 }
       ];
+
+      geometry.routeNetwork = {
+        points: networkPoints,
+        backbone: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        paths: [
+          { points: [9, 10, 2, 3, 4], phase: 0 },
+          { points: [11, 12, 2, 3, 4], phase: 0.045 },
+          { points: [13, 14, 6, 5, 4], phase: 0.085 },
+          { points: [15, 16, 6, 5, 4], phase: 0.125 }
+        ],
+        junctions: [2, 3, 4, 5, 6]
+      };
     }
 
     function updateAtmosphere() {
@@ -344,13 +411,53 @@
           context.closePath();
           context.fill();
 
-          context.strokeStyle = "rgba(202, 31, 69, " + alpha * 1.8 + ")";
+          context.strokeStyle = "rgba(202, 31, 69, " + alpha * 1.5 + ")";
           context.lineWidth = 0.55;
           context.beginPath();
           context.moveTo(a.x + previousHalf, a.y);
           context.lineTo(b.x + currentHalf, b.y);
           context.stroke();
+
+          fault.strands.forEach(function (strand) {
+            var strandA = bendPoint({
+              x: previousBase.x + strand.offset,
+              y: previousBase.y
+            }, fault.depth, 18);
+            var strandB = bendPoint({
+              x: currentBase.x + strand.offset,
+              y: currentBase.y
+            }, fault.depth, 18);
+
+            context.strokeStyle = "rgba(238, 39, 76, " +
+              alpha * strand.alpha + ")";
+            context.lineWidth = strand.width;
+            context.beginPath();
+            context.moveTo(strandA.x, strandA.y);
+            context.lineTo(strandB.x, strandB.y);
+            context.stroke();
+          });
         }
+
+        fault.ticks.forEach(function (tick) {
+          var tickBase = {
+            x: fault.origin + drift + tick.offset,
+            y: tick.y
+          };
+          var tickEnd = {
+            x: tickBase.x,
+            y: Math.min(1, tick.y + tick.length)
+          };
+          var tickA = bendPoint(tickBase, fault.depth, 17);
+          var tickB = bendPoint(tickEnd, fault.depth, 17);
+          var tickAlpha = fault.alpha * tick.alpha * introProgress * 2.35;
+
+          context.strokeStyle = "rgba(250, 48, 82, " + tickAlpha + ")";
+          context.lineWidth = tick.width;
+          context.beginPath();
+          context.moveTo(tickA.x, tickA.y);
+          context.lineTo(tickB.x, tickB.y);
+          context.stroke();
+        });
       });
     }
 
@@ -393,45 +500,210 @@
       });
     }
 
-    function drawRoute(now) {
-      var cycle = reduceMotion ? 0.72 : (now % 9200) / 9200;
-      var tailStart = Math.max(0, cycle - 0.17);
-      var points = geometry.route.map(function (point) {
-        return bendPoint(point, 0.82, 24);
-      });
+    function smoothStep(value) {
+      var amount = clamp(value, 0, 1);
+      return amount * amount * (3 - 2 * amount);
+    }
+
+    function surgeState(now) {
+      if (reduceMotion) return { intensity: 0.62, wave: 0.66 };
+
+      var cycle = (now % 8200) / 8200;
+      if (cycle < 0.54) return { intensity: 0.08, wave: 0 };
+
+      var active = (cycle - 0.54) / 0.46;
+      var intensity;
+      if (active < 0.18) intensity = smoothStep(active / 0.18);
+      else if (active < 0.46) intensity = 1;
+      else intensity = 1 - smoothStep((active - 0.46) / 0.54) * 0.92;
+
+      return {
+        intensity: intensity,
+        wave: smoothStep(clamp(active * 1.08, 0, 1))
+      };
+    }
+
+    function edgeEnergy(x) {
+      var distance = Math.abs(x - 0.5) * 2;
+      return 0.16 + Math.pow(distance, 1.55) * 0.84;
+    }
+
+    function drawFirewallSeam(now, surge) {
+      var seamY = height * (width < 640 ? 0.58 : 0.55) + pointer.y * 3.5;
+      var gradient = context.createLinearGradient(0, seamY, width, seamY);
+      gradient.addColorStop(0, "rgba(255, 86, 110, 0.88)");
+      gradient.addColorStop(0.22, "rgba(238, 41, 75, 0.58)");
+      gradient.addColorStop(0.39, "rgba(205, 23, 58, 0.16)");
+      gradient.addColorStop(0.5, "rgba(192, 17, 52, 0.1)");
+      gradient.addColorStop(0.61, "rgba(205, 23, 58, 0.16)");
+      gradient.addColorStop(0.78, "rgba(238, 41, 75, 0.58)");
+      gradient.addColorStop(1, "rgba(255, 86, 110, 0.88)");
 
       context.save();
       context.lineCap = "round";
-      context.lineJoin = "round";
-      context.strokeStyle = "rgba(180, 19, 55, 0.15)";
-      context.lineWidth = 0.75;
+      context.strokeStyle = gradient;
+      context.shadowColor = "rgba(236, 26, 64, " +
+        (0.22 + surge.intensity * 0.2) + ")";
+      context.shadowBlur = 20 + surge.intensity * 12;
+      context.lineWidth = 7 + surge.intensity * 3;
+      context.globalAlpha = 0.2 + surge.intensity * 0.11;
+      context.beginPath();
+      context.moveTo(0, seamY);
+      context.lineTo(width, seamY);
+      context.stroke();
+
+      context.lineWidth = 0.8 + surge.intensity * 0.55;
+      context.globalAlpha = 0.82;
+      context.shadowBlur = 8 + surge.intensity * 7;
+      context.beginPath();
+      context.moveTo(0, seamY);
+      context.lineTo(width, seamY);
+      context.stroke();
+
+      geometry.seamFragments.forEach(function (fragment) {
+        var x = fragment.x * width;
+        var oscillation = reduceMotion ? 0 :
+          Math.sin(now * 0.0018 + fragment.phase) * 1.35;
+        var y = seamY + fragment.offset * height + oscillation;
+        var alpha = fragment.alpha * edgeEnergy(fragment.x) *
+          (0.46 + surge.intensity * 0.54);
+
+        context.strokeStyle = "rgba(255, 68, 98, " + alpha + ")";
+        context.lineWidth = 0.5 + surge.intensity * 0.55;
+        context.beginPath();
+        context.moveTo(x, y);
+        context.lineTo(Math.min(width, x + fragment.length * width), y);
+        context.stroke();
+      });
+
+      geometry.seamSpikes.forEach(function (spike) {
+        var x = spike.x * width;
+        var flicker = reduceMotion ? 0.74 :
+          0.54 + Math.sin(now * 0.0022 + spike.phase) * 0.2;
+        var spikeAlpha = spike.alpha * edgeEnergy(spike.x) * flicker *
+          (0.58 + surge.intensity * 0.42);
+
+        context.strokeStyle = "rgba(245, 47, 82, " + spikeAlpha + ")";
+        context.lineWidth = 0.55;
+        context.beginPath();
+        context.moveTo(x, seamY);
+        context.lineTo(x, seamY + spike.length * spike.direction);
+        context.stroke();
+      });
+
+      if (pointer.intensity > 0.01) {
+        var pointerX = width * (0.5 + pointer.x * 0.5);
+        var bloomWidth = clamp(width * 0.16, 120, 260);
+        var bloom = context.createLinearGradient(
+          pointerX - bloomWidth,
+          seamY,
+          pointerX + bloomWidth,
+          seamY
+        );
+        bloom.addColorStop(0, "rgba(255, 52, 86, 0)");
+        bloom.addColorStop(0.5, "rgba(255, 116, 135, " +
+          (0.32 * pointer.intensity) + ")");
+        bloom.addColorStop(1, "rgba(255, 52, 86, 0)");
+        context.strokeStyle = bloom;
+        context.shadowColor = "rgba(255, 45, 78, 0.5)";
+        context.shadowBlur = 16;
+        context.lineWidth = 1.4;
+        context.beginPath();
+        context.moveTo(pointerX - bloomWidth, seamY);
+        context.lineTo(pointerX + bloomWidth, seamY);
+        context.stroke();
+      }
+      context.restore();
+    }
+
+    function drawPolyline(points) {
       context.beginPath();
       points.forEach(function (point, index) {
         if (index === 0) context.moveTo(point.x, point.y);
         else context.lineTo(point.x, point.y);
       });
       context.stroke();
+    }
 
-      var steps = 34;
-      var routeAlpha = 0.58 + pointer.intensity * 0.3;
-      context.strokeStyle = "rgba(242, 49, 87, " + routeAlpha + ")";
-      context.shadowColor = "rgba(225, 27, 65, 0.52)";
-      context.shadowBlur = 12 + pointer.intensity * 7;
-      context.lineWidth = 1.35;
+    function drawPathSlice(points, start, end) {
+      var steps = 26;
       context.beginPath();
       for (var step = 0; step <= steps; step += 1) {
-        var progress = tailStart + (cycle - tailStart) * (step / steps);
-        var routePosition = routePoint(points, progress);
-        if (step === 0) context.moveTo(routePosition.x, routePosition.y);
-        else context.lineTo(routePosition.x, routePosition.y);
+        var progress = start + (end - start) * (step / steps);
+        var position = routePoint(points, progress);
+        if (step === 0) context.moveTo(position.x, position.y);
+        else context.lineTo(position.x, position.y);
       }
       context.stroke();
+    }
 
-      var head = routePoint(points, cycle);
-      context.fillStyle = "rgba(255, 74, 108, 0.94)";
-      context.beginPath();
-      context.arc(head.x, head.y, 2.2 + pointer.intensity * 0.8, 0, Math.PI * 2);
-      context.fill();
+    function drawRouteNetwork(now, surge) {
+      var network = geometry.routeNetwork;
+      var transformed = network.points.map(function (point) {
+        return bendPoint(point, 0.84, 25);
+      });
+      var backbone = network.backbone.map(function (index) {
+        return transformed[index];
+      });
+      var paths = network.paths.map(function (path) {
+        return {
+          points: path.points.map(function (index) {
+            return transformed[index];
+          }),
+          phase: path.phase
+        };
+      });
+      var allPaths = [backbone].concat(paths.map(function (path) {
+        return path.points;
+      }));
+
+      context.save();
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      context.strokeStyle = "rgba(190, 25, 58, 0.19)";
+      context.lineWidth = 0.78;
+      allPaths.forEach(drawPolyline);
+
+      context.strokeStyle = "rgba(246, 48, 81, " +
+        (0.1 + surge.intensity * 0.28 + pointer.intensity * 0.08) + ")";
+      context.shadowColor = "rgba(232, 24, 61, 0.48)";
+      context.shadowBlur = 8 + surge.intensity * 12 + pointer.intensity * 4;
+      context.lineWidth = 1 + surge.intensity * 0.65;
+      allPaths.forEach(drawPolyline);
+
+      paths.forEach(function (path) {
+        var wave = clamp(surge.wave - path.phase, 0, 1);
+        if (!wave) return;
+        var tail = Math.max(0, wave - 0.22);
+        context.strokeStyle = "rgba(255, 92, 116, " +
+          (0.32 + surge.intensity * 0.54) + ")";
+        context.lineWidth = 1.35 + surge.intensity * 0.8;
+        context.shadowBlur = 15 + surge.intensity * 11;
+        drawPathSlice(path.points, tail, wave);
+      });
+
+      var leftBackbone = backbone.slice(0, 5);
+      var rightBackbone = backbone.slice(4).reverse();
+      var backboneWave = clamp(surge.wave - 0.1, 0, 1);
+      if (backboneWave) {
+        var backboneTail = Math.max(0, backboneWave - 0.24);
+        context.strokeStyle = "rgba(255, 104, 126, " +
+          (0.34 + surge.intensity * 0.5) + ")";
+        context.lineWidth = 1.45 + surge.intensity * 0.9;
+        context.shadowBlur = 17 + surge.intensity * 12;
+        drawPathSlice(leftBackbone, backboneTail, backboneWave);
+        drawPathSlice(rightBackbone, backboneTail, backboneWave);
+      }
+
+      network.junctions.forEach(function (index) {
+        var point = transformed[index];
+        var radius = 1.35 + surge.intensity * 1.65;
+        context.fillStyle = "rgba(255, 112, 132, " +
+          (0.28 + surge.intensity * 0.5) + ")";
+        context.beginPath();
+        context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+        context.fill();
+      });
       context.restore();
     }
 
@@ -460,12 +732,14 @@
 
     function draw(now) {
       if (!width || !height) return;
+      var surge = surgeState(now);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, width, height);
       drawFaults(now);
       drawConnections(now);
       drawDebris(now);
-      drawRoute(now);
+      drawFirewallSeam(now, surge);
+      drawRouteNetwork(now, surge);
       drawNodes(now);
       updateAtmosphere();
     }

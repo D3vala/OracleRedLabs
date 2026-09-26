@@ -296,7 +296,7 @@
   min-height: 100svh;
   isolation: isolate;
   overflow: hidden;
-  background: #030304;
+  background: #060204;
 }
 
 .landing-hero::before {
@@ -305,8 +305,8 @@
   z-index: 0;
   content: "";
   background:
-    radial-gradient(ellipse 50% 44% at 50% 45%, rgba(3, 3, 4, 0.62) 0%, rgba(3, 3, 4, 0.34) 54%, transparent 86%),
-    linear-gradient(to bottom, rgba(3, 3, 4, 0.16), transparent 38%, rgba(5, 5, 6, 0.7) 100%);
+    radial-gradient(ellipse 48% 42% at 50% 45%, rgba(4, 2, 3, 0.48) 0%, rgba(4, 2, 3, 0.22) 55%, transparent 87%),
+    linear-gradient(to bottom, rgba(4, 2, 3, 0.08), transparent 36%, rgba(6, 2, 4, 0.54) 100%);
   pointer-events: none;
 }
 
@@ -322,15 +322,56 @@
   z-index: -2;
   overflow: hidden;
   background:
-    linear-gradient(116deg, transparent 0 18%, rgba(106, 5, 33, 0.07) 33%, transparent 47% 66%, rgba(83, 4, 27, 0.07) 82%, transparent 100%),
-    radial-gradient(ellipse 80% 72% at 50% 48%, rgba(57, 4, 20, 0.12), transparent 70%);
+    linear-gradient(to bottom, rgba(91, 3, 27, 0.1), transparent 25%, rgba(132, 5, 39, 0.13) 54%, transparent 76%),
+    linear-gradient(116deg, transparent 0 14%, rgba(128, 5, 38, 0.13) 31%, transparent 48% 62%, rgba(112, 4, 33, 0.14) 84%, transparent 100%),
+    radial-gradient(ellipse 88% 78% at 50% 52%, rgba(91, 4, 29, 0.2), transparent 72%);
+}
+
+.landing-hero__atmosphere::before,
+.landing-hero__atmosphere::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.landing-hero__atmosphere::before {
+  top: calc(55% - 48px);
+  right: -5%;
+  left: -5%;
+  height: 96px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 63, 94, 0.52),
+    rgba(218, 22, 59, 0.24) 24%,
+    rgba(143, 8, 40, 0.055) 43%,
+    rgba(116, 5, 33, 0.035) 50%,
+    rgba(143, 8, 40, 0.055) 57%,
+    rgba(218, 22, 59, 0.24) 76%,
+    rgba(255, 63, 94, 0.52)
+  );
+  filter: blur(18px);
+  opacity: 0.76;
+}
+
+.landing-hero__atmosphere::after {
+  top: 30%;
+  right: 8%;
+  bottom: 18%;
+  left: 8%;
+  background: radial-gradient(ellipse at center, rgba(145, 7, 41, 0.14), transparent 69%);
+}
+
+@media (max-width: 639px) {
+  .landing-hero__atmosphere::before {
+    top: calc(58% - 48px);
+  }
 }
 
 .landing-hero__glow {
   position: absolute;
   display: block;
   border-radius: 50%;
-  opacity: 0.88;
+  opacity: 0.96;
   transform: translate3d(0, 0, 0) scale(1);
   transform-origin: center;
   will-change: transform, opacity;
@@ -341,7 +382,7 @@
   bottom: -35vh;
   width: max(78vw, 820px);
   height: max(96vh, 800px);
-  background: radial-gradient(ellipse at center, rgba(176, 12, 52, 0.36) 0%, rgba(96, 6, 34, 0.19) 36%, transparent 72%);
+  background: radial-gradient(ellipse at center, rgba(194, 12, 53, 0.46) 0%, rgba(112, 5, 35, 0.25) 38%, transparent 72%);
 }
 
 .landing-hero__glow--violet {
@@ -349,7 +390,7 @@
   right: -24vw;
   width: max(72vw, 760px);
   height: max(90vh, 760px);
-  background: radial-gradient(ellipse at center, rgba(118, 8, 38, 0.28) 0%, rgba(62, 4, 24, 0.16) 40%, transparent 73%);
+  background: radial-gradient(ellipse at center, rgba(158, 8, 43, 0.38) 0%, rgba(83, 4, 29, 0.22) 40%, transparent 73%);
 }
 
 .landing-hero__glow--halo {
@@ -357,7 +398,7 @@
   left: calc(50% - min(520px, 42vw));
   width: min(1040px, 84vw);
   height: min(720px, 66vh);
-  background: radial-gradient(ellipse at center, rgba(209, 28, 67, 0.13), rgba(95, 6, 31, 0.055) 42%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(224, 29, 69, 0.18), rgba(111, 5, 33, 0.09) 43%, transparent 70%);
 }
 
 .landing-hero__topology {
@@ -375,8 +416,8 @@
 .landing-hero__contrast {
   z-index: 0;
   background:
-    radial-gradient(ellipse 46% 42% at 50% 45%, rgba(3, 3, 4, 0.6) 0%, rgba(3, 3, 4, 0.3) 56%, transparent 88%),
-    linear-gradient(to bottom, rgba(3, 3, 4, 0.28) 0%, transparent 28%, transparent 66%, rgba(5, 5, 6, 0.78) 100%);
+    radial-gradient(ellipse 45% 40% at 50% 45%, rgba(4, 2, 3, 0.46) 0%, rgba(4, 2, 3, 0.2) 57%, transparent 88%),
+    linear-gradient(to bottom, rgba(4, 2, 3, 0.2) 0%, transparent 27%, transparent 68%, rgba(6, 3, 4, 0.68) 100%);
 }
 
 .landing-hero__content {
