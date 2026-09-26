@@ -44,13 +44,14 @@
 .btn--primary {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: #fff;
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm), var(--shadow-inset);
 }
 
 .btn--primary:hover {
   background: var(--color-accent-hover);
   border-color: var(--color-accent-hover);
-  color: #fff;
+  color: var(--color-text);
   box-shadow: 0 4px 14px var(--color-accent-glow), 0 0 0 3px var(--color-accent-soft);
 }
 
@@ -62,9 +63,9 @@
 
 .btn--secondary:hover {
   background: var(--color-surface-2);
-  border-color: var(--color-text-faint);
+  border-color: var(--color-accent-line);
   color: var(--color-text);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-sm), var(--shadow-inset);
 }
 
 /* Ghost: low-emphasis inline action (table row buttons, back buttons). */
@@ -75,7 +76,7 @@
 .btn--ghost:hover {
   background: var(--color-surface-2);
   color: var(--color-text);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Danger: destructive table actions (UI shell only in this milestone). */
@@ -126,6 +127,7 @@
   background: var(--color-bg-raised);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-inset);
   transition: border-color var(--transition-fast),
     background-color var(--transition-fast),
     box-shadow var(--transition-fast),
@@ -185,10 +187,10 @@ html.js [data-reveal="card"].is-revealed {
 .card:hover,
 .card--interactive:hover,
 a.card:hover {
-  border-color: var(--color-border-strong);
+  border-color: var(--color-accent-line);
   background: var(--color-surface-2);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 16px var(--color-accent-soft);
+  box-shadow: var(--shadow-md), var(--shadow-inset), 0 0 18px var(--color-accent-soft);
 }
 
 .card__link {
@@ -197,7 +199,7 @@ a.card:hover {
 }
 
 .card__link:hover {
-  color: var(--color-accent-hover);
+  color: var(--color-signal);
 }
 
 /* Makes the whole card clickable when the card is an <a> or has a title
@@ -392,7 +394,7 @@ a.card:hover {
 /* Required marker: we mark it with a word, not with colour alone. */
 .field__required {
   margin-left: var(--space-2xs);
-  color: var(--color-accent);
+  color: var(--color-signal);
   font-family: var(--font-mono);
   font-size: var(--fs-100);
   font-weight: 400;
@@ -441,6 +443,7 @@ a.card:hover {
   border-radius: var(--radius-md);
   color: var(--color-text);
   font-size: var(--fs-300);
+  box-shadow: var(--shadow-inset);
   transition: border-color var(--transition-fast),
     background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -516,6 +519,7 @@ a.card:hover {
   background: var(--color-bg-sunken);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset);
 }
 
 /* Native file input, styled just enough to sit inside a dark card. */
@@ -527,6 +531,7 @@ a.card:hover {
   border-radius: var(--radius-md);
   color: var(--color-text-muted);
   font-size: var(--fs-200);
+  box-shadow: var(--shadow-inset);
 }
 
 .file-input::file-selector-button {
@@ -574,6 +579,7 @@ a.card:hover {
   border-radius: var(--radius-md);
   color: var(--color-text);
   font-size: var(--fs-200);
+  box-shadow: var(--shadow-inset);
 }
 
 .form-message[hidden] {
@@ -594,6 +600,7 @@ a.card:hover {
   border-radius: var(--radius-md);
   color: var(--color-text-muted);
   font-size: var(--fs-200);
+  box-shadow: var(--shadow-inset);
 }
 
 .notice strong {
@@ -618,6 +625,7 @@ a.card:hover {
   line-height: 1.5;
   white-space: pre;
   overflow: auto;
+  box-shadow: var(--shadow-inset);
 }
 
 /* Definition list used for the "what happens next" info panels. */
@@ -651,6 +659,7 @@ a.card:hover {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-bg-raised);
+  box-shadow: var(--shadow-inset);
 }
 
 .table-scroll {
@@ -744,6 +753,7 @@ a.card:hover {
   background: var(--color-bg-raised);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-inset);
 }
 
 .filter-group {
@@ -770,7 +780,7 @@ a.card:hover {
 
 .filter-btn:hover {
   color: var(--color-text);
-  border-color: var(--color-border-strong);
+  border-color: var(--color-accent-line);
 }
 
 .filter-btn[aria-pressed="true"] {
@@ -858,7 +868,7 @@ a.card:hover {
 
 .tab:hover {
   color: var(--color-text);
-  background: var(--color-surface-2);
+  background: var(--color-accent-soft);
 }
 
 .tab[aria-selected="true"] {
@@ -926,7 +936,7 @@ a.card:hover {
 
 .stepper__item.is-complete .stepper__index {
   border-color: var(--color-accent-line);
-  color: var(--color-accent);
+  color: var(--color-signal);
 }
 
 .step-panel {
@@ -934,6 +944,7 @@ a.card:hover {
   background: var(--color-bg-raised);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-inset);
 }
 
 .step-panel[hidden] {
@@ -959,6 +970,7 @@ a.card:hover {
   background: var(--color-bg-raised);
   border: 1px solid var(--color-accent-line);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md), var(--shadow-inset);
 }
 
 .confirm[hidden] {
@@ -1004,7 +1016,7 @@ a.card:hover {
   background: var(--color-accent-soft);
   border: 1px solid var(--color-accent-line);
   border-radius: var(--radius-md);
-  color: var(--color-accent-hover);
+  color: var(--color-signal);
 }
 
 .icon-tile svg {
@@ -1020,11 +1032,12 @@ a.card:hover {
   background: var(--color-bg-sunken);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset);
   transition: border-color var(--transition-fast);
 }
 
 .armory__item:hover {
-  border-color: var(--color-border-strong);
+  border-color: var(--color-accent-line);
 }
 
 .armory__name {
@@ -1057,18 +1070,18 @@ a.card:hover {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  color: var(--color-accent-hover);
+  color: var(--color-signal);
   font-size: var(--fs-200);
   font-weight: 600;
   cursor: pointer;
 }
 
 .details__summary:hover {
-  color: var(--color-accent);
+  color: var(--color-text);
 }
 
 .details__summary::marker {
-  color: var(--color-accent);
+  color: var(--color-signal);
 }
 
 .details__body {
@@ -1086,6 +1099,7 @@ a.card:hover {
   border: 1px solid var(--color-border);
   border-left: 3px solid var(--color-accent);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md), var(--shadow-inset);
 }
 
 .cta-band h2 {

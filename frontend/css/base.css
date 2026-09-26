@@ -1,3 +1,35 @@
+@font-face {
+  font-family: "DM Sans";
+  src: url("../assets/fonts/dm-sans-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../assets/fonts/jetbrainsmono-400.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../assets/fonts/jetbrainsmono-600.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
 /* ==========================================================================
    base.css - design tokens, reset, typography and shared utilities
    Oracle Red Labs (ORL) - Milestone 4 (visual design)
@@ -12,26 +44,27 @@
    1. Design tokens
    -------------------------------------------------------------------------- */
 :root {
-  /* Surfaces: near-black, never pure #000 (pure black is harsh on LCD panels) */
-  --color-bg: #0a0a0c;
-  --color-bg-raised: #111114;
-  --color-bg-sunken: #070708;
-  --color-surface-2: #16161a;
+  /* Brand surfaces: OLED black with zinc elevation steps. */
+  --color-bg: #050505;
+  --color-bg-raised: #0d0d0f;
+  --color-bg-sunken: #08080a;
+  --color-surface-2: #18181b;
 
   /* Text: off-white body copy, two muted steps for supporting text */
-  --color-text: #e8e8ec;
-  --color-text-muted: #a2a2ad;
-  --color-text-faint: #74747f;
+  --color-text: #ffffff;
+  --color-text-muted: #a1a1aa;
+  --color-text-faint: #71717a;
 
   /* Signal accent: one controlled red, used sparingly (CTAs, links, status) */
   --color-accent: #d13b3b;
-  --color-accent-hover: #e04a4a;
+  --color-accent-hover: #c5353d;
   --color-accent-soft: rgba(209, 59, 59, 0.12);
   --color-accent-line: rgba(209, 59, 59, 0.5);
+  --color-signal: #ff365f;
 
   /* Borders and dividers: muted slate */
-  --color-border: #26262c;
-  --color-border-strong: #3b3b46;
+  --color-border: #27272a;
+  --color-border-strong: #3f3f46;
 
   /* Status colours - one per engagement state (see .badge in components.css) */
   --color-status-pending: #d9a13b;
@@ -41,9 +74,9 @@
   --color-status-cancelled: #c2634f;
 
   /* Typography */
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
+  --font-display: "DM Sans", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
     "Liberation Mono", monospace;
 
   /* Fluid type scale: clamp(min, preferred, max) keeps headings readable
@@ -73,12 +106,13 @@
   /* Radii */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 14px;
+  --radius-lg: 8px;
   --radius-pill: 999px;
 
   /* Elevation (kept subtle on a dark canvas) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px rgba(20, 3, 7, 0.55);
+  --shadow-md: 0 16px 42px rgba(20, 3, 7, 0.34);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.045);
 
   /* Layout */
   --container-max: 1200px;
@@ -157,12 +191,13 @@ body {
   font-family: var(--font-sans);
   font-size: var(--fs-300);
   line-height: var(--lh-body);
-  /* Instrument dot-grid background texture (~5% opacity) layered with subtle top wash */
+  /* Quiet directional light replaces the generic instrument grid. */
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent 400px);
-  background-size: 24px 24px, 100% 100%;
-  background-repeat: repeat, no-repeat;
+    radial-gradient(ellipse 58rem 32rem at 8% -8%, rgba(209, 59, 59, 0.09), transparent 68%),
+    radial-gradient(ellipse 48rem 30rem at 92% 12%, rgba(120, 18, 31, 0.055), transparent 72%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.012), transparent 28rem);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /* --------------------------------------------------------------------------
@@ -172,9 +207,10 @@ h1,
 h2,
 h3,
 h4 {
+  font-family: var(--font-display);
   line-height: var(--lh-tight);
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
@@ -211,7 +247,7 @@ a {
 }
 
 a:hover {
-  color: var(--color-accent-hover);
+  color: var(--color-signal);
   text-decoration-color: var(--color-accent-line);
 }
 
@@ -254,7 +290,7 @@ blockquote {
    visible, and only for keyboard users via :focus-visible.
    -------------------------------------------------------------------------- */
 :focus-visible {
-  outline: 2px solid var(--color-accent-hover);
+  outline: 2px solid var(--color-signal);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -305,7 +341,7 @@ blockquote {
 /* Small mono label that sits above every section heading. */
 .eyebrow {
   display: inline-block;
-  color: var(--color-accent);
+  color: var(--color-signal);
   font-family: var(--font-mono);
   font-size: var(--fs-100);
   letter-spacing: var(--tracking-wide);
@@ -332,7 +368,7 @@ blockquote {
 .typewriter-cursor {
   display: inline-block;
   width: 0.6ch;
-  color: var(--color-accent);
+  color: var(--color-signal);
   animation: orl-blink 1s steps(2, start) infinite;
 }
 
