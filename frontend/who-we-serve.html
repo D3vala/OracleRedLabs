@@ -12,18 +12,19 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/interior.css">
   <!-- Adds a "js" class so the mobile menu can start collapsed. With
        JavaScript disabled the class is never added and the nav links stay
        visible, which is the safer failure mode. -->
   <script>document.documentElement.classList.add("js");</script>
 </head>
-<body>
+<body class="page page--who-we-serve">
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
        include/template; until then consistency matters more than DRY). -->
-  <header class="site-header">
-    <div class="container site-header__inner">
+  <header class="site-header interior-header">
+    <div class="container site-header__inner interior-nav-shell">
       <a class="brand" href="index.html">
         <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
         <span class="brand__name">Oracle <em>Red</em> Labs</span>
@@ -55,7 +56,7 @@
 
   <main id="main">
     <section class="page-head" aria-labelledby="page-heading">
-      <div class="container">
+      <div class="container page-head__layout">
         <p class="page-head__code">/ target clients</p>
         <h1 id="page-heading">Who We Serve</h1>
         <p class="lede">
@@ -64,17 +65,26 @@
           different threat model, so each engagement starts from a different
           question.
         </p>
+        <div class="page-visual page-visual--sectors" aria-hidden="true">
+          <span class="page-visual__field"></span>
+          <span class="page-visual__route"></span>
+          <span class="page-visual__node page-visual__node--1" data-label="FINANCE"></span>
+          <span class="page-visual__node page-visual__node--2" data-label="HEALTH"></span>
+          <span class="page-visual__node page-visual__node--3" data-label="SAAS"></span>
+          <span class="page-visual__node page-visual__node--4" data-label="INFRA"></span>
+          <span class="page-visual__readout">04 / THREAT MODELS</span>
+        </div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="industries-heading">
+    <section class="section sector-atlas" aria-labelledby="industries-heading">
       <div class="container">
         <div class="section__head">
           <p class="eyebrow">Industry Threat Models</p>
           <h2 id="industries-heading">Where simulated assault pays for itself</h2>
         </div>
 
-        <div class="grid grid--cards">
+        <div class="grid grid--cards sector-atlas__grid">
           <!-- Financial services -->
           <article class="card">
             <span class="icon-tile" aria-hidden="true">
@@ -168,7 +178,7 @@
       </div>
     </section>
 
-    <section class="section section--raised" aria-labelledby="fit-heading">
+    <section class="section section--raised fit-filter" aria-labelledby="fit-heading">
       <div class="container">
         <div class="section__head">
           <p class="eyebrow">Honest Fit</p>
@@ -216,7 +226,14 @@
   </main>
 
   <!-- Shared footer: identical on all 11 pages. -->
-  <footer class="site-footer">
+  <footer class="site-footer interior-footer">
+    <div class="container interior-footer__cta" data-reveal="element">
+      <div>
+        <p class="eyebrow">Your threat model</p>
+        <h2>Start with the system you cannot afford to lose.</h2>
+      </div>
+      <a class="btn btn--primary" href="contact.html">Describe the boundary</a>
+    </div>
     <div class="container site-footer__inner">
       <div class="site-footer__brand">
         <p class="mono">Oracle Red Labs</p>
@@ -269,6 +286,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/interior.js"></script>
   <!-- Shared scroll-reveal: loaded last so every page script has already
        rendered its cards before the first reveal sweep. -->
   <script src="js/scroll-reveal.js"></script>

@@ -1,7 +1,7 @@
 /* ==========================================================================
-   scroll-reveal.js - Staggered IntersectionObserver reveals for .card elements.
-   Applies fade + 20px slide-up the first time a card enters the viewport, and
-   staggers sibling cards by 90ms so a grid animates in as a cascade.
+   scroll-reveal.js - Staggered IntersectionObserver reveals for page content.
+   Applies a restrained fade-up the first time an element enters the viewport,
+   and staggers siblings so cards and supporting blocks arrive as a cascade.
    Unobserves after reveal so it never re-triggers on scroll-back.
    The matching CSS lives in css/components.css ([data-reveal="card"]).
    Respects prefers-reduced-motion and bails out where IntersectionObserver is
@@ -65,10 +65,42 @@
       });
     }
 
+    // Interior pages also reveal their editorial headings and large functional
+    // surfaces. These selectors are deliberately structural: no content is
+    // hidden until JavaScript has found and registered it with the observer.
+    function observePageElements() {
+      var selector = [
+        ".page-head__code",
+        ".page-head h1",
+        ".page-head .lede",
+        ".section__head",
+        ".toolbar",
+        ".table-wrap",
+        ".cta-band",
+        ".split > *",
+        ".prose-grid > *",
+        ".armory",
+        ".stepper",
+        ".interior-footer__cta",
+      ].join(",");
+
+      var elements = document.querySelectorAll(selector);
+      Array.prototype.forEach.call(elements, function (element, index) {
+        if (!element.hasAttribute("data-reveal")) {
+          element.setAttribute("data-reveal", "element");
+        }
+        if (element.getAttribute("data-reveal-observed") === "true") return;
+        element.setAttribute("data-reveal-observed", "true");
+        element.style.setProperty("--reveal-delay", (index % 3) * 85 + "ms");
+        observer.observe(element);
+      });
+    }
+
     // Initial pass covers everything in the served HTML; the rAF guard below
     // keeps a burst of late inserts (services catalogue, vault filter,
     // dashboard tiles) to a single sweep per frame.
     observeCards();
+    observePageElements();
 
     var queued = false;
     new MutationObserver(function () {
@@ -77,6 +109,7 @@
       window.requestAnimationFrame(function () {
         queued = false;
         observeCards();
+        observePageElements();
       });
     }).observe(document.body, {
       childList: true,

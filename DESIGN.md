@@ -48,8 +48,8 @@ Semantic states retain their dedicated amber, blue, green, gray, and muted-red c
 
 ## Layout rules
 
-- The existing HTML hierarchy, container widths, grid tracks, section spacing, breakpoints, responsive order, and component placement are canonical.
-- Shared layout rules live in `frontend/css/layout.css` and `frontend/css/responsive.css`. Page-specific landing composition lives in `frontend/css/landing.css`.
+- The landing hierarchy and its established composition remain canonical. Interior pages preserve semantic content order while using page-specific editorial compositions defined in `frontend/css/interior.css`.
+- Shared foundations live in `frontend/css/layout.css` and `frontend/css/responsive.css`; landing composition lives in `frontend/css/landing.css`; the detached interior navigation, instrument mastheads, service ledger, sector atlas, archive, workbenches, operational surfaces, and footer composition live in `frontend/css/interior.css`.
 - Do not add a generic grid texture to the page background. Use sparse radial illumination and directional falloff.
 - Marketing prose should remain within the existing readable line-length limits. Data views may use wider tables with the current responsive stacking behavior.
 - Maintain the 44px minimum target size for principal interactive controls.
@@ -58,7 +58,7 @@ Semantic states retain their dedicated amber, blue, green, gray, and muted-red c
 
 ### Navigation
 
-The shared header remains sticky and translucent with a zinc divider and subtle inner highlight. The landing navigation remains a detached glass island. Active links use red structure; mobile menu behavior and focus management are unchanged.
+The landing and interior navigation both use detached glass islands. Interior navigation remains sticky but floats within the canvas, condenses after the masthead leaves view, and expands into a near-full-screen command panel on mobile. Active links use red structure; keyboard focus, Escape handling, and no-JavaScript access remain intact.
 
 ### Buttons and links
 
@@ -87,6 +87,17 @@ The hero is the brand’s highest-energy moment. Its code-native firewall field 
 Keep the centered headline, navigation, CTA positions, static trust rail, service bento, evidence sequence, outcomes carousel, and inquiry layout unchanged. The canvas remains deterministic, DPR-aware, pointer-responsive, paused offscreen, and static under reduced motion.
 
 The service bento and downstream panels use the shared black-and-red palette. No violet light, blue-purple gradients, matrix rain, locks, shields, hooded figures, or proprietary game imagery should be introduced.
+
+## Interior-page visual language
+
+Interior pages extend the landing direction with a quieter editorial-dark system. Their mastheads pair oversized, tightly tracked display type with one code-native signal diagram whose geometry describes the page subject: branching routes for services, nested boundaries for methodology and engagement scope, sector nodes for audience pages, document strata for the vault, endpoint exchange for contact, verification contours for account access, and restrained telemetry for operational consoles.
+
+- Keep diagrams abstract, sparse, and subordinate to the copy. Each is a real page instrument with labelled decision points, a registered field, and a restrained readout; CSS gradients and hairlines provide the rendering without literal locks, shields, hacker imagery, or ornamental grids.
+- Shared content surfaces use a restrained double-bezel effect made from one zinc hairline, an inset highlight, a faint six-pixel outer register, and a dark-cherry ambient shadow. Avoid unnecessary nested markup when the same hierarchy can be expressed by the component surface.
+- Section introductions use an editorial split at wide widths and return to one column below `900px`. Services use a numbered ledger rather than catalogue cards; audience pages use a sector atlas; research uses a variable archive; forms use workbenches with supporting rails; and dashboards use dense operational surfaces. Source order remains intact in every responsive collapse.
+- The interior footer begins with a large, page-specific decision prompt before resolving into navigation and the academic disclosure. It should read as the final chapter of the page, not a utility strip.
+- Interior entry motion uses `IntersectionObserver`, transform/translate, and opacity only. The masthead instrument may respond to pointer position through transform-based depth, the header condenses through an observer, and the mobile navigation reveals as a near-full-screen command panel with staggered links. Reduced-motion and no-JavaScript states expose complete content immediately.
+- Shared forms, tables, filters, tabs, and workflow controls retain their established behavior, semantics, status colours, and responsive contracts while adopting the same surface depth and focus treatment.
 
 ## Illustration system
 

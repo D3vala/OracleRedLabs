@@ -12,18 +12,19 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/interior.css">
   <!-- Adds a "js" class so the mobile menu can start collapsed. With
        JavaScript disabled the class is never added and the nav links stay
        visible, which is the safer failure mode. -->
   <script>document.documentElement.classList.add("js");</script>
 </head>
-<body>
+<body class="page page--contact">
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
        include/template; until then consistency matters more than DRY). -->
-  <header class="site-header">
-    <div class="container site-header__inner">
+  <header class="site-header interior-header">
+    <div class="container site-header__inner interior-nav-shell">
       <a class="brand" href="index.html">
         <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
         <span class="brand__name">Oracle <em>Red</em> Labs</span>
@@ -55,7 +56,7 @@
 
   <main id="main">
     <section class="page-head" aria-labelledby="page-heading">
-      <div class="container">
+      <div class="container page-head__layout">
         <p class="page-head__code">/ encrypted inquiry engine</p>
         <h1 id="page-heading">Start a Conversation</h1>
         <p class="lede">
@@ -63,12 +64,20 @@
           read by an engagement lead, not a sales queue, and answered within one
           business day.
         </p>
+        <div class="page-visual page-visual--contact" aria-hidden="true">
+          <span class="page-visual__field"></span>
+          <span class="page-visual__route"></span>
+          <span class="page-visual__node page-visual__node--1" data-label="SCOPE"></span>
+          <span class="page-visual__node page-visual__node--2" data-label="ENCRYPT"></span>
+          <span class="page-visual__node page-visual__node--3" data-label="LEAD"></span>
+          <span class="page-visual__readout">RESPONSE / 01 BUSINESS DAY</span>
+        </div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="form-heading">
+    <section class="section inquiry-console" aria-labelledby="form-heading">
       <div class="container">
-        <div class="split">
+        <div class="split inquiry-console__layout">
           <!-- ============================================================
                INQUIRY FORM
                Native HTML validation (required / type / minlength) handles the
@@ -200,7 +209,14 @@ b3JhY2xlLXJlZC1sYWJzLXN0dWRlbnQtcHJvamVjdC1leGFtcGxlLW9ubHk
   </main>
 
   <!-- Shared footer: identical on all 11 pages. -->
-  <footer class="site-footer">
+  <footer class="site-footer interior-footer">
+    <div class="container interior-footer__cta" data-reveal="element">
+      <div>
+        <p class="eyebrow">Secure first contact</p>
+        <h2>Bring the concern. We will shape the scope.</h2>
+      </div>
+      <a class="btn btn--primary" href="engage.html">Build the full request</a>
+    </div>
     <div class="container site-footer__inner">
       <div class="site-footer__brand">
         <p class="mono">Oracle Red Labs</p>
@@ -253,6 +269,7 @@ b3JhY2xlLXJlZC1sYWJzLXN0dWRlbnQtcHJvamVjdC1leGFtcGxlLW9ubHk
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/interior.js"></script>
   <!-- Shared scroll-reveal: loaded last so every page script has already
        rendered its cards before the first reveal sweep. -->
   <script src="js/scroll-reveal.js"></script>

@@ -12,18 +12,19 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/interior.css">
   <!-- Adds a "js" class so the mobile menu can start collapsed. With
        JavaScript disabled the class is never added and the nav links stay
        visible, which is the safer failure mode. -->
   <script>document.documentElement.classList.add("js");</script>
 </head>
-<body>
+<body class="page page--methodology">
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
        include/template; until then consistency matters more than DRY). -->
-  <header class="site-header">
-    <div class="container site-header__inner">
+  <header class="site-header interior-header">
+    <div class="container site-header__inner interior-nav-shell">
       <a class="brand" href="index.html">
         <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
         <span class="brand__name">Oracle <em>Red</em> Labs</span>
@@ -55,7 +56,7 @@
 
   <main id="main">
     <section class="page-head" aria-labelledby="page-heading">
-      <div class="container">
+      <div class="container page-head__layout">
         <p class="page-head__code">/ about and methodology</p>
         <h1 id="page-heading">Methodology and Armory</h1>
         <p class="lede">
@@ -63,10 +64,18 @@
           vulnerability counts and none of them know their intrusion paths. We
           are in the business of producing the second number.
         </p>
+        <div class="page-visual page-visual--methodology" aria-hidden="true">
+          <span class="page-visual__field"></span>
+          <span class="page-visual__route"></span>
+          <span class="page-visual__node page-visual__node--1" data-label="AUTHORISE"></span>
+          <span class="page-visual__node page-visual__node--2" data-label="SIMULATE"></span>
+          <span class="page-visual__node page-visual__node--3" data-label="RETEST"></span>
+          <span class="page-visual__readout">BOUNDARY / OBSERVED</span>
+        </div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="about-heading">
+    <section class="section method-manifesto" aria-labelledby="about-heading">
       <div class="container">
         <div class="prose-grid">
           <div>
@@ -123,7 +132,7 @@
          style of an adversarial tactic matrix. They are not official
          identifiers and nothing here is copied from a real framework.
          ==================================================================== -->
-    <section class="section section--raised" aria-labelledby="mapping-heading">
+    <section class="section section--raised method-map" aria-labelledby="mapping-heading">
       <div class="container">
         <div class="section__head">
           <p class="eyebrow">Mapping</p>
@@ -209,7 +218,7 @@
          we talk about in proposals - these are not functioning capabilities of
          this website, and this page runs no tooling of any kind.
          ==================================================================== -->
-    <section class="section" aria-labelledby="armory-heading">
+    <section class="section method-armory" aria-labelledby="armory-heading">
       <div class="container">
         <div class="section__head">
           <p class="eyebrow">Armory</p>
@@ -277,7 +286,14 @@
   </main>
 
   <!-- Shared footer: identical on all 11 pages. -->
-  <footer class="site-footer">
+  <footer class="site-footer interior-footer">
+    <div class="container interior-footer__cta" data-reveal="element">
+      <div>
+        <p class="eyebrow">Before the first action</p>
+        <h2>See the method. Define the boundary.</h2>
+      </div>
+      <a class="btn btn--primary" href="contact.html">Request the method</a>
+    </div>
     <div class="container site-footer__inner">
       <div class="site-footer__brand">
         <p class="mono">Oracle Red Labs</p>
@@ -330,6 +346,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/interior.js"></script>
   <!-- Shared scroll-reveal: loaded last so every page script has already
        rendered its cards before the first reveal sweep. -->
   <script src="js/scroll-reveal.js"></script>

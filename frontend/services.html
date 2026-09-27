@@ -12,18 +12,19 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/interior.css">
   <!-- Adds a "js" class so the mobile menu can start collapsed. With
        JavaScript disabled the class is never added and the nav links stay
        visible, which is the safer failure mode. -->
   <script>document.documentElement.classList.add("js");</script>
 </head>
-<body>
+<body class="page page--services">
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <!-- Shared header: identical on all 11 pages (Milestone 6 turns this into an
        include/template; until then consistency matters more than DRY). -->
-  <header class="site-header">
-    <div class="container site-header__inner">
+  <header class="site-header interior-header">
+    <div class="container site-header__inner interior-nav-shell">
       <a class="brand" href="index.html">
         <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
         <span class="brand__name">Oracle <em>Red</em> Labs</span>
@@ -55,7 +56,7 @@
 
   <main id="main">
     <section class="page-head" aria-labelledby="page-heading">
-      <div class="container">
+      <div class="container page-head__layout">
         <p class="page-head__code">/ service catalogue</p>
         <h1 id="page-heading">What We Sell, Clearly Priced</h1>
         <p class="lede">
@@ -63,6 +64,14 @@
           and a published base price. No unlimited-scope retainers and no
           surprise change orders.
         </p>
+        <div class="page-visual page-visual--services" aria-hidden="true">
+          <span class="page-visual__field"></span>
+          <span class="page-visual__route"></span>
+          <span class="page-visual__node page-visual__node--1" data-label="EXPOSURE"></span>
+          <span class="page-visual__node page-visual__node--2" data-label="BREACH"></span>
+          <span class="page-visual__node page-visual__node--3" data-label="RELEASE"></span>
+          <span class="page-visual__readout">03 / CONTROLLED ROUTES</span>
+        </div>
       </div>
     </section>
 
@@ -72,7 +81,7 @@
          (variant "full"), so price and delivery detail live in the data set
          that Milestone 7 will replace with an API response.
          ==================================================================== -->
-    <section class="section" aria-labelledby="catalogue-heading">
+    <section class="section service-catalogue" aria-labelledby="catalogue-heading">
       <div class="container">
         <div class="section__head">
           <p class="eyebrow">Catalogue</p>
@@ -83,7 +92,7 @@
           </p>
         </div>
 
-        <div class="grid grid--cards grid--cards--3" id="services-grid" data-services-grid="full"></div>
+        <div class="service-ledger" id="services-grid" data-services-grid="full"></div>
 
         <noscript>
           <div class="notice">
@@ -103,7 +112,7 @@
     <!-- ====================================================================
          INCLUDED / COMMERCIAL TERMS
          ==================================================================== -->
-    <section class="section section--raised" aria-labelledby="included-heading">
+    <section class="section section--raised included-system" aria-labelledby="included-heading">
       <div class="container">
         <div class="section__head">
           <p class="eyebrow">Always Included</p>
@@ -164,7 +173,14 @@
   </main>
 
   <!-- Shared footer: identical on all 11 pages. -->
-  <footer class="site-footer">
+  <footer class="site-footer interior-footer">
+    <div class="container interior-footer__cta" data-reveal="element">
+      <div>
+        <p class="eyebrow">Next move</p>
+        <h2>Put the system under controlled pressure.</h2>
+      </div>
+      <a class="btn btn--primary" href="engage.html">Start an engagement</a>
+    </div>
     <div class="container site-footer__inner">
       <div class="site-footer__brand">
         <p class="mono">Oracle Red Labs</p>
@@ -218,6 +234,7 @@
 
   <script src="js/main.js"></script>
   <script src="js/data/services.js"></script>
+  <script src="js/interior.js"></script>
   <!-- Shared scroll-reveal: loaded last so every page script has already
        rendered its cards before the first reveal sweep. -->
   <script src="js/scroll-reveal.js"></script>
