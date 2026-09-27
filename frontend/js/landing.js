@@ -898,6 +898,94 @@
       );
     });
 
+    gsap.utils.toArray(".service-card").forEach(function (card, index) {
+      var image = card.querySelector(".service-visual img");
+      if (!image) return;
+
+      var direction = index === 1 ? 1 : -1;
+      gsap.fromTo(
+        image,
+        {
+          xPercent: direction * 7,
+          yPercent: 8,
+          scale: 0.94,
+          opacity: 0.2
+        },
+        {
+          xPercent: direction * -3,
+          yPercent: -4,
+          scale: 1.035,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 92%",
+            end: "bottom 34%",
+            scrub: 0.75
+          }
+        }
+      );
+    });
+
+    var evidenceRoute = document.querySelector("[data-evidence-route]");
+    if (evidenceRoute) {
+      gsap.fromTo(
+        evidenceRoute,
+        { xPercent: -5, scale: 0.94, opacity: 0.18 },
+        {
+          xPercent: 3,
+          scale: 1.025,
+          opacity: 0.68,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".evidence__stage",
+            start: "top 86%",
+            end: "bottom 28%",
+            scrub: 0.85
+          }
+        }
+      );
+    }
+
+    gsap.utils.toArray(".method-visual img").forEach(function (image) {
+      gsap.fromTo(
+        image,
+        { yPercent: 9, scale: 0.94, opacity: 0.32 },
+        {
+          yPercent: -7,
+          scale: 1.045,
+          opacity: 0.94,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".method",
+            start: "top 88%",
+            end: "bottom 30%",
+            scrub: 0.8
+          }
+        }
+      );
+    });
+
+    gsap.utils.toArray(".outcome-slide__visual img").forEach(function (image) {
+      gsap.fromTo(
+        image,
+        { xPercent: -6, yPercent: 7, scale: 0.94, opacity: 0.26 },
+        {
+          xPercent: 4,
+          yPercent: -5,
+          scale: 1.04,
+          opacity: 0.9,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".outcomes",
+            start: "top 88%",
+            end: "bottom 34%",
+            scrub: 0.8
+          }
+        }
+      );
+    });
+
     gsap.utils.toArray("[data-scrub-copy]").forEach(function (paragraph) {
       var words = wrapScrubWords(paragraph);
       gsap.fromTo(

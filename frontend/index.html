@@ -125,14 +125,9 @@
                   <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
                 </a>
               </div>
-              <div class="oracle-field" aria-hidden="true">
-                <span class="oracle-field__route"></span>
-                <i style="--x: 12%; --y: 69%"></i>
-                <i style="--x: 38%; --y: 47%"></i>
-                <i style="--x: 65%; --y: 58%"></i>
-                <i style="--x: 88%; --y: 24%"></i>
-                <b></b>
-              </div>
+              <figure class="service-visual service-visual--oracle media-motion" aria-hidden="true">
+                <img src="assets/images/landing/oracle-ai-surface.webp" alt="" width="1448" height="1086" loading="lazy" decoding="async">
+              </figure>
             </div>
           </article>
 
@@ -141,7 +136,9 @@
               <span class="service-card__context">Assumed-breach testing</span>
               <h3>PHANTASM</h3>
               <p>Begin from a controlled foothold. Test privilege, persistence, lateral movement, and the response of your detection stack.</p>
-              <div class="phantasm-field" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
+              <figure class="service-visual service-visual--phantasm media-motion" aria-hidden="true">
+                <img src="assets/images/landing/phantasm-lateral-field.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
+              </figure>
               <a class="landing-text-link" href="services.html#phantasm">
                 <span>Explore PHANTASM</span>
                 <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
@@ -154,7 +151,9 @@
               <span class="service-card__context">Supply-chain assurance</span>
               <h3>CHAINBREAK</h3>
               <p>Challenge CI/CD permissions, dependency provenance, artifact signing, and the controls surrounding release.</p>
-              <div class="chain-field" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+              <figure class="service-visual service-visual--chainbreak media-motion" aria-hidden="true">
+                <img src="assets/images/landing/chainbreak-release-chain.webp" alt="" width="1774" height="887" loading="lazy" decoding="async">
+              </figure>
               <a class="landing-text-link" href="services.html#chainbreak">
                 <span>Explore CHAINBREAK</span>
                 <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
@@ -167,15 +166,23 @@
 
     <section class="evidence" aria-labelledby="evidence-heading">
       <div class="landing-shell">
-        <h2 id="evidence-heading" class="evidence__heading" data-reveal>
-          From exposure
-          <span class="evidence-inline-media media-motion" aria-hidden="true">
-            <img src="assets/images/evidence-signal-route.png" alt="" width="2172" height="724" loading="lazy">
-          </span>
-          to verified closure.
-        </h2>
+        <div class="evidence__stage">
+          <h2 id="evidence-heading" class="evidence__heading" data-reveal>
+            From exposure
+            <span class="evidence-inline-media media-motion" aria-hidden="true">
+              <img src="assets/images/landing/evidence-attack-to-closure.webp" alt="" width="2172" height="724" loading="lazy" decoding="async">
+            </span>
+            to verified closure.
+          </h2>
 
-        <p class="evidence__statement" data-scrub-copy>Every finding connects the boundary that was crossed, the proof your team can replay, and the control that should interrupt the route next time.</p>
+          <p class="evidence__statement" data-scrub-copy>Every finding connects the boundary that was crossed, the proof your team can replay, and the control that should interrupt the route next time.</p>
+
+          <figure class="evidence-panorama" data-evidence-route aria-hidden="true">
+            <div class="evidence-panorama__media media-motion">
+              <img src="assets/images/landing/evidence-attack-to-closure.webp" alt="" width="2172" height="724" loading="lazy" decoding="async">
+            </div>
+          </figure>
+        </div>
 
         <div class="evidence-deliverables">
           <article data-reveal>
@@ -206,6 +213,9 @@
             <span>Read the methodology</span>
             <svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M4 14 14 4M7 4h7v7"></path></svg>
           </a>
+          <figure class="method-visual media-motion" aria-hidden="true">
+            <img src="assets/images/landing/method-controlled-boundary.webp" alt="" width="1122" height="1402" loading="lazy" decoding="async">
+          </figure>
         </div>
 
         <ol class="method__steps">
@@ -247,7 +257,10 @@
           <div class="outcomes-carousel__core bezel-core">
             <div class="outcomes-carousel__track" data-carousel-track>
               <article class="outcome-slide" data-carousel-slide>
-                <div class="outcome-slide__role"><span>Security leaders</span><i aria-hidden="true"></i></div>
+                <div class="outcome-slide__role">
+                  <span>Security leaders</span>
+                  <span class="outcome-slide__visual media-motion" aria-hidden="true"><img src="assets/images/landing/outcome-security-leaders.webp" alt="" width="1254" height="1254" loading="lazy" decoding="async"></span>
+                </div>
                 <div class="outcome-slide__copy">
                   <h3>Know which attack paths deserve attention first.</h3>
                   <p>Connect technical findings to exposed assets, likely impact, and the controls that change risk fastest.</p>
@@ -255,7 +268,10 @@
                 <ul><li>Prioritised exposure</li><li>Named control gaps</li><li>Retest visibility</li></ul>
               </article>
               <article class="outcome-slide" data-carousel-slide>
-                <div class="outcome-slide__role"><span>Engineering teams</span><i aria-hidden="true"></i></div>
+                <div class="outcome-slide__role">
+                  <span>Engineering teams</span>
+                  <span class="outcome-slide__visual media-motion" aria-hidden="true"><img src="assets/images/landing/outcome-engineering-teams.webp" alt="" width="1254" height="1254" loading="lazy" decoding="async"></span>
+                </div>
                 <div class="outcome-slide__copy">
                   <h3>Move from report review to reproducible action.</h3>
                   <p>Follow the tested sequence, understand the failed boundary, and verify the repair against the same route.</p>
@@ -263,7 +279,10 @@
                 <ul><li>Replayable proof</li><li>Clear ownership</li><li>Focused remediation</li></ul>
               </article>
               <article class="outcome-slide" data-carousel-slide>
-                <div class="outcome-slide__role"><span>Executive sponsors</span><i aria-hidden="true"></i></div>
+                <div class="outcome-slide__role">
+                  <span>Executive sponsors</span>
+                  <span class="outcome-slide__visual media-motion" aria-hidden="true"><img src="assets/images/landing/outcome-executive-sponsors.webp" alt="" width="1254" height="1254" loading="lazy" decoding="async"></span>
+                </div>
                 <div class="outcome-slide__copy">
                   <h3>See what was tested, what changed, and what remains.</h3>
                   <p>Receive an accountable view of the approved scenario without losing the engineering evidence behind it.</p>

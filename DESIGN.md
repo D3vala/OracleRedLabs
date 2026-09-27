@@ -88,6 +88,22 @@ Keep the centered headline, navigation, CTA positions, static trust rail, servic
 
 The service bento and downstream panels use the shared black-and-red palette. No violet light, blue-purple gradients, matrix rain, locks, shields, hooded figures, or proprietary game imagery should be introduced.
 
+## Illustration system
+
+Downstream landing-page illustrations use a quiet hybrid of soft signal membranes and ambient topology. They translate service, evidence, methodology, and stakeholder concepts into one or two controlled gestures rather than literal devices. The hero remains the highest-energy visual; illustrations below it use lower contrast, shallower depth, and more negative space.
+
+- Every asset uses genuine alpha transparency, including the evidence panorama. Translucent charcoal and dark-cherry membranes, broad muted-red route ribbons, sparse topology lines, and restrained warm-white verification points dissolve into the surrounding black surface.
+- Primary red describes continuity and structure. Signal red is used sparingly at seams, routes, or active decision points. Warm white marks observation, registration, intentional stopping, and verified closure.
+- Keep visual density low: favor one dominant field and one supporting route, or two broad interacting membranes. Avoid hard housings, cables, bolts, rubble, portals, machinery, sharp reflections, dense particles, and game-like props.
+- Illustrations behave as ambient spatial layers, not framed pictures or standalone icons. Service signals sit behind their card copy, the evidence route spans the section behind its heading and scrubbed statement, the methodology boundary occupies the introductory field, and stakeholder artwork is embedded in each carousel surface.
+- Service artwork stays quieter near headings and links. Evidence uses a frameless multidirectional fade instead of a bordered container. Methodology and outcome artwork may receive only broad low-opacity haze, never a localized glow disc or pronounced drop shadow.
+- Crop with `object-fit`, transparent negative space, and low-contrast edge masks rather than stretching. Preserve the semantic gesture on narrow screens even when peripheral detail is cropped.
+- Generated artwork may use the existing `.media-motion` treatment. Scroll motion is limited to slow transform and opacity interpolation that reinforces route progression, boundary observation, or convergence; never add autonomous downstream loops. Reduced-motion and no-JavaScript states show the complete static composition.
+- Below-fold images require explicit dimensions, lazy loading, and asynchronous decoding. Keep the complete landing illustration payload at approximately 1.1 MB or less.
+- Do not use text, logos, watermarks, people, weapons, hacker figures, locks, shields, skulls, badges, Matrix-style rain, generic circuit-board scenery, violet light, or proprietary game imagery.
+
+The canonical filename, prompt, crop, and placement record lives in `frontend/assets/images/landing/README.md` and must remain synchronized with the shipped assets.
+
 ## Motion
 
 - Existing JavaScript and GSAP choreography is canonical. Do not change timing, triggers, pinning behavior, carousel movement, canvas behavior, or reveal sequencing as part of visual-only work.

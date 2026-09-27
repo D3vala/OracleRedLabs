@@ -730,70 +730,58 @@
   z-index: 2;
 }
 
-.oracle-field {
+.service-visual {
   position: relative;
-  height: 260px;
-  margin-top: 3rem;
-  overflow: hidden;
-  border-radius: 12px;
-  background:
-    radial-gradient(circle at 86% 25%, rgba(255, 54, 95, 0.22), transparent 6%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0));
+  z-index: 1;
+  margin: 0;
+  pointer-events: none;
 }
 
-.oracle-field::before,
-.oracle-field::after {
+.service-visual::after {
   position: absolute;
+  inset: auto -2% -7%;
+  height: 46%;
+  border-radius: 50%;
+  background: rgba(255, 54, 95, 0.08);
+  filter: blur(52px);
   content: "";
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 50%;
+  opacity: 0.58;
 }
 
-.oracle-field::before {
-  right: -4%;
-  top: -20%;
-  width: 250px;
-  height: 250px;
+.service-visual img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: saturate(0.88) contrast(0.95);
 }
 
-.oracle-field::after {
-  right: 6%;
-  top: -5%;
-  width: 180px;
-  height: 180px;
+.service-visual--oracle {
+  position: relative;
+  height: 290px;
+  margin: 2rem -2% -2% 0;
+  overflow: hidden;
+  border-radius: var(--landing-radius);
+  background: radial-gradient(ellipse at 72% 64%, rgba(255, 54, 95, 0.07), transparent 62%);
 }
 
-.oracle-field__route {
+.service-visual--oracle img {
+  object-position: 66% 55%;
+  transform: scale(1.03);
+}
+
+.service-visual--phantasm,
+.service-visual--chainbreak {
   position: absolute;
-  left: 7%;
-  top: 68%;
-  width: 82%;
-  height: 2px;
-  transform: rotate(-18deg);
-  transform-origin: left;
-  background: linear-gradient(90deg, transparent, rgba(255, 54, 95, 0.45) 15%, #ff5b79 78%, rgba(255, 54, 95, 0.15));
-}
-
-.oracle-field i {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: 10px;
-  height: 10px;
-  border: 1px solid #ff8198;
-  border-radius: 50%;
-  background: #7f1731;
-}
-
-.oracle-field b {
-  position: absolute;
-  right: 14%;
-  top: 31%;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 50%;
-  box-shadow: 0 0 0 14px rgba(255, 255, 255, 0.025), 0 0 0 28px rgba(255, 255, 255, 0.018);
+  right: -7%;
+  bottom: -16%;
+  width: min(45%, 290px);
+  height: 74%;
+  opacity: 0.68;
+  -webkit-mask-image: linear-gradient(105deg, transparent 0%, #000 42%);
+  mask-image: linear-gradient(105deg, transparent 0%, #000 42%);
 }
 
 .service-card--phantasm .service-card__core {
@@ -804,49 +792,10 @@
   background: radial-gradient(circle at 74% 50%, rgba(255, 54, 95, 0.16), transparent 30%), #100c10;
 }
 
-.phantasm-field {
-  position: absolute;
-  right: -12px;
-  bottom: -35px;
-  width: 190px;
-  height: 190px;
-}
-
-.phantasm-field i,
-.phantasm-field b {
-  position: absolute;
-  inset: var(--inset, 0);
-  border: 1px solid rgba(255, 54, 95, 0.2);
-  border-radius: 50%;
-}
-
-.phantasm-field i:nth-child(2) { --inset: 24px; }
-.phantasm-field i:nth-child(3) { --inset: 49px; }
-.phantasm-field b {
-  --inset: 76px;
-  background: rgba(209, 59, 59, 0.52);
-}
-
-.chain-field {
-  position: absolute;
-  right: 25px;
-  bottom: 28px;
-  display: flex;
-  gap: 8px;
-  transform: rotate(-12deg);
-}
-
-.chain-field span {
-  display: block;
-  width: 27px;
-  height: 42px;
-  border: 1px solid rgba(255, 91, 121, 0.27);
-  border-radius: 13px;
-}
-
-.chain-field span:nth-child(3) {
-  transform: translateY(-8px) rotate(19deg);
-  border-color: rgba(255, 91, 121, 0.75);
+.service-visual--chainbreak {
+  right: -11%;
+  bottom: -13%;
+  width: min(51%, 330px);
 }
 
 /* Evidence */
@@ -866,10 +815,12 @@
   height: clamp(42px, 5.8vw, 72px);
   margin: 0 0.14em;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 14px;
+  border: 0;
+  border-radius: 0;
   vertical-align: -0.08em;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 
 .evidence-inline-media img {
@@ -892,6 +843,35 @@
 
 .evidence__statement .scrub-word {
   will-change: opacity;
+}
+
+.evidence-panorama {
+  position: relative;
+  margin: clamp(3rem, 6vw, 5.5rem) 0 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.evidence-panorama::after {
+  content: none;
+}
+
+.evidence-panorama__media {
+  aspect-ratio: 3 / 1;
+  min-height: 230px;
+  -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.45), #000 7%, #000 93%, rgba(0, 0, 0, 0.45));
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.45), #000 7%, #000 93%, rgba(0, 0, 0, 0.45));
+}
+
+.evidence-panorama img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 .evidence-deliverables {
@@ -969,6 +949,39 @@
 
 .method__intro .landing-text-link {
   margin-top: 2rem;
+}
+
+.method-visual {
+  position: relative;
+  width: min(78%, 300px);
+  aspect-ratio: 4 / 5;
+  max-height: 340px;
+  margin: 3rem auto 0 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 82%, transparent 100%);
+}
+
+.method-visual::after {
+  position: absolute;
+  inset: 18% -10% 2%;
+  height: auto;
+  border-radius: 50%;
+  background: rgba(255, 54, 95, 0.055);
+  filter: blur(48px);
+  content: "";
+}
+
+.method-visual img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: saturate(0.86) contrast(0.95);
+  opacity: 0.9;
 }
 
 .method__steps {
@@ -1137,14 +1150,32 @@
   text-transform: uppercase;
 }
 
-.outcome-slide__role i {
+.outcome-slide__visual {
+  position: relative;
   display: block;
-  width: 84px;
-  height: 84px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 132px;
+  height: 132px;
+  pointer-events: none;
+}
+
+.outcome-slide__visual::after {
+  position: absolute;
+  inset: 12% -18% -8%;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 35%, rgba(255, 105, 133, 0.65), rgba(127, 26, 57, 0.28) 28%, transparent 60%);
-  box-shadow: 18px 12px 45px rgba(98, 16, 42, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 54, 95, 0.065);
+  filter: blur(36px);
+  content: "";
+}
+
+.outcome-slide__visual img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: saturate(0.86) contrast(0.96);
+  opacity: 0.9;
 }
 
 .outcome-slide__copy h3 {
@@ -1374,6 +1405,212 @@
   line-height: 1.55;
 }
 
+/* Ambient illustration composition */
+.service-card__core {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.service-card__context,
+.service-card h3,
+.service-card p,
+.service-card .landing-text-link {
+  position: relative;
+  z-index: 3;
+}
+
+.service-visual {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.service-visual--oracle {
+  inset: 26% -16% -18% 5%;
+  height: auto;
+  opacity: 0.58;
+  -webkit-mask-image: radial-gradient(ellipse at 64% 62%, #000 28%, rgba(0, 0, 0, 0.78) 56%, transparent 84%);
+  mask-image: radial-gradient(ellipse at 64% 62%, #000 28%, rgba(0, 0, 0, 0.78) 56%, transparent 84%);
+}
+
+.service-visual--oracle img {
+  object-position: 64% 62%;
+  transform: none;
+}
+
+.service-visual--phantasm {
+  inset: -8% -23% -24% 28%;
+  width: auto;
+  height: 118%;
+  opacity: 0.4;
+  -webkit-mask-image: linear-gradient(105deg, transparent 2%, #000 40%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(105deg, transparent 2%, #000 40%, #000 82%, transparent 100%);
+}
+
+.service-visual--chainbreak {
+  inset: auto -17% -13% 17%;
+  width: auto;
+  height: 72%;
+  opacity: 0.42;
+  -webkit-mask-image: linear-gradient(100deg, transparent 0%, #000 34%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(100deg, transparent 0%, #000 34%, #000 86%, transparent 100%);
+}
+
+.service-visual img {
+  filter: saturate(0.82) contrast(0.93);
+}
+
+.evidence .landing-shell {
+  position: relative;
+}
+
+.evidence__stage {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(46rem, 64vw, 58rem);
+}
+
+.evidence__stage::before {
+  position: absolute;
+  z-index: 1;
+  inset: 12% -10% 4%;
+  background:
+    radial-gradient(ellipse at 72% 44%, rgba(8, 8, 11, 0.82), rgba(8, 8, 11, 0.16) 48%, transparent 72%),
+    radial-gradient(ellipse at 18% 72%, rgba(209, 59, 59, 0.055), transparent 58%);
+  content: "";
+  pointer-events: none;
+}
+
+.evidence__heading,
+.evidence__statement {
+  position: relative;
+  z-index: 3;
+}
+
+.evidence-panorama {
+  position: absolute;
+  z-index: 0;
+  top: clamp(15rem, 23vw, 21rem);
+  right: -10vw;
+  left: -10vw;
+  height: clamp(21rem, 35vw, 34rem);
+  margin: 0;
+  overflow: visible;
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.evidence-panorama__media {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  -webkit-mask-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.48), #000 8%, #000 92%, rgba(0, 0, 0, 0.48)),
+    linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  mask-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.48), #000 8%, #000 92%, rgba(0, 0, 0, 0.48)),
+    linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.evidence-panorama img {
+  object-fit: contain;
+  filter: saturate(0.86) contrast(0.92);
+}
+
+.evidence-deliverables {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  background: linear-gradient(180deg, rgba(8, 8, 11, 0.72), rgba(8, 8, 11, 0.96));
+}
+
+.method__intro {
+  isolation: isolate;
+}
+
+.method__intro > h2,
+.method__intro > p,
+.method__intro > .landing-text-link {
+  position: relative;
+  z-index: 3;
+}
+
+.method-visual {
+  position: absolute;
+  z-index: 0;
+  top: 32%;
+  right: -16%;
+  left: -22%;
+  width: auto;
+  height: clamp(26rem, 46vw, 39rem);
+  max-height: none;
+  margin: 0;
+  overflow: visible;
+  opacity: 0.48;
+  -webkit-mask-image: radial-gradient(ellipse at 48% 48%, #000 34%, rgba(0, 0, 0, 0.78) 58%, transparent 82%);
+  mask-image: radial-gradient(ellipse at 48% 48%, #000 34%, rgba(0, 0, 0, 0.78) 58%, transparent 82%);
+}
+
+.method-visual::after {
+  inset: 18% 6% 8%;
+  background: rgba(255, 54, 95, 0.035);
+  filter: blur(54px);
+}
+
+.method-visual img {
+  filter: saturate(0.82) contrast(0.93);
+  opacity: 0.86;
+}
+
+.outcome-slide {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.outcome-slide__role,
+.outcome-slide__copy,
+.outcome-slide > ul {
+  position: relative;
+  z-index: 2;
+}
+
+.outcome-slide__role > span:first-child {
+  position: relative;
+  z-index: 2;
+}
+
+.outcome-slide__visual {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: -4%;
+  width: clamp(16rem, 29vw, 27rem);
+  height: clamp(16rem, 29vw, 27rem);
+  opacity: 0.32;
+  transform: translateY(-50%);
+  -webkit-mask-image: radial-gradient(circle, #000 28%, rgba(0, 0, 0, 0.76) 58%, transparent 82%);
+  mask-image: radial-gradient(circle, #000 28%, rgba(0, 0, 0, 0.76) 58%, transparent 82%);
+}
+
+.outcome-slide__visual::after {
+  inset: 18% -10% -8%;
+  background: rgba(255, 54, 95, 0.045);
+  filter: blur(42px);
+}
+
+.outcome-slide__visual img {
+  filter: saturate(0.82) contrast(0.93);
+  opacity: 0.88;
+}
+
 /* Progressive motion: content is visible until JS takes control. */
 .landing [data-reveal] {
   opacity: 1;
@@ -1554,8 +1791,20 @@
     min-height: 355px;
   }
 
+  .service-visual--phantasm,
+  .service-visual--chainbreak {
+    right: -8%;
+    bottom: -12%;
+    width: min(45%, 300px);
+    height: 62%;
+  }
+
   .evidence__statement {
     margin-top: 5rem;
+  }
+
+  .evidence-panorama__media {
+    aspect-ratio: 16 / 7;
   }
 
   .evidence-deliverables {
@@ -1584,6 +1833,12 @@
     position: static;
   }
 
+  .method-visual {
+    width: min(60%, 320px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
   .outcomes__header {
     align-items: flex-end;
   }
@@ -1603,9 +1858,9 @@
     align-items: center;
   }
 
-  .outcome-slide__role i {
-    width: 54px;
-    height: 54px;
+  .outcome-slide__visual {
+    width: 84px;
+    height: 84px;
   }
 
   .inquiry-form__row--split {
@@ -1665,8 +1920,32 @@
     padding: 1.7rem;
   }
 
-  .oracle-field {
-    height: 220px;
+  .service-visual--oracle {
+    height: 240px;
+    margin-right: -8%;
+    margin-left: -8%;
+  }
+
+  .service-visual--phantasm,
+  .service-visual--chainbreak {
+    right: -14%;
+    bottom: -10%;
+    width: 52%;
+    opacity: 0.56;
+    -webkit-mask-image: linear-gradient(100deg, transparent 0%, #000 48%);
+    mask-image: linear-gradient(100deg, transparent 0%, #000 48%);
+  }
+
+  .evidence-panorama__media {
+    min-height: 210px;
+  }
+
+  .evidence-panorama img {
+    object-position: center;
+  }
+
+  .method-visual {
+    width: min(78%, 290px);
   }
 
   .outcomes__header {
@@ -1689,6 +1968,116 @@
 
   .inquiry-form__submit {
     width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .service-visual--oracle {
+    inset: auto -12% -13% 8%;
+    width: auto;
+    height: 64%;
+    margin: 0;
+    opacity: 0.5;
+  }
+
+  .service-visual--phantasm,
+  .service-visual--chainbreak {
+    right: -18%;
+    bottom: -18%;
+    left: 25%;
+    width: auto;
+    height: 78%;
+    opacity: 0.38;
+  }
+
+  .evidence__stage {
+    min-height: 50rem;
+  }
+
+  .evidence-panorama {
+    top: 24rem;
+    right: -18%;
+    left: -18%;
+    height: 22rem;
+  }
+
+  .method__intro {
+    position: relative;
+    top: auto;
+    padding-bottom: 24rem;
+  }
+
+  .method-visual {
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 50%;
+    width: min(74%, 360px);
+    height: auto;
+    aspect-ratio: 4 / 5;
+    transform: translateX(-50%);
+    opacity: 0.72;
+  }
+
+  .outcome-slide__visual {
+    top: 4.5rem;
+    right: -11%;
+    left: auto;
+    width: clamp(12rem, 48vw, 17rem);
+    height: clamp(12rem, 48vw, 17rem);
+    opacity: 0.34;
+    transform: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .service-visual--oracle {
+    right: -24%;
+    bottom: -9%;
+    left: 0;
+    height: 55%;
+    margin: 0;
+  }
+
+  .service-visual--phantasm,
+  .service-visual--chainbreak {
+    right: -22%;
+    bottom: -13%;
+    left: 31%;
+    width: auto;
+    height: 62%;
+    opacity: 0.34;
+  }
+
+  .evidence__stage {
+    min-height: 49rem;
+  }
+
+  .evidence-panorama {
+    top: 25.5rem;
+    right: -12%;
+    left: -12%;
+    height: 15rem;
+  }
+
+  .evidence-panorama__media {
+    min-height: 0;
+  }
+
+  .method__intro {
+    padding-bottom: 20rem;
+  }
+
+  .method-visual {
+    width: min(88%, 320px);
+  }
+
+  .outcome-slide__visual {
+    top: 5.25rem;
+    right: -15%;
+    width: 13rem;
+    height: 13rem;
+    opacity: 0.3;
   }
 }
 

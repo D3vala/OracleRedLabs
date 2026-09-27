@@ -4,6 +4,10 @@
 
 `frontend/` contains the build-free website. Its page-level HTML files live at the folder root; shared and page-specific styles are in `frontend/css/`; browser scripts and data are in `frontend/js/` (including `js/data/` and vendored libraries in `js/vendor/`); images, icons, and fonts are in `frontend/assets/`. `backend/` is reserved for a future API and currently contains only planning documentation. There is no automated test directory or server implementation yet.
 
+## Design and Visual Assets
+
+Use the root [DESIGN.md](DESIGN.md) as the source of truth for the Oracle Red Labs visual system. Landing-page illustration filenames, placement, prompts, crop behavior, and restrictions are recorded in the [landing illustration manifest](frontend/assets/images/landing/README.md). New or replacement illustrations must follow both documents, preserve the black-and-red identity, and update the manifest in the same change.
+
 ## Build, Test, and Development
 
 No install or build step is required. Open `frontend/index.html` in a browser, or serve the frontend locally for consistent relative paths:
