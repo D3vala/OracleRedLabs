@@ -427,6 +427,11 @@ a.card:hover {
   text-align: center;
 }
 
+/* The hidden attribute wins even when a component later declares display. */
+[hidden] {
+  display: none !important;
+}
+
 /* Hidden errors must really be hidden. */
 .field__error[hidden] {
   display: none;
@@ -605,27 +610,6 @@ a.card:hover {
 
 .notice strong {
   color: var(--color-text);
-}
-
-/* Static PGP key block with its copy button (contact.html). */
-.pgp {
-  display: grid;
-  gap: var(--space-sm);
-}
-
-.pgp__key {
-  max-height: 15rem;
-  margin: 0;
-  padding: var(--space-md);
-  background: var(--color-bg-sunken);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
-  font-size: var(--fs-100);
-  line-height: 1.5;
-  white-space: pre;
-  overflow: auto;
-  box-shadow: var(--shadow-inset);
 }
 
 /* Definition list used for the "what happens next" info panels. */
@@ -1117,4 +1101,114 @@ a.card:hover {
   display: none;
   color: var(--color-text-faint);
   font-size: var(--fs-100);
+}
+
+/* Full-stack application states and detail records. */
+.form-message--error,
+.result-status.form-message--error {
+  color: var(--color-danger-text, #ff8f9f);
+}
+
+.btn:disabled,
+.select:disabled,
+.input:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.75fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.detail-panel,
+.admin-editor {
+  min-width: 0;
+  padding: var(--space-lg);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-inset);
+}
+
+.detail-panel__head,
+.admin-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.detail-copy,
+.target-list li,
+.timeline span,
+.table td {
+  overflow-wrap: anywhere;
+}
+
+.target-list {
+  display: grid;
+  gap: var(--space-xs);
+  margin-block: var(--space-sm) var(--space-lg);
+  padding-inline-start: var(--space-lg);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-200);
+}
+
+.timeline {
+  display: grid;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-lg);
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  display: grid;
+  gap: var(--space-2xs);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.timeline strong {
+  color: var(--color-text);
+  text-transform: capitalize;
+}
+
+.timeline span {
+  color: var(--color-text-muted);
+  font-size: var(--fs-200);
+}
+
+.admin-editor {
+  margin-bottom: var(--space-lg);
+}
+
+.admin-control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+  margin-block: var(--space-lg);
+}
+
+.admin-detail {
+  margin-top: var(--space-xl);
+}
+
+@media (max-width: 767px) {
+  .detail-layout,
+  .admin-control-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-panel,
+  .admin-editor {
+    padding: var(--space-md);
+  }
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engagement Details | Oracle Red Labs</title>
+  <meta name="description" content="Review the authorized scope, targets, schedule, billing, and status history for an engagement.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/components.css?v=20261002"><link rel="stylesheet" href="css/responsive.css"><link rel="stylesheet" href="css/interior.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body class="page page--dashboard">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header interior-header"><div class="container site-header__inner interior-nav-shell"><a class="brand" href="index.html"><img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34"><span class="brand__name">Oracle <em>Red</em> Labs</span></a><button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span class="nav-toggle__bar"></span><span class="nav-toggle__bar"></span><span class="nav-toggle__bar"></span><span class="visually-hidden">Menu</span></button><nav class="nav" id="primary-nav" aria-label="Primary"><ul class="nav__list"><li><a class="nav__link" href="services.html">Services</a></li><li><a class="nav__link" href="vault.html">Vault</a></li><li><a class="nav__link" href="engage.html">Engage</a></li></ul><ul class="nav__list nav__list--auth"><li><a class="nav__link" href="login.html">Log In</a></li><li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li></ul></nav></div></header>
+  <main id="main">
+    <section class="page-head" aria-labelledby="page-heading"><div class="container page-head__layout"><p class="page-head__code">/ engagement record</p><h1 id="page-heading">Engagement Details</h1><p class="lede">The authorized scope, requested start window, billing preference, and recorded state changes for this request.</p><div class="page-visual page-visual--engage" aria-hidden="true"><span class="page-visual__field"></span><span class="page-visual__route"></span><span class="page-visual__node page-visual__node--1" data-label="SCOPE"></span><span class="page-visual__node page-visual__node--2" data-label="STATE"></span><span class="page-visual__node page-visual__node--3" data-label="AUDIT"></span><span class="page-visual__readout">CLIENT / CONTROL RECORD</span></div></div></section>
+    <section class="section"><div class="container"><p class="result-status" id="detail-status" role="status" aria-live="polite">Loading engagement…</p><div id="engagement-detail" class="detail-layout" hidden><article class="detail-panel"><div class="detail-panel__head"><div><p class="mono" id="detail-reference"></p><h2 id="detail-service"></h2></div><span id="detail-badge" class="badge"></span></div><dl class="info-list" id="detail-summary"></dl><h3>Authorized scope</h3><p class="detail-copy" id="detail-scope"></p><h3>Targets</h3><ol class="target-list" id="detail-targets"></ol></article><aside class="detail-panel"><h2>Status history</h2><ol class="timeline" id="detail-history"></ol><a class="btn btn--secondary" href="dashboard.html">Back to dashboard</a></aside></div></div></section>
+  </main>
+  <footer class="site-footer interior-footer"><div class="container site-footer__legal"><p class="site-footer__disclaimer">Oracle Red Labs is a fictional company created for an academic project.</p><p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p></div></footer>
+  <script src="js/api.js"></script><script src="js/main.js"></script><script src="js/engagement-details.js"></script><script src="js/interior.js"></script>
+</body>
+</html>
+

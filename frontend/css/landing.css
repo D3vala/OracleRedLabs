@@ -6,7 +6,7 @@
   --landing-text: #ffffff;
   --landing-text-soft: #d4d4d8;
   --landing-muted: #a1a1aa;
-  --landing-faint: #71717a;
+  --landing-faint: #93939d;
   --landing-red: #d13b3b;
   --landing-signal: #ff365f;
   --landing-red-deep: #8b0d2e;
@@ -109,7 +109,7 @@
   position: fixed;
   inset: 0 0 auto;
   z-index: 60;
-  padding: 18px 24px 0;
+  padding: 0.8rem 1rem 0;
   border: 0;
   background: transparent;
   pointer-events: none;
@@ -120,44 +120,39 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: min(100%, 1180px);
-  min-height: 58px;
+  width: min(calc(100% - 1rem), 1320px);
+  min-height: 62px;
   margin-inline: auto;
-  padding: 6px 8px 6px 18px;
-  border: 1px solid var(--landing-line);
+  padding: 0.4rem 0.5rem 0.4rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 999px;
-  background: rgba(5, 5, 5, 0.82);
-  box-shadow: 0 18px 52px rgba(20, 3, 7, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  background: rgba(8, 8, 10, 0.84);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 18px 54px rgba(0, 0, 0, 0.2);
   pointer-events: auto;
-  backdrop-filter: blur(22px) saturate(130%);
+  backdrop-filter: blur(20px) saturate(120%);
 }
 
-.landing-brand {
+.landing-header .brand {
   position: relative;
   z-index: 72;
-  display: inline-flex;
   flex: 0 0 auto;
-  align-items: center;
-  gap: 9px;
-  min-height: 44px;
-  color: var(--landing-text);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 650;
-  letter-spacing: 0.13em;
-  text-decoration: none;
-  text-transform: uppercase;
+  padding-inline: 0.15rem 0.65rem;
 }
 
-.landing-brand i {
-  display: block;
-  width: 18px;
-  height: 1px;
-  background: var(--landing-red);
+.landing-header .brand__mark {
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0 0 12px rgba(255, 54, 95, 0.24));
+  transition: transform 500ms var(--landing-ease), filter 500ms var(--landing-ease);
 }
 
-.landing-brand__signal {
-  color: var(--landing-signal);
+.landing-header .brand:hover .brand__mark {
+  transform: rotate(-8deg) scale(1.04);
+  filter: drop-shadow(0 0 18px rgba(255, 54, 95, 0.42));
+}
+
+.landing-header .brand__name {
+  font-size: 0.68rem;
 }
 
 .landing-header .nav-toggle {
@@ -188,25 +183,26 @@
   flex: 1 1 auto;
   align-items: center;
   justify-content: flex-end;
-  gap: 22px;
+  gap: 0.5rem;
   margin-left: auto;
-  padding: 0;
+  padding: 0 0 0 0.65rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .landing-header .nav__list {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 2px;
+  gap: 0;
   margin: 0;
   padding: 0;
 }
 
 .landing-header .nav__link {
-  padding: 11px 13px;
+  padding: 0.62rem 0.58rem;
   border-radius: 999px;
   color: var(--landing-muted);
-  font-size: 0.84rem;
+  font-size: 0.77rem;
   font-weight: 480;
   text-decoration: none;
   transition: color 600ms var(--landing-ease), background-color 600ms var(--landing-ease);
@@ -224,7 +220,20 @@
   box-shadow: none;
 }
 
-.landing-nav-cta,
+.landing-header .nav__list--auth {
+  gap: 0.25rem;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.landing-header .nav__list--auth .btn {
+  width: auto;
+  min-height: 38px;
+  padding-inline: 1rem;
+  border-radius: 999px;
+}
+
 .landing-button {
   display: inline-flex;
   align-items: center;
@@ -242,15 +251,6 @@
   transition: transform 700ms var(--landing-ease), background-color 700ms var(--landing-ease), color 700ms var(--landing-ease), box-shadow 700ms var(--landing-ease);
 }
 
-.landing-nav-cta {
-  min-height: 46px;
-  padding-left: 17px;
-  color: var(--landing-text);
-  background: var(--landing-red);
-  box-shadow: 0 12px 32px rgba(209, 59, 59, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-}
-
-.landing-nav-cta__icon,
 .landing-button__icon {
   display: inline-grid;
   flex: 0 0 auto;
@@ -262,12 +262,6 @@
   transition: transform 700ms var(--landing-ease), background-color 700ms var(--landing-ease);
 }
 
-.landing-nav-cta__icon {
-  width: 34px;
-  height: 34px;
-}
-
-.landing-nav-cta svg,
 .landing-button svg {
   width: 17px;
   height: 17px;
@@ -278,17 +272,14 @@
   stroke-width: 1.5;
 }
 
-.landing-nav-cta:hover,
 .landing-button:hover {
   transform: translateY(-2px);
 }
 
-.landing-nav-cta:hover .landing-nav-cta__icon,
 .landing-button:hover .landing-button__icon {
   transform: translate(2px, -2px) scale(1.04);
 }
 
-.landing-nav-cta:active,
 .landing-button:active {
   transform: scale(0.98);
 }
@@ -1371,6 +1362,19 @@
   padding-bottom: 2.2rem;
 }
 
+.landing-footer .brand {
+  padding: 0;
+}
+
+.landing-footer .brand__mark {
+  width: 30px;
+  height: 30px;
+}
+
+.landing-footer .brand__name {
+  font-size: 0.72rem;
+}
+
 .landing-footer nav {
   display: flex;
   flex-wrap: wrap;
@@ -1619,8 +1623,12 @@
 /* Tablet */
 @media (max-width: 1080px) {
   .landing-header .nav__link {
-    padding-inline: 9px;
-    font-size: 0.79rem;
+    padding-inline: 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .landing-header .nav__list--auth .btn {
+    padding-inline: 0.75rem;
   }
 
   .landing-section-intro {
@@ -1660,12 +1668,13 @@
   }
 
   .landing-header.site-header {
-    padding: 12px 12px 0;
+    padding: 0.65rem 0.35rem 0;
   }
 
   .landing-nav-shell {
-    min-height: 56px;
-    padding: 5px 5px 5px 15px;
+    width: calc(100% - 0.35rem);
+    min-height: 58px;
+    padding: 0.35rem 0.4rem 0.35rem 0.7rem;
     backdrop-filter: none;
   }
 
@@ -1685,6 +1694,8 @@
     gap: 2rem;
     margin: 0;
     padding: 8.5rem 24px 3rem;
+    overflow-y: auto;
+    border-left: 0;
     background: rgba(5, 5, 6, 0.985);
     backdrop-filter: blur(28px) saturate(125%);
   }
@@ -1714,8 +1725,24 @@
     background: transparent;
   }
 
-  .landing-nav-cta {
-    align-self: center;
+  .landing-header .nav__list--auth {
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--landing-line-soft);
+  }
+
+  .landing-header .nav__list--auth .nav__link {
+    padding: 0.8rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 520;
+    letter-spacing: 0;
+  }
+
+  .landing-header .nav__list--auth .btn {
+    width: 100%;
+    min-height: 50px;
+    font-size: 0.95rem;
   }
 
   .landing.menu-open {
@@ -1880,14 +1907,6 @@
 }
 
 @media (max-width: 520px) {
-  .landing-brand {
-    font-size: 0.69rem;
-  }
-
-  .landing-brand i {
-    width: 12px;
-  }
-
   .landing-hero h1 {
     font-size: clamp(2.75rem, 13vw, 3.75rem);
   }

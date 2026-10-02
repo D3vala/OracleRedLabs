@@ -10,7 +10,7 @@
   <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/components.css?v=20261002">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/interior.css">
   <!-- Adds a "js" class so the mobile menu can start collapsed. With
@@ -61,8 +61,8 @@
         <h1 id="page-heading">Book an Engagement</h1>
         <p class="lede">
           Three steps: describe the target, attach the signed authorisation, and
-          choose how you want to be invoiced. Nothing leaves your browser in this
-          milestone - the funnel is validated entirely in JavaScript.
+          choose a billing preference. The server records the request only after
+          every control gate passes validation.
         </p>
         <div class="page-visual page-visual--engage" aria-hidden="true">
           <span class="page-visual__field"></span>
@@ -120,8 +120,8 @@
                   <label class="field__label" for="service">
                     Service line <span class="field__required">required</span>
                   </label>
-                  <!-- Options are appended from js/data/services.js by
-                       js/main.js, so the catalogue stays in one place. -->
+                  <!-- Options are loaded from the services API so this form
+                       stays aligned with the public catalogue. -->
                   <select class="select" id="service" name="service" required data-field
                           data-services-select
                           data-error-required="Choose the service line you want to book.">
@@ -134,7 +134,7 @@
                   <label class="field__label" for="scope">
                     Scope description <span class="field__required">required</span>
                   </label>
-                  <textarea class="textarea" id="scope" name="scope" required minlength="40" data-field
+                  <textarea class="textarea" id="scope" name="scope" required minlength="40" maxlength="5000" data-field
                             data-error-required="Describe the scope in at least a sentence."
                             data-error-invalid="Give us at least 40 characters so the scope is unambiguous."
                             placeholder="Example: external assessment of the customer portal and its API, plus the staging environment. The production database is out of scope."></textarea>
@@ -209,8 +209,8 @@
                          data-error-size="That file is larger than 5 MB. Compress it or send a scanned extract."
                          aria-describedby="authorization-hint">
                   <p class="field__hint" id="authorization-hint">
-                    PDF only, 5 MB maximum. The check runs in your browser: the file
-                    is never uploaded in this milestone.
+                    PDF only, 5 MB maximum. The server verifies the file signature
+                    and stores it outside the public website directory.
                   </p>
                   <p class="field__error" data-error-for="authorization" role="alert" hidden></p>
                 </div>
@@ -268,9 +268,8 @@
                     <label class="radio">
                       <input type="radio" name="payment-method" value="card">
                       <span>
-                        <strong>Card on file</strong> - charged on acceptance of
-                        the fixed price. This demo never asks for or stores card
-                        details.
+                        <strong>Request a card-payment link</strong> - records the
+                        preference only. This site never asks for card details.
                       </span>
                     </label>
                     <label class="radio">
@@ -290,7 +289,7 @@
                     Purchase order number <span class="field__required">required</span>
                   </label>
                   <input class="input" id="po-number" name="po-number" type="text" required
-                         data-field pattern="[A-Za-z0-9-]{6,24}"
+                         data-field maxlength="100"
                          data-error-required="Enter the purchase order number we should quote."
                          data-error-invalid="PO numbers here are 6-24 letters, numbers or hyphens."
                          placeholder="PO-2026-0142">
@@ -301,7 +300,7 @@
                   <label class="field__label" for="billing-email">
                     Billing contact email <span class="field__required">required</span>
                   </label>
-                  <input class="input" id="billing-email" name="billing-email" type="email" required
+                  <input class="input" id="billing-email" name="billing-email" type="email" required maxlength="254"
                          data-field data-error-required="We need an address to send the invoice to."
                          autocomplete="email" placeholder="accounts.payable@company.com">
                   <p class="field__hint">
@@ -323,8 +322,8 @@
         <!-- ================================================================
              CONFIRMATION PANEL
              Outside the <form> on purpose: js/engage-form.js hides the form and
-             the step indicator, then reveals this panel with a fake reference
-             number and a recap of what was entered.
+             the step indicator, then reveals this panel with the server-issued
+             reference number and a recap of what was entered.
              ================================================================ -->
         <section class="confirm" id="engage-confirmation" hidden aria-labelledby="confirm-heading">
           <p class="eyebrow">Submitted</p>
@@ -334,8 +333,8 @@
             <p class="card__label">Reference number</p>
             <p class="confirm__ref" id="engage-reference">ORL-000000</p>
             <p class="footnote">
-              Quote this number in any follow-up. It is generated in your browser
-              and stored nowhere.
+              Quote this number in any follow-up. It identifies the request in
+              your dashboard and the administrator console.
             </p>
           </div>
 
@@ -344,16 +343,11 @@
             <dl class="confirm__summary" id="engage-summary"></dl>
           </div>
 
-          <p class="notice">
-            <strong>Simulated submission.</strong>
-            There is no back end in this milestone: nothing was sent and no file
-            left your machine. Milestone 7 replaces this with a POST to the
-            engagements endpoint and a server-issued reference.
-          </p>
+          <p class="notice"><strong>Request recorded.</strong> The scope, targets, billing preference, and authorization metadata are now linked to your account.</p>
 
           <div class="row">
             <button class="btn btn--secondary" type="button" data-engage-restart>Start Another Request</button>
-            <a class="btn btn--primary" href="dashboard.html">View Sample Dashboard</a>
+            <a class="btn btn--primary" href="dashboard.html">View Dashboard</a>
           </div>
         </section>
       </div>
@@ -394,7 +388,7 @@
           <ul class="site-footer__list">
             <li><a href="vault.html">Exploit Vault</a></li>
             <li><a href="engage.html">Book an Engagement</a></li>
-            <li><a href="contact.html">Encrypted Inquiry</a></li>
+            <li><a href="contact.html">Confidential Inquiry</a></li>
           </ul>
         </div>
         <div>
@@ -414,15 +408,14 @@
         Oracle Red Labs is a fictional company created for an academic project
         (ITS122P). Every engagement, price and case study shown here is
         placeholder content. Nothing on this site scans, exploits or attacks
-        anything: all dashboards, badges and live statuses are simulated in the
-        browser with mock data.
+        anything. Account, inquiry, and engagement records are demonstration data.
       </p>
       <p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
     </div>
   </footer>
 
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/data/services.js"></script>
   <script src="js/engage-form.js"></script>
   <script src="js/interior.js"></script>
   <!-- Shared scroll-reveal: loaded last so every page script has already
@@ -430,3 +423,4 @@
   <script src="js/scroll-reveal.js"></script>
 </body>
 </html>
+

@@ -7,11 +7,10 @@
      2. mobile navigation toggle
      3. active nav-link marker (keeps the header markup identical everywhere)
      4. footer copyright year
-     5. demo form handling for the pages that have no back end yet
+     5. API form handling for inquiry, registration, and login
      6. password confirmation check (register.html)
-     7. "Copy Key" button (contact.html)
-     8. accessible tabs (admin.html)
-     9. data-driven card renderers for the mock "services" data set
+     7. accessible tabs (admin.html)
+     8. API-driven service card renderers
 
    Load order matters: this file is loaded by the shared footer before any
    page-specific script, because vault-filter.js uses ORL.formatISODate().
@@ -152,17 +151,14 @@
   }
 
   /* ------------------------------------------------------------------------
-     5. Demo form handling (contact, register, login)
-     There is no server yet, so a valid submit is intercepted, a confirmation
-     message is shown in place, and the form is reset. In Milestone 7 this
-     function is replaced by a real fetch() POST - the markup does not change.
+     5. API form handling (contact, register, login)
      ---------------------------------------------------------------------- */
-  function initDemoForms() {
-    $all("[data-demo-form]").forEach(function (form) {
+  function initApiForms() {
+    $all("[data-api-form]").forEach(function (form) {
       var status = $("[data-form-status]", form) ||
         $("[data-form-status]", form.parentNode);
 
-      form.addEventListener("submit", function (event) {
+      form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         /* Native constraint validation already covers required/type/pattern.
@@ -173,16 +169,66 @@
           return;
         }
 
+        if (!window.ORLApi) return;
+        var button = $("button[type='submit']", form);
+        if (button) button.disabled = true;
         if (status) {
-          var successText = form.getAttribute("data-success-message");
-          status.textContent = successText ||
-            "Received. This is a front-end demo, so nothing was transmitted yet.";
-          status.classList.add("form-message--success");
           status.hidden = false;
-          status.focus(); // move screen readers to the confirmation
+          status.classList.remove("form-message--success", "form-message--error");
+          status.textContent = "Sending…";
         }
-
-        form.reset();
+        try {
+          var endpoint;
+          var body;
+          if (form.id === "login-form") {
+            endpoint = "/api/auth/login";
+            body = { email: form.elements["login-email"].value, password: form.elements["login-password"].value };
+          } else if (form.id === "register-form") {
+            endpoint = "/api/auth/register";
+            body = {
+              full_name: form.elements["register-name"].value,
+              email: form.elements["register-email"].value,
+              company_name: form.elements["register-company"].value,
+              password: form.elements["register-password"].value,
+              authorization_ack: String(form.elements["register-terms"].checked),
+            };
+          } else {
+            endpoint = "/api/inquiries";
+            var message = (form.elements["contact-message"] || form.elements.message).value;
+            if (form.elements.service && form.elements.service.value) {
+              message = "Service interest: " + form.elements.service.value + "\n\n" + message;
+            }
+            body = {
+              full_name: (form.elements["contact-name"] || form.elements.name).value,
+              email: (form.elements["contact-email"] || form.elements.email).value,
+              company_name: (form.elements["contact-company"] || form.elements.organisation).value,
+              message: message,
+            };
+          }
+          var payload = await window.ORLApi.request(endpoint, { method: "POST", body: body });
+          if (payload.data && payload.data.csrf_token) window.ORLApi.setCsrfToken(payload.data.csrf_token);
+          if (form.id === "login-form" || form.id === "register-form") {
+            var next = new URLSearchParams(window.location.search).get("next");
+            var safe = next && /^[a-z0-9-]+\.html(?:\?.*)?$/i.test(next) ? next : null;
+            window.location.assign(safe || (payload.data.user.role === "admin" ? "admin.html" : "dashboard.html"));
+            return;
+          }
+          if (status) {
+            status.textContent = payload.message || "Your inquiry has been received.";
+            status.classList.add("form-message--success");
+            status.focus();
+          }
+          form.reset();
+        } catch (error) {
+          window.ORLApi.applyFieldErrors(form, error.fields);
+          if (status) {
+            status.textContent = error.message;
+            status.classList.add("form-message--error");
+            status.focus();
+          }
+        } finally {
+          if (button) button.disabled = false;
+        }
       });
     });
   }
@@ -221,58 +267,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     7. Copy-to-clipboard buttons (the PGP key block on contact.html)
-     Uses the async Clipboard API when available and falls back to selecting
-     the text so a manual copy still works (older browsers or file:// URLs).
-     ---------------------------------------------------------------------- */
-  function initCopyButtons() {
-    $all("[data-copy-target]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        var target = $(button.getAttribute("data-copy-target"));
-        if (!target) {
-          return;
-        }
-
-        var text = target.textContent;
-        var status = button.parentNode
-          ? $("[data-copy-status]", button.parentNode)
-          : null;
-
-        /* Small feedback loop so the user sees the copy worked. */
-        function report(message) {
-          button.textContent = message;
-          if (status) {
-            status.textContent = message;
-          }
-          window.setTimeout(function () {
-            button.textContent = button.getAttribute("data-label") || "Copy Key";
-          }, 2500);
-        }
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(
-            function () {
-              report("Copied");
-            },
-            function () {
-              report("Press Ctrl+C");
-            }
-          );
-        } else {
-          var range = document.createRange();
-          range.selectNodeContents(target);
-          var selection = window.getSelection();
-          selection.removeAllRanges();
-          selection.addRange(range);
-          report("Press Ctrl+C");
-        }
-      });
-    });
-  }
-
-
-  /* ------------------------------------------------------------------------
-     8. Accessible tabs (admin.html)
+     7. Accessible tabs (admin.html)
      Follows the WAI-ARIA tabs pattern: arrow keys move between tabs, Home and
      End jump to the ends, and only the selected panel is visible.
      ---------------------------------------------------------------------- */
@@ -327,11 +322,9 @@
   }
 
   /* ------------------------------------------------------------------------
-     9. Service cards rendered from js/data/services.js
+     8. Service cards rendered from the services API
      services.html renders the full card (price, delivery method, expandable
-     description); index.html renders the compact teaser variant. Rendering
-     from the data array is what makes the Milestone 7 swap to
-     fetch("/api/services") a one-line change.
+     description); index.html renders the compact teaser variant.
      ---------------------------------------------------------------------- */
 
   /** Append a label/value pair to a .card__meta definition list. */
@@ -384,25 +377,34 @@
     return card;
   }
 
-  function initServiceCards() {
-    /* typeof guard: pages that do not load js/data/services.js simply skip. */
-    if (typeof services === "undefined") {
+  async function initServiceCards() {
+    var serviceContainers = $all("[data-services-grid]");
+    var serviceSelects = $all("[data-services-select]");
+    if (!serviceContainers.length && !serviceSelects.length) return;
+    if (!window.ORLApi) return;
+    var serviceData = [];
+    try {
+      serviceData = (await window.ORLApi.request("/api/services")).data;
+    } catch (error) {
+      serviceContainers.forEach(function (container) {
+        container.replaceChildren(el("p", "notice", error.message));
+      });
       return;
     }
 
-    $all("[data-services-grid]").forEach(function (container) {
+    serviceContainers.forEach(function (container) {
       var variant = container.getAttribute("data-services-grid") || "full";
       /* Re-render from data instead of toggling pre-built markup. */
       container.replaceChildren();
-      services.forEach(function (service) {
+      serviceData.forEach(function (service) {
         container.appendChild(buildServiceCard(service, variant));
       });
     });
 
     /* Engage form: build the service <select> from the same data set so the
        two pages can never drift apart. */
-    $all("[data-services-select]").forEach(function (select) {
-      services.forEach(function (service) {
+    serviceSelects.forEach(function (select) {
+      serviceData.forEach(function (service) {
         var option = document.createElement("option");
         option.value = service.slug;
         option.textContent =
@@ -419,9 +421,8 @@
     initNavToggle();
     setActiveNavLink();
     setFooterYear();
-    initDemoForms();
+    initApiForms();
     initPasswordConfirmation();
-    initCopyButtons();
     initTabs();
     initServiceCards();
   }

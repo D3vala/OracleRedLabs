@@ -39,8 +39,23 @@ skills-lock.json
 # Concept-seed rolls the design skill drops in the repository root.
 seed-roll-*.txt
 
+# ---- Node / local application state ----
+backend/node_modules/
+backend/.env
+backend/.env.example
+backend/uploads/
+backend/.tmp-mysql-data/
+*.log
+
+# ---- Generated delivery working directories ----
+.codex-presentation/
+.codex-finalizer/
+.submission-staging/
+
 # ---- Optional: agent instruction files ----
 # AGENTS.md documents this repository's conventions for coding agents. It is
 # deliberately not ignored, because collaborators and their agents both need it;
 # uncomment the rule below to keep it local instead.
 # AGENTS.md
+
+.env

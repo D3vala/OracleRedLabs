@@ -10,7 +10,7 @@
   <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/components.css?v=20261002">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/interior.css">
   <!-- Adds a "js" class so the mobile menu can start collapsed. With
@@ -90,7 +90,7 @@
              TOOLBAR
              Category buttons carry aria-pressed; the search input is a plain
              type="search" field. Both are wired up in js/vault-filter.js,
-             which rebuilds #vault-grid from js/data/resources.js.
+             which rebuilds #vault-grid from the resources API response.
              ================================================================ -->
         <div class="toolbar archive-console">
           <div class="field">
@@ -128,10 +128,9 @@
           <div class="notice">
             <strong>JavaScript is off, so the library cannot be rendered.</strong>
             <p>
-              The vault entries live in <code>js/data/resources.js</code> and are
-              drawn into the page by <code>js/vault-filter.js</code>. Enable
-              JavaScript to browse them, or
-              <a href="contact.html">ask us for a copy</a>.
+              Resource records are loaded from the application database. Enable
+              JavaScript to browse and filter them, or use the inquiry page for
+              help.
             </p>
           </div>
         </noscript>
@@ -190,7 +189,7 @@
           <ul class="site-footer__list">
             <li><a href="vault.html">Exploit Vault</a></li>
             <li><a href="engage.html">Book an Engagement</a></li>
-            <li><a href="contact.html">Encrypted Inquiry</a></li>
+            <li><a href="contact.html">Confidential Inquiry</a></li>
           </ul>
         </div>
         <div>
@@ -210,15 +209,14 @@
         Oracle Red Labs is a fictional company created for an academic project
         (ITS122P). Every engagement, price and case study shown here is
         placeholder content. Nothing on this site scans, exploits or attacks
-        anything: all dashboards, badges and live statuses are simulated in the
-        browser with mock data.
+        anything. Account, inquiry, and engagement records are demonstration data.
       </p>
       <p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
     </div>
   </footer>
 
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/data/resources.js"></script>
   <script src="js/vault-filter.js"></script>
   <script src="js/interior.js"></script>
   <!-- Shared scroll-reveal: loaded last so every page script has already
@@ -226,3 +224,4 @@
   <script src="js/scroll-reveal.js"></script>
 </body>
 </html>
+

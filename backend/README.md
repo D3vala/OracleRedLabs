@@ -1,35 +1,40 @@
-# Oracle Red Labs — Backend
+# Oracle Red Labs API
 
-This folder is intentionally **empty of code** — the site is a static,
-build-free front end and every form currently runs as an in-browser demo stub
-(the UI messages say so explicitly: *"there is no back end yet"*).
+The backend is an Express 5 application that serves the existing `frontend/` directory and a JSON API under `/api`.
 
-It exists as the reserved home for the server side of the project
-(the "Milestone 7" API referenced in comments throughout the front end).
+## Modules
 
-## What is planned to live here
+- `src/app.js` composes security middleware, sessions, routes, static files, and errors.
+- `src/config.js` validates environment configuration.
+- `src/db.js` owns the MySQL connection pool.
+- `src/session-store.js` persists Express sessions in MySQL.
+- `src/http.js` contains errors, validation, CSRF, and role middleware.
+- `src/routes/auth.js` implements registration, login, logout, and current user.
+- `src/routes/public.js` implements public services, resources, and inquiries.
+- `src/routes/engagements.js` implements the client transaction and ownership checks.
+- `src/routes/admin.js` implements administrator CRUD and status operations.
+- `scripts/seed-admin.js` creates or updates the environment-configured administrator.
 
-| Endpoint (planned) | Front-end call site today | Purpose |
-|---|---|---|
-| `POST /api/contact` | `frontend/js/main.js` (Encrypted Inquiry form) | Store new contact inquiries; feeds the admin console's inquiry table |
-| `POST /api/engage` | `frontend/js/engage-form.js` (3-step funnel) | Store engagement requests; source of the `ORL-######` reference numbers |
-| `POST /api/register`, `POST /api/login` | `frontend/js/engage-form.js` form handling | Client accounts and sessions for `register.html` / `login.html` |
-| `GET /api/services` | `frontend/js/data/services.js` | Replace the inlined service catalogue array with live data |
-| `GET /api/resources` | `frontend/js/data/resources.js` | Replace the inlined vault array with live data |
-| `GET/PUT` engagement status | dashboard & admin tables (`frontend/js/`) | Persist the status currently changed by the admin dropdowns |
+## Storage boundaries
 
-## Front-end integration points
+`frontend/` is public. Uploaded authorization PDFs are written to `backend/uploads/authorizations` by default and are never exposed through static middleware. Document downloads pass through an administrator-only API route.
 
-The front end was written so wiring this up is a swap, not a rewrite:
+Engagement creation uses one transaction for the engagement, targets, document metadata, invoice, and initial history row. If a transaction fails, the uploaded file is removed.
 
-- `js/vault-filter.js` — comment: the `GET /api/resources` response replaces the
-  local array in one place.
-- `js/data/services.js` data file — *"replace the array with a `fetch()`"*.
-- `js/engage-form.js` — *"the `fetch()` POST goes here and the reference number
-  comes [from the server]"*.
-- `js/main.js` — `fetch("/api/services")` noted as a one-line change.
+## API errors
 
-## Running
+Expected validation and authorization failures use a stable error object:
 
-Nothing to run yet. Until a server exists, open
-`../frontend/index.html` directly in a browser — no install, no build step.
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Check the highlighted fields.",
+    "fields": {}
+  }
+}
+```
+
+Database duplicate and referenced-row errors are translated to HTTP 409. Internal error details are logged server-side and are not returned to the browser.
+
+See the root `README.md` for setup and `SRS.md` for the complete route contract.

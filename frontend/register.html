@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Register | Oracle Red Labs</title>
-  <meta name="description" content="Create a client account to track engagements, findings and deliverables.">
+  <meta name="description" content="Create a client account to submit and track authorized engagement requests.">
   <meta name="author" content="Oracle Red Labs (ITS122P student project)">
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/components.css?v=20261002">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/interior.css">
   <!-- Adds a "js" class so the mobile menu can start collapsed. With
@@ -60,9 +60,8 @@
         <p class="page-head__code">/ client registration</p>
         <h1 id="page-heading">Register a Client Account</h1>
         <p class="lede">
-          An account gives you access to engagement status, findings and
-          deliverables. Accounts are created in the browser only: there is no
-          user database yet.
+          Create an account to submit an authorized engagement request, track
+          its current status, and review its billing state.
         </p>
         <div class="page-visual page-visual--register" aria-hidden="true">
           <span class="page-visual__field"></span>
@@ -82,11 +81,9 @@
             <p class="eyebrow">New Account</p>
             <h2 id="register-heading">Create your credentials</h2>
 
-            <!-- data-password-form enables the confirmation check in
-                 js/main.js (initPasswordConfirmation); data-demo-form shows the
-                 on-page confirmation instead of navigating away. -->
-            <form class="form" id="register-form" data-demo-form data-password-form
-                  data-success-message="Account form validated. In the finished application these details would be posted to the user service and a verification email would follow; nothing was stored in this demo."
+            <!-- data-password-form enables the client-side confirmation check;
+                 the API performs the authoritative validation. -->
+            <form class="form" id="register-form" data-api-form data-password-form
                   style="margin-top: var(--space-lg);">
               <div class="field">
                 <label class="field__label" for="register-name">
@@ -119,15 +116,13 @@
                   Password <span class="field__required">required</span>
                 </label>
                 <input class="input" id="register-password" name="register-password" type="password"
-                       required data-password minlength="12"
-                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}"
+                       required data-password minlength="12" maxlength="72"
                        autocomplete="new-password"
                        aria-describedby="register-password-hint"
-                       title="At least 12 characters, including upper and lower case, a number and a symbol.">
+                       title="Use between 12 and 72 characters.">
                 <p class="field__hint" id="register-password-hint">
-                  At least 12 characters, with upper and lower case, a number and a
-                  symbol. The rule is enforced by the pattern attribute in the
-                  markup, not by a library.
+                  Use between 12 and 72 characters. A longer, unique passphrase is
+                  easier to remember and harder to guess.
                 </p>
               </div>
 
@@ -136,7 +131,7 @@
                   Confirm password <span class="field__required">required</span>
                 </label>
                 <input class="input" id="register-password-confirm" name="register-password-confirm"
-                       type="password" required data-password-confirm
+                       type="password" required data-password-confirm minlength="12" maxlength="72"
                        autocomplete="new-password" aria-describedby="register-password-confirm-error">
                 <!-- Filled in by js/main.js when the two passwords differ. -->
                 <p class="field__error" id="register-password-confirm-error"
@@ -151,12 +146,6 @@
                 </span>
               </label>
 
-              <p class="notice">
-                <strong>Front-end demo.</strong>
-                No account is created, no password is stored and no email is sent.
-                Authentication and the user table arrive in Milestone 7.
-              </p>
-
               <button class="btn btn--primary" type="submit">Create Account</button>
 
               <p class="form-message" data-form-status role="status" tabindex="-1" hidden></p>
@@ -169,8 +158,8 @@
               <h3>What the account is for</h3>
               <ul class="check-list">
                 <li>Track engagement status and requested start slots</li>
-                <li>Download findings and remediation queues as they are released</li>
-                <li>Approve a scope change without reopening the whole contract</li>
+                <li>Review the authorized scope and submitted target list</li>
+                <li>See status and invoice changes from the administrator</li>
               </ul>
             </div>
 
@@ -178,8 +167,8 @@
               <span class="card__label">Already Registered</span>
               <h3>Sign in instead</h3>
               <p class="text-muted">
-                Existing clients can go straight to the login page. Again: there
-                is no real authentication behind it yet.
+                Existing clients can go straight to the login page and continue
+                with their server-side session.
               </p>
               <a class="btn btn--secondary btn--sm" href="login.html">Go to Log In</a>
             </div>
@@ -222,7 +211,7 @@
           <ul class="site-footer__list">
             <li><a href="vault.html">Exploit Vault</a></li>
             <li><a href="engage.html">Book an Engagement</a></li>
-            <li><a href="contact.html">Encrypted Inquiry</a></li>
+            <li><a href="contact.html">Confidential Inquiry</a></li>
           </ul>
         </div>
         <div>
@@ -242,13 +231,13 @@
         Oracle Red Labs is a fictional company created for an academic project
         (ITS122P). Every engagement, price and case study shown here is
         placeholder content. Nothing on this site scans, exploits or attacks
-        anything: all dashboards, badges and live statuses are simulated in the
-        browser with mock data.
+        anything. Account, inquiry, and engagement records are demonstration data.
       </p>
       <p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p>
     </div>
   </footer>
 
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
   <script src="js/interior.js"></script>
   <!-- Shared scroll-reveal: loaded last so every page script has already
@@ -256,3 +245,4 @@
   <script src="js/scroll-reveal.js"></script>
 </body>
 </html>
+

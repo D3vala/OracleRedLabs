@@ -9,8 +9,8 @@
      - A "Step 2 of 3" indicator plus the visual stepper update on every move.
      - Step 2 checks the authorisation upload: present, .pdf, and <= 5 MB.
      - The requested start slot must be a date/time in the future.
-     - The final submit is intercepted (no back end yet) and replaced with a
-       confirmation panel containing a fake reference number, e.g. ORL-482913.
+     - The final submit sends the validated request and PDF to the API, then
+       displays the server-issued reference number.
 
    DOM contract used by this script (see engage.html):
      #engage-form             the form, marked novalidate (we validate ourselves)
@@ -22,7 +22,7 @@
      [data-radio-group]       a wrapper whose inputs are validated as one group
      [data-conditional-on]    wrapper revealed when a radio with that value is on
      #engage-confirmation     the success panel
-     #engage-reference        where the fake reference number is written
+     #engage-reference        where the committed server reference is written
      #engage-summary          the <dl> recapping what was submitted
    ========================================================================== */
 
@@ -419,17 +419,9 @@
     });
   }
 
-  /** Fake reference number: ORL- plus six random digits. */
-  function makeReference() {
-    return "ORL-" + String(Math.floor(100000 + Math.random() * 900000));
-  }
-
-  function showConfirmation() {
-    /* There is no back end yet, so we swap the funnel for a receipt panel.
-       In Milestone 7 the fetch() POST goes here and the reference number comes
-       back from the server instead of being generated in the browser. */
+  function showConfirmation(reference) {
     if (referenceNode) {
-      referenceNode.textContent = makeReference();
+      referenceNode.textContent = reference;
     }
     renderSummary();
 
@@ -450,11 +442,13 @@
   /* ---------------------------------------------------------------------
      Event wiring
      --------------------------------------------------------------------- */
-  function init() {
+  async function init() {
     form = document.getElementById("engage-form");
     if (!form) {
       return; // not the engage page
     }
+
+    if (window.ORLApi && !(await window.ORLApi.guard("client"))) return;
 
     panels = $all("[data-step-panel]", form);
     markers = $all("[data-step-marker]");
@@ -481,12 +475,29 @@
     });
 
     /* --- Final submit --- */
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // no server to post to yet
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
       if (!validateStep(currentStep)) {
         return;
       }
-      showConfirmation();
+      var submit = form.querySelector('button[type="submit"]');
+      var status = $("[data-step-status]");
+      if (submit) submit.disabled = true;
+      if (status) status.textContent = "Submitting engagement request…";
+      try {
+        var payload = await window.ORLApi.request("/api/engagements", {
+          method: "POST",
+          body: new FormData(form),
+        });
+        showConfirmation(payload.data.reference_code);
+      } catch (error) {
+        window.ORLApi.applyFieldErrors(form, error.fields);
+        if (status) status.textContent = error.message;
+        var first = form.querySelector('[aria-invalid="true"]');
+        if (first) first.focus();
+      } finally {
+        if (submit) submit.disabled = false;
+      }
     });
 
     /* --- Live error clearing: once a field is fixed, drop the message --- */

@@ -2,10 +2,7 @@
    js/vault-filter.js
    Feature 3: the Exploit Vault filter + live search (vault.html).
 
-   Design rule from the brief: filter the in-memory data array and re-render
-   the grid, rather than hiding pre-built DOM cards with display:none. That
-   means the same function keeps working when `resources` is replaced by a
-   fetch("/api/resources") response in Milestone 7.
+   The API response is held in memory, filtered, and rendered without a reload.
 
    Filter and search combine with AND logic: a card must match the active
    category AND contain the search text.
@@ -39,12 +36,11 @@
   var filterButtons = [];
   var activeCategory = "all";
   var searchTerm = "";
+  var resourceData = [];
 
-  /** The full data set. `resources` is a top-level `const` in
-      js/data/resources.js, which makes it a global lexical binding - it is
-      reachable by name but deliberately NOT a property of window. */
+  /** Return the current API data set. */
   function allResources() {
-    return typeof resources === "undefined" ? [] : resources;
+    return resourceData;
   }
 
   /* ---------------------------------------------------------------------
@@ -155,14 +151,10 @@
     render();
   }
 
-  function init() {
+  async function init() {
     grid = document.getElementById("vault-grid");
     if (!grid) {
       return; // not the vault page
-    }
-
-    if (typeof resources === "undefined") {
-      return; // data file missing: nothing to render
     }
 
     searchInput = document.getElementById("vault-search");
@@ -184,8 +176,15 @@
       });
     }
 
-    /* Initial paint: everything, with the "All" button active. */
-    setCategory("all");
+    try {
+      if (!window.ORLApi) throw new Error("The application API is unavailable.");
+      resourceData = (await window.ORLApi.request("/api/resources")).data;
+      setCategory("all");
+    } catch (error) {
+      statusLine.textContent = error.message;
+      grid.replaceChildren();
+      grid.appendChild(ORL.el("p", "notice", "The resource library could not be loaded. Refresh the page to try again."));
+    }
   }
 
   if (document.readyState === "loading") {

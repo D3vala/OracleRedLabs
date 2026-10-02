@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Static HTML, CSS, and JavaScript with no framework, package manager, CDN dependency, or build step.
+Semantic HTML, CSS, and plain browser JavaScript served by a Node.js and Express application. MySQL stores users, sessions, catalogue records, inquiries, engagements, document metadata, invoices, and audit history. The front end retains its build-free structure.
 
 ## Users
 
@@ -16,7 +16,7 @@ The primary audience is CISOs and security or engineering leaders evaluating an 
 
 ## Product Purpose
 
-Oracle Red Labs presents controlled red-team services and helps qualified visitors understand the approach, compare service lines, and begin a browser-only engagement inquiry. Success means a first-time visitor can identify the offer, understand the authorisation-first method, and reach the engagement form within seconds.
+Oracle Red Labs presents controlled red-team services and lets a visitor become a client, submit an authorized engagement request, and track its persisted status. Administrators manage the catalogue, inquiries, engagements, invoices, and private authorization documents.
 
 ## Positioning
 
@@ -24,14 +24,16 @@ Oracle Red Labs focuses on simulation-first intrusion testing under written auth
 
 ## Operating Context
 
-Visitors compare three fictional services: ORACLE AI, PHANTASM, and CHAINBREAK. Engagements move through written scope, controlled simulation, evidence replay, remediation, and retest. The site includes service, methodology, audience, resource, inquiry, authentication-demo, and dashboard-demo pages.
+Visitors compare three fictional services: ORACLE AI, PHANTASM, and CHAINBREAK. The application records requests and administrative states; it does not run the described security work. Public, client, and administrator areas share the same Express origin.
 
 ## Capabilities and Constraints
 
-- All forms, accounts, engagement references, statuses, prices, and metrics are browser-only demonstrations.
-- The site must remain build-free and work from a basic static file server.
-- Existing routes, query strings, the global `services` data shape, and page interactions remain compatible.
+- Accounts, inquiries, engagements, status history, catalogue records, and billing states persist in MySQL.
+- The browser source remains build-free and framework-free; Express is required to serve it with the API.
+- Existing page routes and service query strings remain compatible.
 - JavaScript enhancements require readable no-script and reduced-motion fallbacks.
+- Billing is a recorded preference only. The application never collects card details or processes payments.
+- Uploaded authorization PDFs are private and available only through an administrator route.
 - No verified clients, testimonials, performance outcomes, or commercial claims are available.
 
 ## Brand Commitments
@@ -44,7 +46,7 @@ Visitors compare three fictional services: ORACLE AI, PHANTASM, and CHAINBREAK. 
 
 ## Evidence on Hand
 
-- Existing service definitions and placeholder prices in `frontend/js/data/services.js`.
+- Service definitions and placeholder prices are seeded from `database/seed.sql`.
 - Existing descriptions of the four-stage engagement method.
 - Existing SVG brand mark and technical imagery in `frontend/assets/images/`.
 - Synthetic engagement metrics may be used only when they are visibly labeled as demonstration data.

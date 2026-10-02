@@ -8,10 +8,11 @@
   <meta name="author" content="Oracle Red Labs (ITS122P student project)">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#050506">
+  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/components.css?v=20261002">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/landing.css">
   <script>document.documentElement.classList.add("js");</script>
@@ -21,32 +22,31 @@
 
   <header class="site-header landing-header">
     <div class="landing-nav-shell">
-      <a class="landing-brand" href="index.html" aria-current="page" aria-label="Oracle Red Labs home">
-        <span>Oracle</span>
-        <i aria-hidden="true"></i>
-        <span class="landing-brand__signal">Red Labs</span>
+      <a class="brand" href="index.html" aria-current="page" aria-label="Oracle Red Labs home">
+        <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
+        <span class="brand__name">Oracle <em>Red</em> Labs</span>
       </a>
 
       <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
         <span class="nav-toggle__bar" aria-hidden="true"></span>
         <span class="nav-toggle__bar" aria-hidden="true"></span>
         <span class="nav-toggle__bar" aria-hidden="true"></span>
-        <span class="visually-hidden">Open navigation</span>
+        <span class="visually-hidden">Menu</span>
       </button>
 
-      <nav class="nav" id="primary-nav" aria-label="Primary navigation">
+      <nav class="nav" id="primary-nav" aria-label="Primary">
         <ul class="nav__list">
-          <li><a class="nav__link" href="#capabilities">Services</a></li>
           <li><a class="nav__link" href="methodology.html">Methodology</a></li>
-          <li><a class="nav__link" href="who-we-serve.html">Who we serve</a></li>
+          <li><a class="nav__link" href="services.html">Services</a></li>
+          <li><a class="nav__link" href="who-we-serve.html">Who We Serve</a></li>
           <li><a class="nav__link" href="vault.html">Vault</a></li>
+          <li><a class="nav__link" href="contact.html">Contact</a></li>
+          <li><a class="nav__link" href="engage.html">Engage</a></li>
         </ul>
-        <a class="landing-nav-cta" href="#inquiry">
-          <span>Start an inquiry</span>
-          <span class="landing-nav-cta__icon" aria-hidden="true">
-            <svg viewBox="0 0 16 16" focusable="false"><path d="M4 12 12 4M6 4h6v6"></path></svg>
-          </span>
-        </a>
+        <ul class="nav__list nav__list--auth">
+          <li><a class="nav__link" href="login.html">Log In</a></li>
+          <li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li>
+        </ul>
       </nav>
     </div>
   </header>
@@ -299,7 +299,7 @@
       <div class="landing-shell inquiry__layout">
         <div class="inquiry__intro" data-reveal>
           <h2 id="inquiry-heading">What needs to withstand a real attack?</h2>
-          <p>Share the system, environment, or concern you want to test. This demonstration form does not transmit or store any information.</p>
+          <p>Share the system, environment, or concern you want to test. The inquiry is stored for administrator review.</p>
           <div class="inquiry__route">
             <span>Already have a defined scope?</span>
             <a class="landing-text-link" href="engage.html">
@@ -311,7 +311,7 @@
 
         <div class="inquiry-panel double-bezel" data-reveal>
           <div class="inquiry-panel__core bezel-core">
-            <form class="inquiry-form" data-demo-form data-success-message="Received. This is a front-end demonstration, so nothing was transmitted. In the finished application, these details would be used to arrange an assessment conversation.">
+            <form class="inquiry-form" data-api-form>
               <div class="inquiry-form__row">
                 <label for="inquiry-name">Name</label>
                 <input id="inquiry-name" name="name" type="text" autocomplete="name" required>
@@ -340,7 +340,7 @@
                 <label for="inquiry-message">What needs to be tested?</label>
                 <textarea id="inquiry-message" name="message" rows="5" minlength="20" required placeholder="Describe the system, environment, or concern you want to assess."></textarea>
               </div>
-              <p class="inquiry-form__note"><strong>Demo form:</strong> nothing entered here is sent or stored.</p>
+              <p class="inquiry-form__note"><strong>Keep secrets out:</strong> do not include credentials or customer data.</p>
               <button class="landing-button landing-button--primary inquiry-form__submit" type="submit">
                 <span>Request an assessment conversation</span>
                 <span class="landing-button__icon" aria-hidden="true">
@@ -357,8 +357,9 @@
 
   <footer class="landing-footer">
     <div class="landing-shell landing-footer__top">
-      <a class="landing-brand" href="index.html" aria-label="Oracle Red Labs home">
-        <span>Oracle</span><i aria-hidden="true"></i><span class="landing-brand__signal">Red Labs</span>
+      <a class="brand" href="index.html" aria-label="Oracle Red Labs home">
+        <img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34">
+        <span class="brand__name">Oracle <em>Red</em> Labs</span>
       </a>
       <nav aria-label="Footer navigation">
         <a href="services.html">Services</a>
@@ -376,7 +377,9 @@
 
   <script src="js/vendor/gsap.min.js"></script>
   <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/main.js"></script>
   <script src="js/landing.js"></script>
 </body>
 </html>
+
