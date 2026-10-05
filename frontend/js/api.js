@@ -132,6 +132,22 @@
       return;
     }
     if (!user) return;
+    if (user.role === "client") {
+      document.querySelectorAll(".nav__list--auth").forEach(function (list) {
+        if (list.querySelector("[data-organization-nav]")) return;
+        var item = document.createElement("li");
+        item.setAttribute("data-organization-nav", "");
+        var link = document.createElement("a");
+        link.className = "nav__link nav__link--organization";
+        link.href = "organization.html";
+        link.textContent = "Organization";
+        if (user.active_organization) {
+          link.title = user.active_organization.name + " · " + user.active_organization.role;
+        }
+        item.appendChild(link);
+        list.insertBefore(item, list.firstChild);
+      });
+    }
     document.querySelectorAll('a[href="login.html"]').forEach(function (link) {
       link.href = user.role === "admin" ? "admin.html" : "dashboard.html";
       link.textContent = user.role === "admin" ? "Admin Console" : "Dashboard";

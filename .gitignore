@@ -50,6 +50,7 @@ backend/.tmp-mysql-data/
 # ---- Generated delivery working directories ----
 .codex-presentation/
 .codex-finalizer/
+.codex-build/
 .submission-staging/
 
 # ---- Optional: agent instruction files ----

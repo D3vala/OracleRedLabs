@@ -1,6 +1,6 @@
 # Oracle Red Labs
 
-Oracle Red Labs is a fictional academic full-stack application for requesting and tracking authorized security engagements. It demonstrates account authentication, a transactional multipart booking flow, role-based access, MySQL CRUD, protected document storage, and status audit history. It does not perform security testing or process payments.
+Oracle Red Labs is a fictional academic full-stack application for requesting and tracking authorized security engagements. It demonstrates account authentication, multi-user organizations, shared engagement access, database-backed invitations, a transactional multipart booking flow, role-based access, MySQL CRUD, protected document storage, and status audit history. It does not perform security testing, send invitation email, or process payments.
 
 ## Requirements
 
@@ -18,6 +18,8 @@ Oracle Red Labs is a fictional academic full-stack application for requesting an
    mysql -u root -p < database/schema.sql
    mysql -u root -p oracle_red_labs < database/seed.sql
    ```
+
+   Existing installations created before organization membership support should back up the database, select it, and run `database/migrations/20261003-organizations-and-memberships.sql` instead. The migration is rerunnable and converts every existing client into the owner of a new organization.
 
 4. Install the server dependencies:
 
@@ -61,6 +63,7 @@ backend/src/              Express application, middleware, routes, database acce
 backend/scripts/          Administrator seed command
 database/schema.sql       Repeatable production database schema
 database/test-schema.sql  Repeatable isolated test database schema
+database/migrations/      Rerunnable existing-data migrations
 database/seed.sql         Fictional service and resource catalogue
 database/oracle_red_labs.sql  Submission entry point for schema and seed data
 docs/milestone-2/         Sitemap and low-fidelity wireframes
@@ -90,12 +93,26 @@ From the repository root, `./scripts/check-html.ps1` checks local links, duplica
 
 ## Main workflow
 
-1. Register a client account or sign in.
-2. Select an active service and complete the engagement wizard.
-3. Upload a signed PDF authorization and submit the request.
-4. View the persisted request in the client dashboard.
-5. Sign in as the seeded administrator and update engagement and invoice states.
-6. Return to the client session and verify the updates and status history.
+1. Register a client account; registration creates an organization and owner membership.
+2. Invite another member. Existing accounts accept from the organization page; new accounts use the manually copied invitation link.
+3. Select the active organization, choose a service, and complete the engagement wizard.
+4. Upload a signed PDF authorization and submit the organization-owned request.
+5. Confirm that authorized organization members see the shared record with role-appropriate billing and scope fields.
+6. Sign in as the seeded administrator and update engagement and invoice states.
+7. Return to the client session and verify the updates and status history.
+
+## Organization roles
+
+| Role | Engagement access | Organization access |
+|---|---|---|
+| Owner | Full scope, submission, cancellation, invoices | Details, invitations, roles, removal; final owner is protected |
+| Manager | Full scope, submission, cancellation, invoices | Invite non-owners and manage member/billing memberships |
+| Member | Full scope, submission, cancellation; billing hidden | Read the roster |
+| Billing | Basic engagement summaries and invoices only | Read the roster |
+
+One active organization is stored in the server session. The database supports multiple memberships, and the organization page provides the switcher. Invitations expire after seven days. The application stores only token hashes and never sends email, so links for unregistered recipients must be copied when they are created.
+
+In-app notifications remain deferred pending a separate design and recipient-policy review.
 
 ## Documentation
 
@@ -108,7 +125,7 @@ From the repository root, `./scripts/check-html.ps1` checks local links, duplica
 - [Presentation guide](docs/PRESENTATION.md)
 - [Submission checklist](docs/SUBMISSION-CHECKLIST.md)
 - [Screenshot evidence](docs/SCREENSHOTS.md)
-- [Final PowerPoint presentation](output/presentation/oracle-red-labs-final-presentation.pptx)
+- [Organization-membership PowerPoint presentation](output/presentation/oracle-red-labs-organization-memberships.pptx)
 - [Safe sample authorization PDF](output/pdf/sample-authorization.pdf)
 
 All company names, services, prices, resources, inquiries, and engagement records are fictional demonstration content for ITS122P.

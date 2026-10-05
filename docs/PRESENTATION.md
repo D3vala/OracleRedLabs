@@ -17,23 +17,23 @@
 
 1. Open the public services and resource pages to show database content and vault filtering.
 2. Submit a public inquiry.
-3. Register the prepared client account.
-4. Book an engagement with a valid sample PDF and read the server-generated reference.
-5. Open the dashboard and engagement details.
-6. In a separate browser profile, sign in as the seeded administrator.
-7. Find the same reference, download its authorization, and move it to `scoping`.
-8. Move its invoice to `outstanding`.
-9. Return to the client profile and refresh to show both persisted updates and history.
-10. Add, edit, and delete a temporary resource; show a referenced service deletion conflict; review and delete the inquiry.
+3. Register the prepared owner account and show the automatically created organization.
+4. Create a member invitation and copy the manual link; explain that the database stores only its hash.
+5. Accept the invitation in a second client profile and show the shared organization dashboard.
+6. Book an engagement with a valid sample PDF and read the server-generated reference.
+7. Compare owner, member, and billing projections; switch a multi-organization account's active context.
+8. In a separate administrator profile, download the authorization and move the engagement to `scoping`.
+9. Move its invoice to `outstanding`, then return to the organization and show the persisted update.
+10. Show final-owner protection, add/edit/delete a temporary resource, demonstrate a referenced service conflict, and administer the inquiry.
 
 ## CRUD evidence matrix
 
 | Operation | Demonstration |
 |---|---|
-| Create | Register, submit inquiry, book engagement, add service/resource |
-| Read | Public catalogue, resource filter, client dashboard/detail, admin tables |
-| Update | Edit service/resource, change engagement/invoice/inquiry state |
-| Delete | Delete unused service, resource, or inquiry |
+| Create | Register an organization owner, create invitation/membership, submit inquiry, book engagement, add service/resource |
+| Read | Organization roster, received invitations, shared dashboard/detail, public catalogue, admin tables |
+| Update | Switch active organization, change member role, edit service/resource, update workflow states |
+| Delete | Remove an allowed membership, cancel an invitation, delete unused service/resource/inquiry |
 | Controlled business update | Client cancellation of a pending/scoping engagement |
 
 ## Prepared demonstration data
@@ -41,6 +41,7 @@
 - One administrator created with `npm run seed:admin`
 - One fresh client email not already present
 - One second client for ownership isolation
+- One invited member and one billing user for role projection
 - A PDF under 5 MB beginning with a valid `%PDF-` signature
 - A start date at least 24 hours ahead
 - At least two targets on separate lines

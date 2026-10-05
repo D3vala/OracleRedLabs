@@ -816,6 +816,46 @@ html.js .page [data-reveal="card"].is-revealed {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@media (max-width: 900px) {
+  .dashboard-organization,
+  .organization-context,
+  .organization-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .organization-panel--wide {
+    grid-column: 1;
+  }
+
+  .dashboard-organization .btn {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 600px) {
+  .organization-context,
+  .organization-panel,
+  .invitation-preview {
+    padding: var(--space-md);
+  }
+
+  .organization-list__item,
+  .copy-control,
+  .invitation-preview .info-list {
+    grid-template-columns: 1fr;
+  }
+
+  .organization-list__item {
+    display: grid;
+    justify-items: start;
+  }
+
+  .copy-control .btn,
+  .organization-list__item .btn {
+    width: 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page .page-head::before,
   .page .page-head::after,
@@ -1095,7 +1135,8 @@ html.js .page [data-reveal="card"].is-revealed {
 
 .page-visual--sectors .page-visual__field,
 .page-visual--admin .page-visual__field,
-.page-visual--dashboard .page-visual__field {
+.page-visual--dashboard .page-visual__field,
+.page-visual--organization .page-visual__field {
   border-radius: var(--radius-md);
   background:
     linear-gradient(90deg, transparent 49.8%, rgba(255, 255, 255, 0.07) 50%, transparent 50.2%),
@@ -1544,6 +1585,171 @@ html.js .page [data-reveal="card"].is-revealed {
   min-height: 44px;
 }
 
+.dashboard-organization {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr) auto;
+  gap: var(--space-lg);
+  align-items: end;
+  margin-top: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(209, 59, 59, 0.09), transparent 46%), #0b0b0d;
+}
+
+.dashboard-organization strong {
+  display: block;
+  margin-top: var(--space-xs);
+  font-size: var(--fs-400);
+  text-transform: capitalize;
+}
+
+.organization-shell > .result-status {
+  margin-bottom: var(--space-lg);
+}
+
+html:not(.js) #organization-status,
+html:not(.js) #invitation-status,
+html:not(.js) .organization-context,
+html:not(.js) .organization-grid {
+  display: none;
+}
+
+.no-script-message {
+  max-width: 72ch;
+}
+
+.no-script-message a {
+  color: var(--color-white);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.organization-context {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.55fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: end;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-md);
+  background: linear-gradient(145deg, rgba(209, 59, 59, 0.1), transparent 52%), #0b0b0d;
+}
+
+.organization-context__controls {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.organization-context__controls .mono {
+  color: var(--color-signal);
+  text-transform: uppercase;
+}
+
+.organization-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.organization-panel,
+.invitation-preview {
+  min-width: 0;
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius-md);
+  background: #0b0b0d;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.014), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.organization-panel--wide {
+  grid-column: 1 / -1;
+}
+
+.organization-panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.organization-panel__head p {
+  max-width: 62ch;
+}
+
+.organization-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.organization-list__item {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: center;
+  justify-content: space-between;
+  min-height: 4.5rem;
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.organization-list__item:last-child {
+  border-bottom: 0;
+}
+
+.organization-list__item > div {
+  display: grid;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+
+.invitation-link {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.copy-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.empty-state--compact {
+  min-height: 11rem;
+  padding: var(--space-lg);
+}
+
+.invitation-preview-shell {
+  max-width: 58rem;
+}
+
+.invitation-preview {
+  display: grid;
+  gap: var(--space-xl);
+  background: linear-gradient(145deg, rgba(209, 59, 59, 0.1), transparent 52%), #0b0b0d;
+}
+
+.invitation-preview .info-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.invitation-preview__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.detail-layout--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 /* Conversion-led footer --------------------------------------------------------- */
 .page .interior-footer.site-footer {
   position: relative;
@@ -1852,6 +2058,59 @@ html.js .page [data-reveal="card"].is-revealed {
 
   .interior-footer__cta .btn {
     justify-self: start;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-organization,
+  .organization-context,
+  .organization-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .organization-panel--wide {
+    grid-column: 1;
+  }
+
+  .dashboard-organization .btn {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 600px) {
+  .organization-context,
+  .organization-panel,
+  .invitation-preview {
+    padding: var(--space-md);
+  }
+
+  .organization-context {
+    align-items: start;
+  }
+
+  .organization-context__controls,
+  .organization-context__controls .select,
+  .organization-panel .form,
+  .organization-panel .input,
+  .organization-panel .select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .organization-list__item,
+  .copy-control,
+  .invitation-preview .info-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .organization-list__item {
+    display: grid;
+    justify-items: stretch;
+  }
+
+  .organization-list__item .btn,
+  .copy-control .btn {
+    width: 100%;
   }
 }
 

@@ -17,6 +17,7 @@ const authRoutes = require("./routes/auth");
 const publicRoutes = require("./routes/public");
 const engagementRoutes = require("./routes/engagements");
 const adminRoutes = require("./routes/admin");
+const { organizationsRouter, invitationsRouter } = require("./routes/organizations");
 
 const app = express();
 app.disable("x-powered-by");
@@ -77,6 +78,8 @@ app.use("/api", csrfProtection);
 app.use("/api/auth", authRoutes);
 app.use("/api", publicRoutes);
 app.use("/api/engagements", engagementRoutes);
+app.use("/api/organizations", organizationsRouter);
+app.use("/api/invitations", invitationsRouter);
 app.use("/api/admin", adminRoutes);
 
 app.use(express.static(config.frontendDir, {

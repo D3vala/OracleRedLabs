@@ -7,6 +7,7 @@ const {
   INVOICE_TRANSITIONS,
   canTransition,
 } = require("../src/domain");
+const { permissionsForRole } = require("../src/organization-context");
 
 test("engagement transition matrix permits every specified forward path", () => {
   assert.equal(canTransition(ENGAGEMENT_TRANSITIONS, "pending", "scoping"), true);
@@ -31,4 +32,13 @@ test("invoice transitions allow the specified lifecycle and optional same-state 
   assert.equal(canTransition(INVOICE_TRANSITIONS, "outstanding", "cancelled"), true);
   assert.equal(canTransition(INVOICE_TRANSITIONS, "paid", "outstanding"), false);
   assert.equal(canTransition(INVOICE_TRANSITIONS, "paid", "paid", true), true);
+});
+
+test("organization roles expose the intended server-side capabilities", () => {
+  assert.equal(permissionsForRole("owner").can_manage_organization, true);
+  assert.equal(permissionsForRole("manager").can_manage_members, true);
+  assert.equal(permissionsForRole("member").can_view_invoices, false);
+  assert.equal(permissionsForRole("member").can_submit_engagements, true);
+  assert.equal(permissionsForRole("billing").can_view_full_engagements, false);
+  assert.equal(permissionsForRole("billing").can_submit_engagements, false);
 });

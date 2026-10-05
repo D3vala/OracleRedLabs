@@ -27,14 +27,19 @@ npm run test:db
 | Area | Cases | Expected result |
 |---|---|---|
 | Registration | valid record, duplicate email, short password, missing acknowledgment | session on valid record; 409 duplicate; 422 validation failures |
+| Registration organization | normal and invitation registration | normal creates owner organization; invitation joins the intended organization only |
+| Invitations | new/existing email, invalid, expired, used, cancelled, wrong email | manual link or received list; invalid lifecycle states rejected |
+| Membership | duplicate, role change, removal, final owner | unique membership; role matrix enforced; final owner retained |
+| Active organization | user with two memberships | session context switches only to an authorized active organization |
 | Login | valid client/admin, wrong email/password, inactive user | correct role session; generic 401 failures |
 | Logout | valid session, repeated request | session removed; later protected request returns 401 |
 | Inquiry | valid, malformed email, short message | persisted new inquiry; 422 invalid inputs |
-| Authorization | guest, client, different owner, admin | role and ownership boundaries return 401/403/404 as specified |
+| Authorization | guest, organization roles, different organization, admin | role and organization boundaries return 401/403/404 as specified |
 | Engagement | valid complete request | one engagement, targets, document, invoice, and initial history row |
 | Engagement validation | inactive service, short scope, zero/101 targets, long target, past date | 422 and no partial records or orphaned PDF |
 | PDF | wrong MIME, oversized file, false `.pdf`, valid PDF | rejected invalid files; accepted file outside public directory |
-| Client isolation | two clients and two records | each client reads only their own records |
+| Organization isolation | two organizations and shared members | members share their organization records; another organization receives 404 |
+| Role projections | owner, manager, member, billing | members receive no billing fields; billing receives no scope or targets |
 | Cancellation | pending, scoping, active, completed, already cancelled | first two succeed; other client operations return conflict |
 | Engagement state | every allowed and disallowed transition | allowed state and history commit together; invalid returns 409 |
 | Invoice state | allowed, terminal, amount update | valid transitions persist timestamps; invalid returns 409 |
@@ -64,7 +69,7 @@ Replace the example reference with the actual response. The expected count is on
 
 ## Manual browser checklist
 
-Run at approximately 360 px, 768 px, and desktop widths.
+Run at 390 px, 768 px, and desktop widths.
 
 - [ ] All header/footer links reach a real page.
 - [ ] Public information remains readable when JavaScript is disabled.
@@ -76,24 +81,28 @@ Run at approximately 360 px, 768 px, and desktop widths.
 - [ ] Dashboard and admin tables become readable stacked records on mobile.
 - [ ] Reduced-motion mode removes nonessential motion.
 - [ ] Client and administrator sessions route to the proper areas.
-- [ ] A client cannot view a second client's reference by changing the URL.
+- [ ] Organization switcher changes dashboard context and persists in the session.
+- [ ] Invitation links support registration; existing accounts accept from the received list.
+- [ ] Owner and manager controls match their role; final owner cannot be removed or demoted.
+- [ ] Members cannot see invoice data; billing users cannot see scope/targets or submit/cancel.
+- [ ] A member cannot view another organization's reference by changing the URL.
 - [ ] Authorization download works for admin and has no public static URL.
 - [ ] Browser console and server output contain no unexpected errors.
 
 ## End-to-end acceptance run
 
 1. Start from a fresh schema and seed.
-2. Register client A and create an engagement with the sample authorization PDF.
-3. Confirm the receipt and dashboard record.
-4. Open the detail page and confirm scope, targets, dates, billing, and initial history.
-5. In a separate administrator session, open the same reference and download the PDF.
-6. Move the engagement to `scoping` and the invoice to `outstanding`.
-7. Refresh client A and confirm both updates.
-8. Register client B and confirm client A's reference is inaccessible.
-9. Demonstrate service and resource create/update/delete, including the referenced-service conflict.
-10. Submit and administer an inquiry.
-11. Restart Express and confirm the records remain.
-12. Repeat the main transaction once more before the presentation.
+2. Register client A and confirm its owner organization membership.
+3. Create an invitation for a new member, copy the link, and register client B through it.
+4. Create a billing account, invite its existing email, accept from the received-invitations list, and switch organizations.
+5. Create an engagement with the sample authorization PDF and confirm organization and submitter ownership.
+6. Confirm the owner and member see the shared record, with billing fields absent for the member.
+7. Confirm the billing user sees invoice data but no scope or targets and cannot submit or cancel.
+8. Register a separate organization and confirm the reference is inaccessible.
+9. In a separate administrator session, download the PDF, move the engagement to `scoping`, and set the invoice to `outstanding`.
+10. Demonstrate the final-owner guard and manager membership restrictions.
+11. Demonstrate service/resource CRUD and inquiry administration.
+12. Restart Express and confirm the records and session-backed organization selection remain.
 
 ## Environment result
 
@@ -104,3 +113,4 @@ The committed schema and integration flow were validated with an isolated MySQL 
 | 2026-10-02 | Codex implementation pass | Node 25.8.1; MySQL 8.0.42 isolated instance | PASS: schema 10 tables; 3 services; 8 resources; database integration test passed | Admin editor ignored `hidden` because grid display overrode it; added a global hidden rule and verified at 360 px |
 | 2026-10-02 | Codex implementation pass | Node test runner and Supertest | PASS: 6 unit/HTTP checks; live database suite PASS when enabled | Removed the vulnerable third-party session-store dependency and replaced it with the project session store; `npm audit --omit=dev` reports 0 vulnerabilities |
 | 2026-10-02 | Codex implementation pass | Codex in-app Chromium, 360 px and 1440 px | PASS: home, client dashboard, engagement detail, and admin shell responsive checks | Static preview reports expected API errors because it has no database-backed Express process |
+| 2026-10-03 | Codex organization pass | Node test runner; isolated MySQL 8.0.42 | PASS: 7 default tests; live organization/invitation/shared-engagement integration test; legacy migration succeeded twice without child-record loss | Notifications intentionally deferred; destructive reset guarded by `_test` database suffix |

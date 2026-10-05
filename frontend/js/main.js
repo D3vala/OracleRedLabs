@@ -184,6 +184,7 @@
             endpoint = "/api/auth/login";
             body = { email: form.elements["login-email"].value, password: form.elements["login-password"].value };
           } else if (form.id === "register-form") {
+            var invitationToken = new URLSearchParams(window.location.search).get("invitation");
             endpoint = "/api/auth/register";
             body = {
               full_name: form.elements["register-name"].value,
@@ -191,6 +192,7 @@
               company_name: form.elements["register-company"].value,
               password: form.elements["register-password"].value,
               authorization_ack: String(form.elements["register-terms"].checked),
+              invitation_token: invitationToken || undefined,
             };
           } else {
             endpoint = "/api/inquiries";

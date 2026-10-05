@@ -23,6 +23,77 @@ CREATE TABLE IF NOT EXISTS users (
   KEY idx_users_role_active (role, is_active)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS organizations (
+  organization_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(150) NOT NULL,
+  billing_email VARCHAR(254) NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (organization_id),
+  KEY idx_organizations_active_name (is_active, name)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS organization_memberships (
+  organization_id BIGINT UNSIGNED NOT NULL,
+  user_id BIGINT UNSIGNED NOT NULL,
+  role ENUM('owner', 'manager', 'member', 'billing') NOT NULL,
+  invited_by_user_id BIGINT UNSIGNED NULL,
+  joined_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (organization_id, user_id),
+  KEY idx_memberships_user_role (user_id, role),
+  KEY idx_memberships_inviter (invited_by_user_id),
+  CONSTRAINT fk_memberships_organization
+    FOREIGN KEY (organization_id) REFERENCES organizations (organization_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_memberships_user
+    FOREIGN KEY (user_id) REFERENCES users (user_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_memberships_inviter
+    FOREIGN KEY (invited_by_user_id) REFERENCES users (user_id)
+    ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS organization_invitations (
+  invitation_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  organization_id BIGINT UNSIGNED NOT NULL,
+  invited_email VARCHAR(254) NOT NULL,
+  intended_role ENUM('owner', 'manager', 'member', 'billing') NOT NULL,
+  token_hash CHAR(64) NOT NULL,
+  status ENUM('pending', 'accepted', 'cancelled', 'expired') NOT NULL DEFAULT 'pending',
+  pending_email VARCHAR(254) GENERATED ALWAYS AS (
+    CASE WHEN status = 'pending' THEN invited_email ELSE NULL END
+  ) STORED,
+  invited_by_user_id BIGINT UNSIGNED NOT NULL,
+  accepted_by_user_id BIGINT UNSIGNED NULL,
+  cancelled_by_user_id BIGINT UNSIGNED NULL,
+  expires_at DATETIME NOT NULL,
+  accepted_at DATETIME NULL,
+  cancelled_at DATETIME NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (invitation_id),
+  UNIQUE KEY uq_invitations_token_hash (token_hash),
+  UNIQUE KEY uq_invitations_pending_email (organization_id, pending_email),
+  KEY idx_invitations_received (invited_email, status, expires_at),
+  KEY idx_invitations_inviter (invited_by_user_id),
+  KEY idx_invitations_acceptor (accepted_by_user_id),
+  KEY idx_invitations_canceller (cancelled_by_user_id),
+  CONSTRAINT fk_invitations_organization
+    FOREIGN KEY (organization_id) REFERENCES organizations (organization_id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_invitations_inviter
+    FOREIGN KEY (invited_by_user_id) REFERENCES users (user_id)
+    ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT fk_invitations_acceptor
+    FOREIGN KEY (accepted_by_user_id) REFERENCES users (user_id)
+    ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT fk_invitations_canceller
+    FOREIGN KEY (cancelled_by_user_id) REFERENCES users (user_id)
+    ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS services (
   service_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(100) NOT NULL,
@@ -78,7 +149,8 @@ CREATE TABLE IF NOT EXISTS inquiries (
 CREATE TABLE IF NOT EXISTS engagements (
   engagement_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   reference_code CHAR(10) NOT NULL,
-  client_user_id BIGINT UNSIGNED NOT NULL,
+  organization_id BIGINT UNSIGNED NOT NULL,
+  submitted_by_user_id BIGINT UNSIGNED NOT NULL,
   service_id INT UNSIGNED NOT NULL,
   scope_description TEXT NOT NULL,
   requested_start_at DATETIME NOT NULL,
@@ -92,12 +164,16 @@ CREATE TABLE IF NOT EXISTS engagements (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (engagement_id),
   UNIQUE KEY uq_engagements_reference (reference_code),
-  KEY idx_engagements_client_created (client_user_id, created_at),
+  KEY idx_engagements_organization_created (organization_id, created_at),
+  KEY idx_engagements_submitter (submitted_by_user_id),
   KEY idx_engagements_service (service_id),
   KEY idx_engagements_status_start (status, requested_start_at),
   CONSTRAINT chk_engagements_price CHECK (price_snapshot >= 0),
-  CONSTRAINT fk_engagements_client
-    FOREIGN KEY (client_user_id) REFERENCES users (user_id)
+  CONSTRAINT fk_engagements_organization
+    FOREIGN KEY (organization_id) REFERENCES organizations (organization_id)
+    ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT fk_engagements_submitter
+    FOREIGN KEY (submitted_by_user_id) REFERENCES users (user_id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT fk_engagements_service
     FOREIGN KEY (service_id) REFERENCES services (service_id)

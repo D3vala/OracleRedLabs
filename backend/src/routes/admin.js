@@ -106,13 +106,15 @@ router.delete("/resources/:id", param("id").isInt({ min: 1 }), asyncHandler(asyn
 const adminEngagementQuery = `
   SELECT e.engagement_id, e.reference_code, e.scope_description, e.requested_start_at,
          e.billing_method, e.billing_email, e.purchase_order_number, e.status,
-         e.price_snapshot, e.created_at, e.updated_at,
-         u.full_name AS client_name, u.email AS client_email, u.company_name,
+         e.price_snapshot, e.created_at, e.updated_at, e.organization_id,
+         e.submitted_by_user_id, o.name AS company_name, o.name AS organization_name,
+         u.full_name AS client_name, u.email AS client_email,
          s.name AS service_name, s.slug AS service_slug,
          i.amount AS invoice_amount, i.currency, i.status AS invoice_status,
          i.issued_at, i.paid_at
     FROM engagements e
-    JOIN users u ON u.user_id = e.client_user_id
+    JOIN organizations o ON o.organization_id = e.organization_id
+    JOIN users u ON u.user_id = e.submitted_by_user_id
     JOIN services s ON s.service_id = e.service_id
     JOIN invoices i ON i.engagement_id = e.engagement_id`;
 
@@ -195,24 +197,34 @@ router.patch(
   ],
   asyncHandler(async (req, res) => {
     requireValid(req);
-    const [rows] = await pool.execute(
-      `SELECT i.invoice_id, i.status
-         FROM invoices i JOIN engagements e ON e.engagement_id = i.engagement_id
-        WHERE e.reference_code = ?`,
-      [req.params.reference]
-    );
-    if (!rows.length) throw new AppError(404, "INVOICE_NOT_FOUND", "That invoice was not found.");
-    if (!canTransition(INVOICE_TRANSITIONS, rows[0].status, req.body.status, true)) {
-      throw new AppError(409, "INVALID_INVOICE_TRANSITION", `A ${rows[0].status} invoice cannot move to ${req.body.status}.`);
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
+      const [rows] = await connection.execute(
+        `SELECT i.invoice_id, i.status
+           FROM invoices i JOIN engagements e ON e.engagement_id = i.engagement_id
+          WHERE e.reference_code = ? FOR UPDATE`,
+        [req.params.reference]
+      );
+      if (!rows.length) throw new AppError(404, "INVOICE_NOT_FOUND", "That invoice was not found.");
+      if (!canTransition(INVOICE_TRANSITIONS, rows[0].status, req.body.status, true)) {
+        throw new AppError(409, "INVALID_INVOICE_TRANSITION", `A ${rows[0].status} invoice cannot move to ${req.body.status}.`);
+      }
+      await connection.execute(
+        `UPDATE invoices SET amount = ?, status = ?,
+           issued_at = CASE WHEN ? = 'outstanding' AND issued_at IS NULL THEN UTC_TIMESTAMP() ELSE issued_at END,
+           paid_at = CASE WHEN ? = 'paid' THEN UTC_TIMESTAMP() ELSE paid_at END
+         WHERE invoice_id = ?`,
+        [req.body.amount, req.body.status, req.body.status, req.body.status, rows[0].invoice_id]
+      );
+      await connection.commit();
+      res.json({ data: { reference_code: req.params.reference, invoice_status: req.body.status }, message: "Invoice updated." });
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
     }
-    await pool.execute(
-      `UPDATE invoices SET amount = ?, status = ?,
-         issued_at = CASE WHEN ? = 'outstanding' AND issued_at IS NULL THEN UTC_TIMESTAMP() ELSE issued_at END,
-         paid_at = CASE WHEN ? = 'paid' THEN UTC_TIMESTAMP() ELSE paid_at END
-       WHERE invoice_id = ?`,
-      [req.body.amount, req.body.status, req.body.status, req.body.status, rows[0].invoice_id]
-    );
-    res.json({ data: { reference_code: req.params.reference, invoice_status: req.body.status }, message: "Invoice updated." });
   })
 );
 

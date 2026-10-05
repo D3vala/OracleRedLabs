@@ -9,7 +9,9 @@ The backend is an Express 5 application that serves the existing `frontend/` dir
 - `src/db.js` owns the MySQL connection pool.
 - `src/session-store.js` persists Express sessions in MySQL.
 - `src/http.js` contains errors, validation, CSRF, and role middleware.
+- `src/organization-context.js` resolves the active organization and server-side role capabilities.
 - `src/routes/auth.js` implements registration, login, logout, and current user.
+- `src/routes/organizations.js` implements organization switching, membership, and invitation acceptance.
 - `src/routes/public.js` implements public services, resources, and inquiries.
 - `src/routes/engagements.js` implements the client transaction and ownership checks.
 - `src/routes/admin.js` implements administrator CRUD and status operations.
@@ -19,7 +21,11 @@ The backend is an Express 5 application that serves the existing `frontend/` dir
 
 `frontend/` is public. Uploaded authorization PDFs are written to `backend/uploads/authorizations` by default and are never exposed through static middleware. Document downloads pass through an administrator-only API route.
 
-Engagement creation uses one transaction for the engagement, targets, document metadata, invoice, and initial history row. If a transaction fails, the uploaded file is removed.
+Registration uses one transaction for the account, organization or invitation membership, and invitation acceptance. Engagement creation uses one transaction for the organization-owned engagement, targets, document metadata, invoice, and initial history row. If an engagement transaction fails, the uploaded file is removed.
+
+Organization-scoped routes validate the selected membership on every request. Owners and managers can see invoices, members receive no billing fields, and billing members receive no scope or target data. Administrators retain global access.
+
+Invitation tokens are random 32-byte values. Only SHA-256 hashes are stored. The raw link is returned once for manual delivery when the recipient has no account; existing users see matching invitations after signing in. Notifications and email delivery are not implemented.
 
 ## API errors
 

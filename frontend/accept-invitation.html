@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accept Invitation | Oracle Red Labs</title>
+  <meta name="description" content="Review and accept an Oracle Red Labs organization invitation.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css?v=20261003">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/interior.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body class="page page--invitation">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header interior-header"><div class="container site-header__inner interior-nav-shell"><a class="brand" href="index.html"><img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34"><span class="brand__name">Oracle <em>Red</em> Labs</span></a><button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span class="nav-toggle__bar" aria-hidden="true"></span><span class="nav-toggle__bar" aria-hidden="true"></span><span class="nav-toggle__bar" aria-hidden="true"></span><span class="visually-hidden">Menu</span></button><nav class="nav" id="primary-nav" aria-label="Primary"><ul class="nav__list"><li><a class="nav__link" href="services.html">Services</a></li><li><a class="nav__link" href="vault.html">Vault</a></li><li><a class="nav__link" href="contact.html">Contact</a></li></ul><ul class="nav__list nav__list--auth"><li><a class="nav__link" href="login.html">Log In</a></li><li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li></ul></nav></div></header>
+
+  <main id="main">
+    <section class="page-head" aria-labelledby="page-heading"><div class="container page-head__layout"><p class="page-head__code">/ membership invitation</p><h1 id="page-heading">Join an Organization</h1><p class="lede">Review the destination and assigned role before adding this organization to your account.</p><div class="page-visual page-visual--register" aria-hidden="true"><span class="page-visual__field"></span><span class="page-visual__route"></span><span class="page-visual__node page-visual__node--1" data-label="INVITE"></span><span class="page-visual__node page-visual__node--2" data-label="VERIFY"></span><span class="page-visual__node page-visual__node--3" data-label="JOIN"></span><span class="page-visual__readout">MEMBERSHIP / CONTROLLED ENTRY</span></div></div></section>
+    <section class="section access-gateway" aria-labelledby="invitation-heading">
+      <div class="container invitation-preview-shell">
+        <p class="result-status" id="invitation-status" role="status" aria-live="polite">Checking invitation…</p>
+        <noscript>
+          <div class="notice no-script-message">
+            Invitation details require JavaScript so the token can be verified securely. Enable JavaScript, then reload this page, or <a href="login.html">sign in</a> to review invitations received by your account email.
+          </div>
+        </noscript>
+        <article class="invitation-preview" id="invitation-preview" hidden>
+          <div><h2 id="invitation-heading">Invitation details</h2><p class="text-muted">This invitation grants access to shared academic demonstration records.</p></div>
+          <dl class="info-list"><div><dt>Organization</dt><dd id="invitation-organization"></dd></div><div><dt>Assigned role</dt><dd id="invitation-role"></dd></div><div><dt>Expires</dt><dd id="invitation-expiry"></dd></div></dl>
+          <div class="invitation-preview__actions"><button class="btn btn--primary" id="accept-invitation" type="button" hidden>Accept Invitation</button><a class="btn btn--primary" id="register-for-invitation" href="register.html">Create Account</a><a class="btn btn--secondary" id="login-for-invitation" href="login.html">Sign In</a></div>
+          <p class="notice">Invitations are delivered manually for this academic project. No email is sent by the application.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer interior-footer"><div class="container site-footer__legal"><p class="site-footer__disclaimer">Organization membership records are fictional demonstration data.</p><p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p></div></footer>
+  <script src="js/api.js"></script><script src="js/main.js"></script><script src="js/accept-invitation.js"></script><script src="js/interior.js"></script>
+</body>
+</html>

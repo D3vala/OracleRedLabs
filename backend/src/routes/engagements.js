@@ -8,6 +8,10 @@ const multer = require("multer");
 const config = require("../config");
 const { pool } = require("../db");
 const { AppError, asyncHandler, requireClient } = require("../http");
+const {
+  requireOrganizationContext,
+  requireOrganizationRoles,
+} = require("../organization-context");
 
 const router = express.Router();
 fs.mkdir(config.uploadDir, { recursive: true }).catch(console.error);
@@ -111,20 +115,40 @@ const baseListQuery = `
          e.requested_start_at, e.billing_method, e.billing_email,
          e.purchase_order_number, e.status, e.price_snapshot,
          e.cancelled_at, e.created_at, e.updated_at,
+         e.organization_id, e.submitted_by_user_id,
+         o.name AS organization_name, u.full_name AS submitted_by_name,
          s.service_id, s.name AS service_name, s.slug AS service_slug,
          i.invoice_id, i.amount AS invoice_amount, i.currency,
          i.status AS invoice_status, i.issued_at, i.paid_at
     FROM engagements e
+    JOIN organizations o ON o.organization_id = e.organization_id
+    JOIN users u ON u.user_id = e.submitted_by_user_id
     JOIN services s ON s.service_id = e.service_id
     JOIN invoices i ON i.engagement_id = e.engagement_id`;
 
-async function loadClientEngagement(reference, userId) {
+function projectEngagement(engagement, role) {
+  const value = { ...engagement };
+  if (role === "member") {
+    [
+      "billing_method", "billing_email", "purchase_order_number", "price_snapshot",
+      "invoice_id", "invoice_amount", "currency", "invoice_status", "issued_at", "paid_at",
+    ].forEach((key) => delete value[key]);
+  }
+  if (role === "billing") {
+    delete value.scope_description;
+    delete value.purchase_order_number;
+  }
+  return value;
+}
+
+async function loadClientEngagement(reference, organizationId, role) {
   const [rows] = await pool.execute(
-    `${baseListQuery} WHERE e.reference_code = ? AND e.client_user_id = ?`,
-    [reference, userId]
+    `${baseListQuery} WHERE e.reference_code = ? AND e.organization_id = ?`,
+    [reference, organizationId]
   );
   if (!rows.length) throw new AppError(404, "ENGAGEMENT_NOT_FOUND", "That engagement was not found.");
-  const engagement = rows[0];
+  const engagement = projectEngagement(rows[0], role);
+  if (role === "billing") return { ...engagement, targets: [], status_history: [] };
   const [targets] = await pool.execute(
     "SELECT target_value, sort_order FROM engagement_targets WHERE engagement_id = ? ORDER BY sort_order",
     [engagement.engagement_id]
@@ -138,9 +162,9 @@ async function loadClientEngagement(reference, userId) {
   return { ...engagement, targets, status_history: history };
 }
 
-router.use(requireClient);
+router.use(requireClient, requireOrganizationContext);
 
-router.post("/", upload.single("authorization"), asyncHandler(async (req, res) => {
+router.post("/", requireOrganizationRoles("owner", "manager", "member"), upload.single("authorization"), asyncHandler(async (req, res) => {
   const values = validateEngagement(req);
   await verifyPdf(req.file.path);
   const digest = await sha256(req.file.path);
@@ -160,12 +184,13 @@ router.post("/", upload.single("authorization"), asyncHandler(async (req, res) =
     const reference = await referenceCode(connection);
     const [engagementResult] = await connection.execute(
       `INSERT INTO engagements
-        (reference_code, client_user_id, service_id, scope_description,
+        (reference_code, organization_id, submitted_by_user_id, service_id, scope_description,
          requested_start_at, billing_method, billing_email,
          purchase_order_number, price_snapshot)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         reference,
+        req.organization.organization_id,
         req.session.user.user_id,
         service.service_id,
         values.scope,
@@ -211,24 +236,30 @@ router.post("/", upload.single("authorization"), asyncHandler(async (req, res) =
 
 router.get("/", asyncHandler(async (req, res) => {
   const [rows] = await pool.execute(
-    `${baseListQuery} WHERE e.client_user_id = ? ORDER BY e.created_at DESC`,
-    [req.session.user.user_id]
+    `${baseListQuery} WHERE e.organization_id = ? ORDER BY e.created_at DESC`,
+    [req.organization.organization_id]
   );
-  res.json({ data: rows });
+  res.json({ data: rows.map((row) => projectEngagement(row, req.organization.role)) });
 }));
 
 router.get("/:reference", asyncHandler(async (req, res) => {
-  res.json({ data: await loadClientEngagement(req.params.reference, req.session.user.user_id) });
+  res.json({
+    data: await loadClientEngagement(
+      req.params.reference,
+      req.organization.organization_id,
+      req.organization.role
+    ),
+  });
 }));
 
-router.patch("/:reference/cancel", asyncHandler(async (req, res) => {
+router.patch("/:reference/cancel", requireOrganizationRoles("owner", "manager", "member"), asyncHandler(async (req, res) => {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
     const [rows] = await connection.execute(
       `SELECT engagement_id, status FROM engagements
-        WHERE reference_code = ? AND client_user_id = ? FOR UPDATE`,
-      [req.params.reference, req.session.user.user_id]
+        WHERE reference_code = ? AND organization_id = ? FOR UPDATE`,
+      [req.params.reference, req.organization.organization_id]
     );
     if (!rows.length) throw new AppError(404, "ENGAGEMENT_NOT_FOUND", "That engagement was not found.");
     if (!["pending", "scoping"].includes(rows[0].status)) {

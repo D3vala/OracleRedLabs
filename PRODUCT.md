@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Semantic HTML, CSS, and plain browser JavaScript served by a Node.js and Express application. MySQL stores users, sessions, catalogue records, inquiries, engagements, document metadata, invoices, and audit history. The front end retains its build-free structure.
+Semantic HTML, CSS, and plain browser JavaScript served by a Node.js and Express application. MySQL stores users, organizations, memberships, invitations, sessions, catalogue records, inquiries, engagements, document metadata, invoices, and audit history. The front end retains its build-free structure.
 
 ## Users
 
@@ -16,7 +16,7 @@ The primary audience is CISOs and security or engineering leaders evaluating an 
 
 ## Product Purpose
 
-Oracle Red Labs presents controlled red-team services and lets a visitor become a client, submit an authorized engagement request, and track its persisted status. Administrators manage the catalogue, inquiries, engagements, invoices, and private authorization documents.
+Oracle Red Labs presents controlled red-team services and lets a visitor create or join an organization, submit an authorized engagement request, and track its persisted status with other authorized members. Administrators manage the catalogue, inquiries, engagements, invoices, and private authorization documents.
 
 ## Positioning
 
@@ -28,7 +28,10 @@ Visitors compare three fictional services: ORACLE AI, PHANTASM, and CHAINBREAK. 
 
 ## Capabilities and Constraints
 
-- Accounts, inquiries, engagements, status history, catalogue records, and billing states persist in MySQL.
+- Accounts, organizations, memberships, invitations, inquiries, engagements, status history, catalogue records, and billing states persist in MySQL.
+- Engagements belong to organizations while retaining the original submitting user.
+- One active organization is selected per server session; the data model supports multiple memberships.
+- Invitations are copied manually. No email or in-app notification delivery is implemented.
 - The browser source remains build-free and framework-free; Express is required to serve it with the API.
 - Existing page routes and service query strings remain compatible.
 - JavaScript enhancements require readable no-script and reduced-motion fallbacks.

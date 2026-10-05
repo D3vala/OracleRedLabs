@@ -33,17 +33,17 @@
       <div class="container page-head__layout">
         <p class="page-head__code">/ client dashboard</p>
         <h1 id="page-heading">Your Engagements</h1>
-        <p class="lede">Review every authorized request on your account, including its start window, current state, and invoice status.</p>
+        <p class="lede">Review every authorized request shared with your active organization, subject to your membership role.</p>
         <div class="page-visual page-visual--dashboard" aria-hidden="true"><span class="page-visual__field"></span><span class="page-visual__route"></span><span class="page-visual__node page-visual__node--1" data-label="PENDING"></span><span class="page-visual__node page-visual__node--2" data-label="SCOPING"></span><span class="page-visual__node page-visual__node--3" data-label="ACTIVE"></span><span class="page-visual__readout">ACCOUNT / AUTHORIZED REQUESTS</span></div>
       </div>
     </section>
 
-    <section class="section operations-summary" aria-labelledby="summary-heading"><div class="container"><h2 id="summary-heading" class="visually-hidden">Account summary</h2><p class="result-status" id="dashboard-status" role="status" aria-live="polite">Loading your engagements…</p><div class="stat-grid" id="dashboard-stats" aria-label="Engagement summary"></div></div></section>
+    <section class="section operations-summary" aria-labelledby="summary-heading"><div class="container"><h2 id="summary-heading" class="visually-hidden">Organization summary</h2><p class="result-status" id="dashboard-status" role="status" aria-live="polite">Loading shared engagements…</p><div class="dashboard-organization"><div><span class="card__label">Active organization</span><strong id="dashboard-organization-name">Loading…</strong></div><div><span class="card__label">Membership role</span><strong id="dashboard-organization-role">—</strong></div><a class="btn btn--secondary btn--sm" href="organization.html">Manage Organization</a></div><div class="stat-grid" id="dashboard-stats" aria-label="Engagement summary"></div></div></section>
 
     <section class="section section--tight operations-register" aria-labelledby="engagements-heading">
       <div class="container">
-        <div class="section__head"><h2 id="engagements-heading">Engagement register</h2><p class="lede">Pending and scoping requests can be cancelled online. Contact the engagement lead once work is active.</p></div>
-        <div class="table-wrap"><div class="table-scroll"><table class="table table--stack" id="engagements-table"><caption>Engagements owned by the signed-in client</caption><thead><tr><th scope="col">Reference</th><th scope="col">Service</th><th scope="col">Status</th><th scope="col">Requested slot</th><th scope="col">Invoice</th><th scope="col">Actions</th></tr></thead><tbody></tbody></table></div></div>
+        <div class="section__head"><h2 id="engagements-heading">Engagement register</h2><p class="lede" id="engagements-guidance">Pending and scoping requests can be cancelled online. Contact the engagement lead once work is active.</p></div>
+        <div class="table-wrap"><div class="table-scroll"><table class="table table--stack" id="engagements-table"><caption>Engagements shared with the active organization</caption><thead><tr><th scope="col">Reference</th><th scope="col">Service</th><th scope="col">Submitted by</th><th scope="col">Status</th><th scope="col">Requested slot</th><th scope="col" data-billing-column>Invoice</th><th scope="col">Actions</th></tr></thead><tbody></tbody></table></div></div>
         <div class="empty-state" id="dashboard-empty" hidden><h3>No engagements yet</h3><p>Your first authorized request will appear here after submission.</p><a class="btn btn--primary" href="engage.html">Book an Engagement</a></div>
       </div>
     </section>

@@ -448,7 +448,14 @@
       return; // not the engage page
     }
 
-    if (window.ORLApi && !(await window.ORLApi.guard("client"))) return;
+    var user = window.ORLApi ? await window.ORLApi.guard("client") : null;
+    if (window.ORLApi && !user) return;
+    if (user && !user.active_organization.permissions.can_submit_engagements) {
+      form.hidden = true;
+      document.getElementById("engage-progress").hidden = true;
+      document.getElementById("engage-access-denied").hidden = false;
+      return;
+    }
 
     panels = $all("[data-step-panel]", form);
     markers = $all("[data-step-marker]");
