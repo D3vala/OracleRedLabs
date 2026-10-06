@@ -1,0 +1,16 @@
+Subject: Oracle Red Labs: an update is available
+
+Oracle Red Labs
+
+An update is available
+
+An update is available in your Oracle Red Labs account.
+
+Sign in to review it.
+
+Review update:
+https://oracle-red-labs.example.test/notifications.html?organization=42&notification=108
+
+You can change event email preferences in Notifications.
+
+Oracle Red Labs is a fictional company created for an academic project (ITS122P).

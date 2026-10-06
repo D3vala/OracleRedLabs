@@ -4,6 +4,7 @@ const crypto = require("node:crypto");
 const express = require("express");
 const { body, param, query } = require("express-validator");
 const { pool } = require("../db");
+const { createEvent, queueInvitation, cancelInvitationMail } = require("../notifications");
 const {
   AppError,
   asyncHandler,
@@ -77,6 +78,10 @@ async function acceptInvitation(req, selector, value) {
         WHERE invitation_id = ?`,
       [req.session.user.user_id, invitation.invitation_id]
     );
+    await cancelInvitationMail(connection, invitation.invitation_id);
+    await createEvent(connection, { type: "invitation_accepted", organizationId: invitation.organization_id,
+      actorUserId: req.session.user.user_id, subjectUserId: req.session.user.user_id,
+      invitationId: invitation.invitation_id, sourceKey: `invitation:${invitation.invitation_id}:accepted` });
     await connection.commit();
     req.session.activeOrganizationId = invitation.organization_id;
     return {
@@ -208,6 +213,8 @@ organizationsRouter.patch(
         "UPDATE organization_memberships SET role = ? WHERE organization_id = ? AND user_id = ?",
         [newRole, req.organization.organization_id, targetUserId]
       );
+      await createEvent(connection, { type: "member_role_changed", organizationId: req.organization.organization_id,
+        actorUserId: req.session.user.user_id, subjectUserId: targetUserId, oldValue: oldRole, newValue: newRole });
       await connection.commit();
       res.json({ data: { user_id: targetUserId, role: newRole }, message: `${targets[0].full_name}'s role was updated.` });
     } catch (error) {
@@ -252,6 +259,8 @@ organizationsRouter.delete(
         "DELETE FROM organization_memberships WHERE organization_id = ? AND user_id = ?",
         [req.organization.organization_id, targetUserId]
       );
+      await createEvent(connection, { type: "member_removed", organizationId: req.organization.organization_id,
+        actorUserId: req.session.user.user_id, subjectUserId: targetUserId });
       await connection.commit();
       if (targetUserId === req.session.user.user_id) req.session.activeOrganizationId = null;
       res.json({ data: null, message: `${targets[0].full_name} was removed from the organization.` });
@@ -333,6 +342,9 @@ organizationsRouter.post(
          VALUES (?, ?, ?, ?, ?, DATE_ADD(UTC_TIMESTAMP(), INTERVAL 7 DAY))`,
         [req.organization.organization_id, email, role, tokenHash(token), req.session.user.user_id]
       );
+      await createEvent(connection, { type: "invitation_created", organizationId: req.organization.organization_id,
+        actorUserId: req.session.user.user_id, invitationId: result.insertId, sourceKey: `invitation:${result.insertId}:created` });
+      const emailQueued = await queueInvitation(connection, req.organization.organization_id, result.insertId, token, accounts.length > 0);
       await connection.commit();
       res.status(201).json({
         data: {
@@ -340,11 +352,12 @@ organizationsRouter.post(
           invited_email: email,
           intended_role: role,
           account_exists: accounts.length > 0,
+          email_queued: emailQueued,
           invitation_url: accounts.length ? null : `accept-invitation.html?token=${token}`,
         },
-        message: accounts.length
+        message: (emailQueued ? "Email queued. " : "Email is disabled. ") + (accounts.length
           ? "Invitation created. The user can accept it from their organization page."
-          : "Invitation created. Copy the link now; it cannot be shown again.",
+          : "Invitation created. Copy the link now; it cannot be shown again."),
       });
     } catch (error) {
       await connection.rollback();
@@ -380,6 +393,10 @@ organizationsRouter.delete(
           WHERE invitation_id = ?`,
         [req.session.user.user_id, req.params.invitationId]
       );
+      await cancelInvitationMail(connection, Number(req.params.invitationId));
+      await createEvent(connection, { type: "invitation_cancelled", organizationId: req.organization.organization_id,
+        actorUserId: req.session.user.user_id, invitationId: Number(req.params.invitationId),
+        sourceKey: `invitation:${req.params.invitationId}:cancelled` });
       await connection.commit();
       res.json({ data: null, message: "Invitation cancelled." });
     } catch (error) {

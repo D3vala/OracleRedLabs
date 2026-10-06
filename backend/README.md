@@ -25,7 +25,11 @@ Registration uses one transaction for the account, organization or invitation me
 
 Organization-scoped routes validate the selected membership on every request. Owners and managers can see invoices, members receive no billing fields, and billing members receive no scope or target data. Administrators retain global access.
 
-Invitation tokens are random 32-byte values. Only SHA-256 hashes are stored. The raw link is returned once for manual delivery when the recipient has no account; existing users see matching invitations after signing in. Notifications and email delivery are not implemented.
+Invitation tokens are random 32-byte values. The invitation table stores SHA-256 hashes. The raw link is returned once for manual delivery when the recipient has no account; configured email delivery temporarily encrypts that token in the outbox. Existing users receive a sign-in link to their received-invitations section.
+
+Organization-scoped notifications, recipient rows, preferences, and outbox jobs persist in four InnoDB tables. Event writes and eligible email jobs share the originating domain transaction. Current roles, membership, active account, and preferences are checked again before display or delivery. Read state is individual. Backend MySQL connections initialize their SQL timezone to UTC.
+
+`src/notification-policy.js` owns audiences, email eligibility/deep links, encryption and retries; `src/email-templates.js` renders the shared branded HTML and matching plain text; `src/notifications.js` writes events and jobs; `src/routes/notifications.js` exposes client APIs; `src/notification-worker.js` provides the injectable worker, and `src/notification-worker-main.js` runs it with Nodemailer. Sending defaults off; start `npm run worker:notifications` separately. See [configuration, privacy, API and rollout](../docs/NOTIFICATIONS.md) and [email templates, previews, tests and restart steps](../docs/EMAIL-TEMPLATES.md).
 
 ## API errors
 

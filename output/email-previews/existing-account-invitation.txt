@@ -1,0 +1,16 @@
+Subject: Oracle Red Labs: organization invitation
+
+Oracle Red Labs
+
+Organization invitation
+
+You have been invited to join Synthetic Research Organization as manager.
+
+Sign in to review this invitation in your received invitations.
+
+Review invitation:
+https://oracle-red-labs.example.test/organization.html#received-heading
+
+Invitations expire seven days after creation. If you were not expecting this invitation, you can ignore it.
+
+Oracle Red Labs is a fictional company created for an academic project (ITS122P).

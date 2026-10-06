@@ -5,6 +5,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const { body } = require("express-validator");
 const { pool } = require("../db");
+const { createEvent, cancelInvitationMail } = require("../notifications");
 const {
   AppError,
   asyncHandler,
@@ -130,6 +131,10 @@ router.post(
             WHERE invitation_id = ?`,
           [user.user_id, invitation.invitation_id]
         );
+        await cancelInvitationMail(connection, invitation.invitation_id);
+        await createEvent(connection, { type: "invitation_accepted", organizationId: invitation.organization_id,
+          actorUserId: user.user_id, subjectUserId: user.user_id, invitationId: invitation.invitation_id,
+          sourceKey: `invitation:${invitation.invitation_id}:accepted` });
         membership = {
           organization_id: invitation.organization_id,
           name: invitation.organization_name,

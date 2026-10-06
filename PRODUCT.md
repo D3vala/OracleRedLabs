@@ -31,7 +31,8 @@ Visitors compare three fictional services: ORACLE AI, PHANTASM, and CHAINBREAK. 
 - Accounts, organizations, memberships, invitations, inquiries, engagements, status history, catalogue records, and billing states persist in MySQL.
 - Engagements belong to organizations while retaining the original submitting user.
 - One active organization is selected per server session; the data model supports multiple memberships.
-- Invitations are copied manually. No email or in-app notification delivery is implemented.
+- Organization-scoped in-app notifications persist per recipient, with current-role visibility, individual read state, and 90-day retention.
+- SMTP invitation and event emails use a transactional queue, retries, per-user organization preferences, and generic event summaries. Sending is disabled until configured; manual invitation links remain available.
 - The browser source remains build-free and framework-free; Express is required to serve it with the API.
 - Existing page routes and service query strings remain compatible.
 - JavaScript enhancements require readable no-script and reduced-motion fallbacks.

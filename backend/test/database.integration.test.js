@@ -25,6 +25,7 @@ test("complete client and administrator transaction persists across the API", { 
   async function resetDatabase() {
     assert.match(config.db.database, /_test$/, "Destructive integration reset requires a _test database.");
     const tables = [
+      "notification_email_outbox", "notifications", "notification_preferences", "notification_events",
       "engagement_status_history", "invoices", "authorization_documents",
       "engagement_targets", "engagements", "organization_invitations",
       "organization_memberships", "organizations", "inquiries", "resources",

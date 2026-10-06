@@ -43,6 +43,7 @@ seed-roll-*.txt
 backend/node_modules/
 backend/.env
 backend/.env.example
+backend/.env.notifications.example
 backend/uploads/
 backend/.tmp-mysql-data/
 *.log

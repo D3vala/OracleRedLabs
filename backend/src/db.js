@@ -13,6 +13,12 @@ const pool = mysql.createPool({
   namedPlaceholders: false,
 });
 
+// mysql2's timezone option controls date decoding, not MySQL session timestamps.
+// Queue UTC initialization before this new connection is handed to a caller.
+pool.on("connection", (connection) => {
+  connection.query("SET time_zone = '+00:00'");
+});
+
 async function verifyDatabase() {
   const connection = await pool.getConnection();
   try {

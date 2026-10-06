@@ -7,6 +7,7 @@ const express = require("express");
 const multer = require("multer");
 const config = require("../config");
 const { pool } = require("../db");
+const { createEvent, cancelEngagementInvoice } = require("../notifications");
 const { AppError, asyncHandler, requireClient } = require("../http");
 const {
   requireOrganizationContext,
@@ -224,6 +225,8 @@ router.post("/", requireOrganizationRoles("owner", "manager", "member"), upload.
        VALUES (?, NULL, 'pending', ?, 'Engagement request submitted.')`,
       [engagementId, req.session.user.user_id]
     );
+    await createEvent(connection, { type: "engagement_submitted", organizationId: req.organization.organization_id,
+      actorUserId: req.session.user.user_id, engagementId, sourceKey: `engagement:${engagementId}:submitted` });
     await connection.commit();
     res.status(201).json({ data: { reference_code: reference, status: "pending" }, message: "Engagement request submitted." });
   } catch (error) {
@@ -269,16 +272,16 @@ router.patch("/:reference/cancel", requireOrganizationRoles("owner", "manager", 
       "UPDATE engagements SET status = 'cancelled', cancelled_at = UTC_TIMESTAMP() WHERE engagement_id = ?",
       [rows[0].engagement_id]
     );
-    await connection.execute(
-      "UPDATE invoices SET status = 'cancelled' WHERE engagement_id = ? AND status <> 'paid'",
-      [rows[0].engagement_id]
-    );
+    await cancelEngagementInvoice(connection, rows[0].engagement_id, req.organization.organization_id, req.session.user.user_id);
     await connection.execute(
       `INSERT INTO engagement_status_history
         (engagement_id, old_status, new_status, changed_by, note)
        VALUES (?, ?, 'cancelled', ?, 'Cancelled by client.')`,
       [rows[0].engagement_id, rows[0].status, req.session.user.user_id]
     );
+    await createEvent(connection, { type: "engagement_status_changed", organizationId: req.organization.organization_id,
+      actorUserId: req.session.user.user_id, engagementId: rows[0].engagement_id,
+      oldValue: rows[0].status, newValue: "cancelled" });
     await connection.commit();
     res.json({ data: { reference_code: req.params.reference, status: "cancelled" }, message: "Engagement cancelled." });
   } catch (error) {

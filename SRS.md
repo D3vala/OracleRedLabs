@@ -71,7 +71,7 @@ Express serves the existing front end and the `/api` routes from one origin.
 | FR-17 | Destroy the session on logout | `POST /api/auth/logout` |
 | FR-18 | Return safe, structured errors | central JSON error handler and UI status regions |
 | FR-19 | Create and switch organization memberships | organization routes, session context, organization page |
-| FR-20 | Invite new or existing users without email delivery | hashed invitations and manual-link acceptance flow |
+| FR-20 | Invite new or existing users with optional queued email delivery | hashed invitations, encrypted queued tokens, manual-link and existing-user acceptance flows |
 | FR-21 | Share organization engagements with role projections | organization-constrained SQL and capability-aware client views |
 
 ## 4. Business rules
@@ -154,7 +154,7 @@ erDiagram
 | `users` | Client and administrator identities | unique email; role enum; deactivation instead of deletion |
 | `organizations` | Shared client identity and billing preference | active flag; non-unique name; optional billing email |
 | `organization_memberships` | User access to organizations | composite organization/user primary key; owner/manager/member/billing role |
-| `organization_invitations` | Manual membership invitations | unique token hash; pending-email uniqueness; expiry and lifecycle audit fields |
+| `organization_invitations` | Membership invitations with optional queued email | unique token hash; pending-email uniqueness; expiry and lifecycle audit fields |
 | `services` | Bookable catalogue | unique name and slug; nonnegative price; active flag |
 | `resources` | Public vault entries | unique slug; category enum; published flag |
 | `inquiries` | Public contact submissions | new/reviewed/closed state; optional admin reviewer |
@@ -164,6 +164,10 @@ erDiagram
 | `invoices` | Demonstration billing state | one per engagement; amount snapshot and state enum |
 | `engagement_status_history` | Audit trail | old/new states, acting user, note, timestamp |
 | `sessions` | Server-side login sessions | JSON session payload with automatic expiry cleanup |
+| `notification_events` | Typed organization events | unique source key; organization/event identity; no operational payloads |
+| `notifications` | Recipient inbox and read state | unique event/recipient; composite organization FKs; membership cascade |
+| `notification_preferences` | Organization-specific event email flags | membership key and role-constrained eligibility |
+| `notification_email_outbox` | Durable SMTP jobs | unique delivery key; recoverable leases; bounded retries; encrypted temporary tokens |
 
 The production and test executable specifications are in `database/schema.sql` and `database/test-schema.sql`. Demonstration catalogue data is in `database/seed.sql`.
 
@@ -251,7 +255,7 @@ The following remain future enhancements because they exceed the academic CRUD t
 - Email verification and password recovery
 - PGP encryption and a Tor mirror
 - Real compliance badges or certifications
-- In-app and email notifications
+- Push notifications, digests, provider bounce webhooks, and a staff notification inbox
 - Staff assignment and workforce scheduling
 
 ## 9. Acceptance and traceability
@@ -273,4 +277,8 @@ Setup, automated checks, manual test cases, and presentation steps are maintaine
 
 ## 10. Current implementation status
 
-Milestones 1 through 9 are represented in the repository: reconciled scope, planning artifacts, application screens and states, browser API integration, repeatable database scripts and migration, Express routes, authentication, organization membership, invitations, uploads, CRUD, automated checks, and a manual acceptance checklist. The fresh schema, rerun legacy migration, and complete transaction passed against an isolated MySQL 8.0.42 instance; the documented target remains MySQL 8.4. In-app notifications remain deferred for a separate design decision.
+Milestones 1 through 9 are represented in the repository: reconciled scope, planning artifacts, application screens and states, browser API integration, repeatable database scripts and migration, Express routes, authentication, organization membership, invitations, uploads, CRUD, automated checks, and a manual acceptance checklist. The fresh schema, rerun legacy migration, and complete transaction passed against an isolated MySQL 8.0.42 instance; the documented target remains MySQL 8.4. Organization-scoped notifications and queued SMTP invitation/event emails are now implemented. Email delivery is disabled until configured. API contracts, recipient policy, preferences, retention, privacy, and rollout are recorded in `docs/NOTIFICATIONS.md`; the MySQL target remains 8.4.
+
+## Notification feature contract
+
+The client notification routes are GET list/summary/preferences, PATCH individual read state/preferences, and POST read-all under `/api/notifications`. Every route uses the session organization, recipient identity, live account/membership/role, retention boundary, no-store responses, and an expected `organization_id` query guard. Mutations require CSRF. Incoming invitations retain their separate email-matched authorization. The full request/response shapes and role/event matrix are in `docs/NOTIFICATIONS.md`.

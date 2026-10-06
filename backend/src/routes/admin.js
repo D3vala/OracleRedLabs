@@ -5,6 +5,7 @@ const express = require("express");
 const { body, param } = require("express-validator");
 const config = require("../config");
 const { pool } = require("../db");
+const { createEvent, cancelEngagementInvoice } = require("../notifications");
 const { ENGAGEMENT_TRANSITIONS, INVOICE_TRANSITIONS, canTransition } = require("../domain");
 const { AppError, asyncHandler, requireAdmin, requireValid } = require("../http");
 
@@ -153,7 +154,7 @@ router.patch(
     try {
       await connection.beginTransaction();
       const [rows] = await connection.execute(
-        "SELECT engagement_id, status FROM engagements WHERE reference_code = ? FOR UPDATE",
+        "SELECT engagement_id, organization_id, status FROM engagements WHERE reference_code = ? FOR UPDATE",
         [req.params.reference]
       );
       if (!rows.length) throw new AppError(404, "ENGAGEMENT_NOT_FOUND", "That engagement was not found.");
@@ -167,10 +168,7 @@ router.patch(
         [req.body.status, req.body.status, rows[0].engagement_id]
       );
       if (req.body.status === "cancelled") {
-        await connection.execute(
-          "UPDATE invoices SET status = 'cancelled' WHERE engagement_id = ? AND status <> 'paid'",
-          [rows[0].engagement_id]
-        );
+        await cancelEngagementInvoice(connection, rows[0].engagement_id, rows[0].organization_id, req.session.user.user_id);
       }
       await connection.execute(
         `INSERT INTO engagement_status_history
@@ -178,6 +176,8 @@ router.patch(
          VALUES (?, ?, ?, ?, ?)`,
         [rows[0].engagement_id, oldStatus, req.body.status, req.session.user.user_id, req.body.note?.trim() || null]
       );
+      await createEvent(connection, { type: "engagement_status_changed", organizationId: rows[0].organization_id,
+        actorUserId: req.session.user.user_id, engagementId: rows[0].engagement_id, oldValue: oldStatus, newValue: req.body.status });
       await connection.commit();
       res.json({ data: { reference_code: req.params.reference, status: req.body.status }, message: "Engagement status updated." });
     } catch (error) {
@@ -201,7 +201,7 @@ router.patch(
     try {
       await connection.beginTransaction();
       const [rows] = await connection.execute(
-        `SELECT i.invoice_id, i.status
+        `SELECT i.invoice_id, i.status, i.amount, e.organization_id, e.engagement_id
            FROM invoices i JOIN engagements e ON e.engagement_id = i.engagement_id
           WHERE e.reference_code = ? FOR UPDATE`,
         [req.params.reference]
@@ -217,6 +217,11 @@ router.patch(
          WHERE invoice_id = ?`,
         [req.body.amount, req.body.status, req.body.status, req.body.status, rows[0].invoice_id]
       );
+      if (rows[0].status !== req.body.status || Number(rows[0].amount) !== Number(req.body.amount)) {
+        await createEvent(connection, { type: "invoice_changed", organizationId: rows[0].organization_id,
+          actorUserId: req.session.user.user_id, engagementId: rows[0].engagement_id,
+          oldValue: rows[0].status, newValue: req.body.status });
+      }
       await connection.commit();
       res.json({ data: { reference_code: req.params.reference, invoice_status: req.body.status }, message: "Invoice updated." });
     } catch (error) {

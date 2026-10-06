@@ -17,6 +17,7 @@ const authRoutes = require("./routes/auth");
 const publicRoutes = require("./routes/public");
 const engagementRoutes = require("./routes/engagements");
 const adminRoutes = require("./routes/admin");
+const notificationRoutes = require("./routes/notifications");
 const { organizationsRouter, invitationsRouter } = require("./routes/organizations");
 
 const app = express();
@@ -81,6 +82,7 @@ app.use("/api/engagements", engagementRoutes);
 app.use("/api/organizations", organizationsRouter);
 app.use("/api/invitations", invitationsRouter);
 app.use("/api/admin", adminRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use(express.static(config.frontendDir, {
   extensions: ["html"],

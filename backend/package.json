@@ -12,7 +12,8 @@
     "dev": "node --watch src/server.js",
     "seed:admin": "node scripts/seed-admin.js",
     "test": "node --test",
-    "test:db": "node --test --test-concurrency=1 test/database.integration.test.js"
+    "test:db": "node --test --test-concurrency=1 test/database.integration.test.js test/notifications.integration.test.js",
+    "worker:notifications": "node src/notification-worker-main.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -23,7 +24,8 @@
     "express-validator": "^7.3.0",
     "helmet": "^8.1.0",
     "multer": "^2.0.2",
-    "mysql2": "^3.15.2"
+    "mysql2": "^3.15.2",
+    "nodemailer": "^10.0.15"
   },
   "devDependencies": {
     "supertest": "^7.1.4"

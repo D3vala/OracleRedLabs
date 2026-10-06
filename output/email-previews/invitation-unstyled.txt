@@ -1,0 +1,16 @@
+Subject: Oracle Red Labs: organization invitation
+
+Oracle Red Labs
+
+Organization invitation
+
+You have been invited to join Synthetic Research Organization as member.
+
+Sign in or create an account to review this invitation.
+
+Review invitation:
+https://oracle-red-labs.example.test/accept-invitation.html?token=abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789
+
+Invitations expire seven days after creation. If you were not expecting this invitation, you can ignore it.
+
+Oracle Red Labs is a fictional company created for an academic project (ITS122P).

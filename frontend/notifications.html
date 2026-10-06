@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notifications | Oracle Red Labs</title>
+  <meta name="description" content="Review organization updates and control your Oracle Red Labs event emails.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="assets/images/orl-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css?v=20261003">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/interior.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body class="page page--notifications">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header interior-header">
+    <div class="container site-header__inner interior-nav-shell">
+      <a class="brand" href="index.html"><img class="brand__mark" src="assets/images/orl-mark.svg" alt="" width="34" height="34"><span class="brand__name">Oracle <em>Red</em> Labs</span></a>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span class="nav-toggle__bar" aria-hidden="true"></span><span class="nav-toggle__bar" aria-hidden="true"></span><span class="visually-hidden">Menu</span></button>
+      <nav class="nav" id="primary-nav" aria-label="Primary">
+        <ul class="nav__list"><li><a class="nav__link" href="services.html">Services</a></li><li><a class="nav__link" href="engage.html">Engage</a></li></ul>
+        <ul class="nav__list nav__list--auth"><li><a class="nav__link" href="login.html">Log In</a></li><li><a class="btn btn--primary btn--sm" href="register.html">Register</a></li></ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="page-head" aria-labelledby="page-heading">
+      <div class="container page-head__layout">
+        <h1 id="page-heading">Keep Up With Shared Work</h1>
+        <p class="lede">Engagement, billing, and access updates for the organization you are working with. Your role determines what appears here.</p>
+        <div class="page-visual page-visual--organization" aria-hidden="true"><span class="page-visual__field"></span><span class="page-visual__route"></span><span class="page-visual__node page-visual__node--1" data-label="EVENT"></span><span class="page-visual__node page-visual__node--2" data-label="ROLE"></span><span class="page-visual__node page-visual__node--3" data-label="INBOX"></span><span class="page-visual__readout">UPDATES / ORGANIZATION BOUNDARY</span></div>
+      </div>
+    </section>
+    <section class="section section--tight" aria-labelledby="context-heading">
+      <div class="container organization-shell">
+        <noscript><div class="notice"><p>Notifications require JavaScript to verify your session and permissions. You can still <a href="dashboard.html">open the dashboard</a> or <a href="login.html">sign in</a>.</p></div></noscript>
+        <p class="result-status js-only" id="notification-status" role="status" aria-live="polite">Loading your updates…</p>
+        <button class="btn btn--secondary js-only" id="notification-retry" type="button" hidden>Retry</button>
+        <div class="notice js-only" id="notification-switch-prompt" hidden><p id="notification-switch-message"></p><button class="btn btn--primary" id="notification-switch-confirm" type="button">Switch organization</button></div>
+        <div class="js-only" id="notification-content" hidden>
+          <div class="organization-context">
+            <div><h2 id="context-heading">Active organization</h2><p class="text-muted">Notifications remain available for 90 days. Reading an update changes only your own inbox.</p></div>
+            <div class="organization-context__controls"><label class="field__label" for="notification-organization">Organization</label><select class="select" id="notification-organization" aria-describedby="notification-role"></select><p class="mono" id="notification-role"></p></div>
+          </div>
+          <section class="notification-feed" aria-labelledby="updates-heading">
+            <div class="notification-toolbar"><div><h2 id="updates-heading">Your updates</h2><p class="text-muted" id="notification-count"></p></div><div class="notification-actions"><div class="notification-filters" aria-label="Filter notifications"><button class="btn btn--secondary" id="notification-all" type="button" aria-pressed="true">All</button><button class="btn btn--secondary" id="notification-unread" type="button" aria-pressed="false">Unread</button></div><button class="btn btn--secondary" id="notification-read-all" type="button">Mark all read</button></div></div>
+            <ul class="notification-list" id="notification-list" aria-label="Organization notifications"></ul>
+            <div class="empty-state" id="notification-empty" hidden><h3 id="notification-empty-heading">No notifications yet</h3><p id="notification-empty-copy">New updates for this organization will appear here.</p><a class="btn btn--secondary" href="dashboard.html">Open dashboard</a></div>
+            <button class="btn btn--secondary" id="notification-more" type="button" hidden>Load more</button>
+          </section>
+          <div class="notification-support">
+            <section class="organization-panel" aria-labelledby="email-heading"><h2 id="email-heading">Event emails</h2><p class="text-muted">Choose emails for this organization. In-app updates stay on. Invitation emails are sent when someone creates an invitation.</p><form class="form" id="notification-preferences"><fieldset class="notification-preferences"><legend class="visually-hidden">Email categories</legend><label><input type="checkbox" name="engagement_email"> Engagement status changes</label><label data-notification-invoice><input type="checkbox" name="invoice_email"> Invoice updates</label><label data-notification-team><input type="checkbox" name="team_email"> Invitations and team activity</label><label><input type="checkbox" name="personal_access_email"> Changes to my role</label></fieldset><button class="btn btn--primary" type="submit">Save email preferences</button></form><p class="text-muted">Email delivery depends on the configured mail service. Emails link back here to protect operational details.</p></section>
+            <section class="organization-panel" aria-labelledby="invitations-heading"><h2 id="invitations-heading">Invitations for you</h2><p class="text-muted">Invitations match your account email and can come from other organizations. They are separate from your unread count.</p><ul class="organization-list" id="notification-invitations"></ul><p id="notification-invitations-empty" hidden>No invitations waiting.</p><p id="notification-invitations-error" role="status" hidden>Invitations could not be loaded. Use Retry to try again.</p><a class="btn btn--secondary" href="organization.html#received-heading">Review invitations</a></section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer interior-footer"><div class="container interior-footer__cta"><div><h2>Review the change. Keep the context.</h2></div><a class="btn btn--secondary" href="dashboard.html">Open dashboard</a></div><div class="container site-footer__legal"><p class="site-footer__disclaimer">Oracle Red Labs is a fictional academic application. No security testing or payments are performed.</p><p class="mono">&copy; <span data-current-year>2026</span> Oracle Red Labs</p></div></footer>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/interior.js"></script>
+</body>
+</html>

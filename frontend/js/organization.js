@@ -200,9 +200,11 @@
 
     switcher.addEventListener("change", async function () {
       switcher.disabled = true;
+      window.dispatchEvent(new Event("orl:organization-changing"));
       try {
         await ORLApi.request("/api/organizations/active", { method: "PATCH", body: { organization_id: Number(switcher.value) } });
         await loadCurrent();
+        window.dispatchEvent(new Event("orl:organization-changed"));
         announce("Active organization changed to " + state.current.name + ".");
       } catch (error) { announce(error.message, true); }
       finally { switcher.disabled = state.organizations.length < 2; }

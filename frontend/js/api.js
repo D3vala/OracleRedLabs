@@ -124,6 +124,35 @@
     });
   }
 
+  var notificationGeneration = 0;
+  var navigationReady = false;
+  function clearNotificationBadges() {
+    notificationGeneration += 1;
+    document.querySelectorAll("[data-notification-badge]").forEach(function (badge) { badge.hidden = true; badge.textContent = ""; });
+    document.querySelectorAll("[data-notification-link]").forEach(function (link) { link.setAttribute("aria-label", "Notifications"); });
+  }
+  async function refreshNotificationBadges() {
+    clearNotificationBadges();
+    var generation = notificationGeneration;
+    try {
+      var organization = (await request("/api/organizations/current")).data;
+      if (!organization || generation !== notificationGeneration) return;
+      var payload = await request("/api/notifications/summary?organization_id=" + organization.organization_id);
+      if (generation !== notificationGeneration) return;
+      document.querySelectorAll("[data-notification-badge]").forEach(function (badge) {
+        badge.textContent = payload.data.unread_count > 99 ? "99+" : String(payload.data.unread_count);
+        badge.hidden = payload.data.unread_count === 0;
+      });
+      document.querySelectorAll("[data-notification-link]").forEach(function (link) {
+        link.setAttribute("aria-label", "Notifications, " + payload.data.unread_count + " unread for " + organization.name);
+      });
+    } catch (_error) { clearNotificationBadges(); }
+  }
+  window.addEventListener("orl:organization-changing", clearNotificationBadges);
+  window.addEventListener("orl:organization-changed", refreshNotificationBadges);
+  window.addEventListener("orl:notifications-updated", function () { if (navigationReady) refreshNotificationBadges(); });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden && navigationReady) refreshNotificationBadges(); });
+
   async function initAuthNavigation() {
     var user;
     try {
@@ -146,8 +175,25 @@
         }
         item.appendChild(link);
         list.insertBefore(item, list.firstChild);
+        var notifications = document.createElement("li");
+        var notificationLink = document.createElement("a");
+        notificationLink.className = "nav__link nav__link--notifications";
+        notificationLink.href = "notifications.html";
+        notificationLink.setAttribute("data-notification-link", "");
+        notificationLink.textContent = "Notifications ";
+        if (window.location.pathname.endsWith("/notifications.html")) notificationLink.setAttribute("aria-current", "page");
+        var badge = document.createElement("span");
+        badge.className = "notification-nav-badge";
+        badge.setAttribute("data-notification-badge", "");
+        badge.setAttribute("aria-hidden", "true");
+        badge.hidden = true;
+        notificationLink.appendChild(badge);
+        notifications.appendChild(notificationLink);
+        list.insertBefore(notifications, item.nextSibling);
       });
     }
+    navigationReady = true;
+    if (user.role === "client") refreshNotificationBadges();
     document.querySelectorAll('a[href="login.html"]').forEach(function (link) {
       link.href = user.role === "admin" ? "admin.html" : "dashboard.html";
       link.textContent = user.role === "admin" ? "Admin Console" : "Dashboard";
@@ -161,6 +207,7 @@
           await request("/api/auth/logout", { method: "POST" });
           setCsrfToken(null);
           currentUserPromise = null;
+          clearNotificationBadges();
           window.location.assign("index.html");
         } catch (error) {
           link.textContent = "Try Log Out Again";

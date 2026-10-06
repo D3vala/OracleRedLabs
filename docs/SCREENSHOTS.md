@@ -13,4 +13,12 @@ The images in `output/screenshots/` were captured from a running Express applica
 | `07-organization-membership-mobile.png` | Full 390 px organization-management flow without horizontal overflow |
 | `08-invitation-acceptance-mobile.png` | Full 390 px invitation preview, routing actions, and delivery note |
 
-All names, organizations, domains, prices, records, and authorization content in these screenshots are fictional demonstration data. Invitation delivery is manual; the application sends no email or notifications.
+All names, organizations, domains, prices, records, and authorization content in these screenshots are fictional demonstration data. Screenshots 01–08 document the completed membership feature before notifications. Screenshots 09–13 document the notification extension using synthetic data and disabled real email delivery; SMTP delivery is verified with a fake transport in integration tests.
+
+| Notification file | Evidence |
+|---|---|
+| `09-notifications-desktop.png` | 1440 px organization-scoped feed, unread count, preferences, separate incoming invitations |
+| `10-notifications-mobile.png` | 390 px stacked feed, role context, full-width actions and preferences |
+| `11-notifications-empty.png` | Unread empty state after Mark all read |
+| `12-notifications-error.png` | Network failure with Retry and recoverable state |
+| `13-notifications-no-javascript.png` | Readable explanation and navigation with unavailable controls hidden |

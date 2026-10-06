@@ -1,6 +1,6 @@
 # Oracle Red Labs
 
-Oracle Red Labs is a fictional academic full-stack application for requesting and tracking authorized security engagements. It demonstrates account authentication, multi-user organizations, shared engagement access, database-backed invitations, a transactional multipart booking flow, role-based access, MySQL CRUD, protected document storage, and status audit history. It does not perform security testing, send invitation email, or process payments.
+Oracle Red Labs is a fictional academic full-stack application for requesting and tracking authorized security engagements. It demonstrates account authentication, multi-user organizations, shared engagement access, database-backed invitations, a transactional multipart booking flow, role-based access, MySQL CRUD, protected document storage, and status audit history. It includes organization-scoped notifications and configurable queued SMTP email. It does not perform security testing or process payments.
 
 ## Requirements
 
@@ -33,6 +33,8 @@ Oracle Red Labs is a fictional academic full-stack application for requesting an
    ```powershell
    npm run seed:admin
    ```
+
+Existing installations with memberships must select their database and apply `database/migrations/20261005-notifications.sql` before starting the updated application. Fresh schema and submission SQL already include notification tables.
 
 6. Start the application with `npm start` from `backend/`.
 7. Open `http://localhost:3000`.
@@ -110,9 +112,11 @@ From the repository root, `./scripts/check-html.ps1` checks local links, duplica
 | Member | Full scope, submission, cancellation; billing hidden | Read the roster |
 | Billing | Basic engagement summaries and invoices only | Read the roster |
 
-One active organization is stored in the server session. The database supports multiple memberships, and the organization page provides the switcher. Invitations expire after seven days. The application stores only token hashes and never sends email, so links for unregistered recipients must be copied when they are created.
+One active organization is stored in the server session. The database supports multiple memberships, and the organization page provides the switcher. Invitations expire after seven days. The invitation table stores token hashes. With SMTP enabled, invitation emails are queued; new-account tokens are encrypted temporarily in the outbox and cleared after completion, cancellation, or expiry. Manual links for unregistered recipients are still shown once.
 
-In-app notifications remain deferred pending a separate design and recipient-policy review.
+Notifications are available at `frontend/notifications.html`. They are private to the recipient and active organization, filtered by current role, and retained for 90 days. Incoming invitations remain separate from unread notification counts.
+
+Email is disabled by default. Merge `backend/.env.notifications.example` into local configuration and start `npm run worker:notifications` in a separate supervised process for delivery and retention cleanup. SMTP acceptance is not proof of inbox delivery. See [notification setup and API contract](docs/NOTIFICATIONS.md).
 
 ## Documentation
 
